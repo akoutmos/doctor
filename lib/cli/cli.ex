@@ -6,26 +6,19 @@ defmodule Doctor.CLI do
   alias Mix.Project
   alias Doctor.{ModuleInformation, ModuleReport}
 
-  def report(args) do
+  def run_report(args) do
     # Using the project's app name, fetch all the modules associated with the app and
     # generate report
-    result =
-      Project.config()
-      |> Keyword.get(:app)
-      |> get_application_modules()
-      |> Enum.map(&generate_module_entry/1)
-      |> Enum.map(&async_fetch_user_defined_functions/1)
-      |> Enum.map(&Task.await(&1, 15_000))
-      |> Enum.reject(fn module_info -> module_info.module in args.ignore_modules end)
-      |> Enum.reject(fn module_info -> filter_ignore_paths(module_info, args.ignore_paths) end)
-      |> Enum.map(&ModuleReport.build/1)
-      |> args.reporter.generate_report(args)
-
-    if result do
-      exit({:shutdown, 0})
-    else
-      exit({:shutdown, 1})
-    end
+    Project.config()
+    |> Keyword.get(:app)
+    |> get_application_modules()
+    |> Enum.map(&generate_module_entry/1)
+    |> Enum.map(&async_fetch_user_defined_functions/1)
+    |> Enum.map(&Task.await(&1, 15_000))
+    |> Enum.reject(fn module_info -> module_info.module in args.ignore_modules end)
+    |> Enum.reject(fn module_info -> filter_ignore_paths(module_info, args.ignore_paths) end)
+    |> Enum.map(&ModuleReport.build/1)
+    |> args.reporter.generate_report(args)
   end
 
   defp generate_module_entry(module) do
