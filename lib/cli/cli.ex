@@ -7,16 +7,24 @@ defmodule Doctor.CLI do
   alias Doctor.{ModuleInformation, ModuleReport}
 
   def run_report(args) do
-    # Using the project's app name, fetch all the modules associated with the app and
-    # generate report
+    # Using the project's app name, fetch all the modules associated with the app
     Project.config()
     |> Keyword.get(:app)
     |> get_application_modules()
+
+    # Fetch the module information from the list of application modules
     |> Enum.map(&generate_module_entry/1)
-    |> Enum.map(&async_fetch_user_defined_functions/1)
-    |> Enum.map(&Task.await(&1, 15_000))
+
+    # Filter out any files/modules that were specified in the config
     |> Enum.reject(fn module_info -> module_info.module in args.ignore_modules end)
     |> Enum.reject(fn module_info -> filter_ignore_paths(module_info, args.ignore_paths) end)
+
+    # Asynchronously get the user defined functions from the modules
+    |> Enum.map(&async_fetch_user_defined_functions/1)
+    |> Enum.map(&Task.await(&1, 15_000))
+
+    # Build report struct for each module and pass to configured reporter
+    |> Enum.sort(&(&1.file_relative_path < &2.file_relative_path))
     |> Enum.map(&ModuleReport.build/1)
     |> args.reporter.generate_report(args)
   end

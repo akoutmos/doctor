@@ -3,9 +3,10 @@ defmodule Doctor.Config do
 
   @default_config %{
     moduledoc_required: true,
-    typespec_required: false,
-    min_overall_coverage: 60,
-    min_module_coverage: 50,
+    min_overall_doc_coverage: 50,
+    min_overall_spec_coverage: 0,
+    min_module_doc_coverage: 40,
+    min_module_spec_coverage: 0,
     ignore_modules: [],
     ignore_paths: [],
     reporter: Doctor.Reporters.Full
