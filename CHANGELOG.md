@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2018-11-30
+
+### Fixed
+
+- Umbrella project exit status code
+
 ## [0.1.0] - 2018-10-04
 
 ### Added
