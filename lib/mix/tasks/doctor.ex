@@ -16,11 +16,13 @@ defmodule Mix.Tasks.Doctor do
       |> merge_cli_args(args)
       |> Doctor.CLI.run_report()
 
-    if result do
-      exit({:shutdown, 0})
-    else
-      exit({:shutdown, 1})
+    unless result do
+      System.at_exit(fn _ ->
+        exit({:shutdown, 1})
+      end)
     end
+
+    :ok
   end
 
   defp load_config_file(file) do
