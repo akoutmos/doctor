@@ -59,12 +59,12 @@ defmodule Doctor.Reporters.Summary do
   defp print_footer(pass, passed, failed, doc_coverage, spec_coverage) do
     doc_coverage =
       doc_coverage
-      |> Decimal.new()
+      |> Decimal.from_float()
       |> Decimal.round(1)
 
     spec_coverage =
       spec_coverage
-      |> Decimal.new()
+      |> Decimal.from_float()
       |> Decimal.round(1)
 
     print_divider()
