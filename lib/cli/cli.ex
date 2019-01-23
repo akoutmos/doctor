@@ -44,10 +44,9 @@ defmodule Doctor.CLI do
   end
 
   defp get_application_modules(application) do
-    # Compile and start the application
-    # TODO: Not a fan of this...but will do for now
+    # Compile and load the application
     Mix.Task.run("compile")
-    Mix.Task.run("app.start")
+    Application.load(application)
 
     # Get all the modules in the application
     {:ok, modules} = :application.get_key(application, :modules)

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2019-1-23
+
+### Changed
+
+- Loaded application vs starting the application to avoid Ecto errors connecting to DB during Doctor validation
+
 ## [0.3.0] - 2018-11-30
 
 ### Changed
