@@ -39,7 +39,7 @@ defmodule Doctor.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:decimal, "~> 1.6"},
+      {:decimal, "~> 1.7"},
       {:ex_doc, ">= 0.0.0", only: :dev}
     ]
   end

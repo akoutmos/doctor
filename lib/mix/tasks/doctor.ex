@@ -1,4 +1,6 @@
 defmodule Mix.Tasks.Doctor do
+  @moduledoc false
+
   use Mix.Task
 
   alias Doctor.Config
@@ -8,6 +10,9 @@ defmodule Mix.Tasks.Doctor do
   @shortdoc "Documentation coverage report"
   @recursive true
 
+  @doc """
+  This Mix task generates a Doctor report of the project.
+  """
   def run(args) do
     result =
       Config.config_file()

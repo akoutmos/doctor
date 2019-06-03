@@ -1,9 +1,19 @@
 defmodule Doctor.ModuleReport do
+  @moduledoc """
+  This module exposes a struct which encapsulates all the results for a doctor report. Whether
+  the module has a moduledoc, what the doc coverage is, the number of author defined functions,
+  and so on.
+  """
+
   alias __MODULE__
   alias Doctor.ModuleInformation
 
   defstruct ~w(doc_coverage spec_coverage file functions missed_docs missed_specs has_module_doc)a
 
+  @doc """
+  Given a ModuleInformation struct with the necessary fields completed,
+  build the report.
+  """
   def build(%ModuleInformation{} = module_info) do
     %ModuleReport{
       doc_coverage: calculate_doc_coverage(module_info),
@@ -27,7 +37,9 @@ defmodule Doctor.ModuleReport do
     missed = calculate_missed_docs(module_info)
 
     if total > 0 do
-      (total - missed) / total * 100
+      (total - missed)
+      |> Decimal.div(total)
+      |> Decimal.mult(100)
     else
       nil
     end
@@ -44,7 +56,9 @@ defmodule Doctor.ModuleReport do
     missed = calculate_missed_specs(module_info)
 
     if total > 0 do
-      (total - missed) / total * 100
+      (total - missed)
+      |> Decimal.div(total)
+      |> Decimal.mult(100)
     else
       nil
     end

@@ -1,5 +1,7 @@
 defmodule Doctor.ModuleInformation do
   @moduledoc """
+  This module defines a struct which houses all the
+  documentation data for an entire module.
   """
 
   alias __MODULE__
@@ -27,6 +29,10 @@ defmodule Doctor.ModuleInformation do
     }
   end
 
+  @doc """
+  Given the provided module, read the file from which the module was generated and
+  convert the file to an AST.
+  """
   def load_file_ast(%ModuleInformation{} = module_info) do
     ast =
       module_info.file_full_path
@@ -36,10 +42,13 @@ defmodule Doctor.ModuleInformation do
     %{module_info | file_ast: ast}
   end
 
+  @doc """
+  Given a ModuleInformation struct with the AST loaded, fetch all of the author defined functions
+  """
   def load_user_defined_functions(%ModuleInformation{} = module_info) do
     {_ast, functions} = Macro.prewalk(module_info.file_ast, [], &parse_ast_node_for_def/2)
 
-    %{module_info | user_defined_functions: functions}
+    %{module_info | user_defined_functions: Enum.uniq(functions)}
   end
 
   defp get_full_file_path(module) do
