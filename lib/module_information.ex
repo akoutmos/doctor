@@ -46,7 +46,12 @@ defmodule Doctor.ModuleInformation do
   Given a ModuleInformation struct with the AST loaded, fetch all of the author defined functions
   """
   def load_user_defined_functions(%ModuleInformation{} = module_info) do
-    {_ast, functions} = Macro.prewalk(module_info.file_ast, [], &parse_ast_node_for_def/2)
+    {_ast, modules} = Macro.prewalk(module_info.file_ast, %{}, &parse_ast_node_for_defmodules/2)
+
+    {_ast, functions} =
+      modules
+      |> Map.get(module_info.module)
+      |> Macro.prewalk([], &parse_ast_node_for_def/2)
 
     %{module_info | user_defined_functions: Enum.uniq(functions)}
   end
@@ -67,21 +72,41 @@ defmodule Doctor.ModuleInformation do
   defp parse_ast_node_for_def(
          {:def, _def_line,
           [{:when, _line_when, [{function_name, _function_line, args}, _guard]}, _do_block]} =
-           tuple,
+           ast,
          acc
        ) do
-    {tuple, [{function_name, get_function_arity(args)} | acc]}
+    {ast, [{function_name, get_function_arity(args)} | acc]}
   end
 
   defp parse_ast_node_for_def(
-         {:def, _def_line, [{function_name, _function_line, args}, _do_block]} = tuple,
+         {:def, _def_line, [{function_name, _function_line, args}, _do_block]} = ast,
          acc
        ) do
-    {tuple, [{function_name, get_function_arity(args)} | acc]}
+    {ast, [{function_name, get_function_arity(args)} | acc]}
   end
 
-  defp parse_ast_node_for_def(tuple, acc) do
-    {tuple, acc}
+  defp parse_ast_node_for_def(
+         {:def, _def_line, [{function_name, _function_line, args}]} = ast,
+         acc
+       ) do
+    {ast, [{function_name, get_function_arity(args)} | acc]}
+  end
+
+  defp parse_ast_node_for_def(ast, acc) do
+    {ast, acc}
+  end
+
+  defp parse_ast_node_for_defmodules(
+         {definition, _defmodule_line, [{:__aliases__, _line_num, module}, _do_block]} = ast,
+         acc
+       )
+       when definition in [:defmodule, :defprotocol] do
+    module_in_ast = Module.concat(module)
+    {ast, Map.put(acc, module_in_ast, ast)}
+  end
+
+  defp parse_ast_node_for_defmodules(ast, acc) do
+    {ast, acc}
   end
 
   defp get_function_arity(nil), do: 0

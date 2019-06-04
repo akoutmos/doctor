@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2019-6-2
+
+### Changed
+
+- Fixed counting issue when there are multiple modules in a single file
+- Changed reporters around to be more DRY and share report calculation functionality
+- Added tests for Doctor reporting functionality
+
 ## [0.4.0] - 2019-1-23
 
 ### Changed

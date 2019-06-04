@@ -8,7 +8,7 @@ defmodule Doctor.ModuleReport do
   alias __MODULE__
   alias Doctor.ModuleInformation
 
-  defstruct ~w(doc_coverage spec_coverage file functions missed_docs missed_specs has_module_doc)a
+  defstruct ~w(doc_coverage spec_coverage file module functions missed_docs missed_specs has_module_doc)a
 
   @doc """
   Given a ModuleInformation struct with the necessary fields completed,
@@ -19,11 +19,18 @@ defmodule Doctor.ModuleReport do
       doc_coverage: calculate_doc_coverage(module_info),
       spec_coverage: calculate_spec_coverage(module_info),
       file: module_info.file_relative_path,
+      module: generate_module_name(module_info.module),
       functions: length(module_info.user_defined_functions),
       missed_docs: calculate_missed_docs(module_info),
       missed_specs: calculate_missed_specs(module_info),
       has_module_doc: has_module_doc?(module_info)
     }
+  end
+
+  defp generate_module_name(module) do
+    module
+    |> Module.split()
+    |> Enum.join(".")
   end
 
   defp calculate_missed_docs(module_info) do

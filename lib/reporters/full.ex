@@ -11,7 +11,8 @@ defmodule Doctor.Reporters.Full do
 
   @doc_cov_width 9
   @spec_cov_width 10
-  @file_width 61
+  @module_width 41
+  @file_width 70
   @functions_width 11
   @missed_docs_width 9
   @missed_specs_width 10
@@ -33,6 +34,7 @@ defmodule Doctor.Reporters.Full do
         OutputUtils.generate_table_line([
           {doc_cov, @doc_cov_width},
           {spec_cov, @spec_cov_width},
+          {module_report.module, @module_width},
           {module_report.file, @file_width},
           {module_report.functions, @functions_width},
           {module_report.missed_docs, @missed_docs_width},
@@ -67,6 +69,7 @@ defmodule Doctor.Reporters.Full do
       OutputUtils.generate_table_line([
         {"DOC COV", @doc_cov_width},
         {"SPEC COV", @spec_cov_width},
+        {"MODULE", @module_width},
         {"FILE", @file_width},
         {"FUNCTIONS", @functions_width},
         {"NO DOCS", @missed_docs_width},
@@ -79,7 +82,7 @@ defmodule Doctor.Reporters.Full do
 
   defp print_divider do
     "-"
-    |> String.duplicate(120)
+    |> String.duplicate(170)
     |> IO.info()
   end
 
