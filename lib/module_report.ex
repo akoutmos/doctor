@@ -53,8 +53,14 @@ defmodule Doctor.ModuleReport do
   end
 
   defp calculate_missed_specs(module_info) do
+    function_specs =
+      module_info.specs
+      |> Enum.map(fn spec ->
+        {spec.name, spec.arity}
+      end)
+
     Enum.count(module_info.user_defined_functions, fn function ->
-      function not in module_info.specs
+      function not in function_specs
     end)
   end
 

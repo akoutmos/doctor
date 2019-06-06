@@ -4,7 +4,7 @@ defmodule Mix.Tasks.Doctor do
   use Mix.Task
 
   alias Doctor.Config
-  alias Doctor.Reporters.{Full, Summary}
+  alias Doctor.Reporters.{Full, Short, Summary}
   alias Mix.Shell.IO
 
   @shortdoc "Documentation coverage report"
@@ -54,6 +54,9 @@ defmodule Mix.Tasks.Doctor do
       |> Enum.reduce(%{}, fn
         "--full", acc ->
           Map.merge(acc, %{reporter: Full})
+
+        "--short", acc ->
+          Map.merge(acc, %{reporter: Short})
 
         "--summary", acc ->
           Map.merge(acc, %{reporter: Summary})
