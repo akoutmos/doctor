@@ -1,4 +1,4 @@
-defmodule Doctor.Reporters.Full do
+defmodule Doctor.Reporters.Short do
   @moduledoc """
   This reporter generates a full documentation coverage report and lists
   all the files in the project along with whether they pass or fail.
@@ -12,10 +12,8 @@ defmodule Doctor.Reporters.Full do
   @doc_cov_width 9
   @spec_cov_width 10
   @module_width 41
-  @file_width 70
   @functions_width 11
-  @missed_docs_width 9
-  @missed_specs_width 10
+  @docs_spec_missing_width 20
   @module_doc_width 10
 
   @doc """
@@ -34,11 +32,8 @@ defmodule Doctor.Reporters.Full do
         OutputUtils.generate_table_line([
           {doc_cov, @doc_cov_width},
           {spec_cov, @spec_cov_width},
-          {module_report.module, @module_width},
-          {module_report.file, @file_width},
           {module_report.functions, @functions_width},
-          {module_report.missed_docs, @missed_docs_width},
-          {module_report.missed_specs, @missed_specs_width},
+          {module_report.module, @module_width},
           {module_doc, @module_doc_width}
         ])
 
@@ -69,11 +64,8 @@ defmodule Doctor.Reporters.Full do
       OutputUtils.generate_table_line([
         {"Doc Cov", @doc_cov_width},
         {"Spec Cov", @spec_cov_width},
-        {"Module", @module_width},
-        {"File", @file_width},
         {"Functions", @functions_width},
-        {"No Docs", @missed_docs_width},
-        {"No Specs", @missed_specs_width},
+        {"Module", @module_width},
         {"Module Doc", @module_doc_width, 0}
       ])
 
@@ -82,7 +74,7 @@ defmodule Doctor.Reporters.Full do
 
   defp print_divider do
     "-"
-    |> String.duplicate(170)
+    |> String.duplicate(81)
     |> IO.info()
   end
 
