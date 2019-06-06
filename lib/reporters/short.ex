@@ -13,7 +13,6 @@ defmodule Doctor.Reporters.Short do
   @spec_cov_width 10
   @module_width 41
   @functions_width 11
-  @docs_spec_missing_width 20
   @module_doc_width 10
 
   @doc """

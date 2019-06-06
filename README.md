@@ -14,7 +14,7 @@ by adding `doctor` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:doctor, "~> 0.5.0"}
+    {:doctor, "~> 0.6.0"}
   ]
 end
 ```
@@ -66,7 +66,7 @@ Report created for Phoenix:
 ```
 Doctor file not found. Using defaults.
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-DOC COV  SPEC COV  MODULE                                   FILE                                                                  FUNCTIONS  NO DOCS  NO SPECS  MODULE DOC
+Doc Cov  Spec Cov  Module                                   File                                                                  Functions  No Docs  No Specs  Module Doc
 100%     0%        Mix.Phoenix                              lib/mix/phoenix.ex                                                    18         0        18        YES
 0%       0%        Mix.Phoenix.Context                      lib/mix/phoenix/context.ex                                            6          6        6         YES
 63%      0%        Mix.Phoenix.Schema                       lib/mix/phoenix/schema.ex                                             8          3        8         YES
@@ -76,25 +76,25 @@ DOC COV  SPEC COV  MODULE                                   FILE                
 100%     0%        Mix.Tasks.Phx                            lib/mix/tasks/phx.ex                                                  1          0        1         YES
 100%     0%        Mix.Tasks.Phx.Gen.Cert                   lib/mix/tasks/phx.gen.cert.ex                                         2          0        2         YES
 100%     0%        Mix.Tasks.Phx.Gen.Channel                lib/mix/tasks/phx.gen.channel.ex                                      1          0        1         YES
-86%      0%        Mix.Tasks.Phx.Gen.Context                lib/mix/tasks/phx.gen.context.ex                                      7          1        7         YES
-100%     0%        Mix.Tasks.Phx.Gen.Embedded               lib/mix/tasks/phx.gen.embedded.ex                                     6          0        6         YES
+86%      14%       Mix.Tasks.Phx.Gen.Context                lib/mix/tasks/phx.gen.context.ex                                      7          1        6         YES
+100%     17%       Mix.Tasks.Phx.Gen.Embedded               lib/mix/tasks/phx.gen.embedded.ex                                     6          0        5         YES
 100%     0%        Mix.Tasks.Phx.Gen.Html                   lib/mix/tasks/phx.gen.html.ex                                         4          0        4         YES
 100%     0%        Mix.Tasks.Phx.Gen.Json                   lib/mix/tasks/phx.gen.json.ex                                         4          0        4         YES
 100%     0%        Mix.Tasks.Phx.Gen.Presence               lib/mix/tasks/phx.gen.presence.ex                                     1          0        1         YES
-100%     0%        Mix.Tasks.Phx.Gen.Schema                 lib/mix/tasks/phx.gen.schema.ex                                       7          0        7         YES
+100%     14%       Mix.Tasks.Phx.Gen.Schema                 lib/mix/tasks/phx.gen.schema.ex                                       7          0        6         YES
 100%     0%        Mix.Tasks.Phx.Gen.Secret                 lib/mix/tasks/phx.gen.secret.ex                                       1          0        1         YES
 100%     0%        Mix.Tasks.Phx.Routes                     lib/mix/tasks/phx.routes.ex                                           1          0        1         YES
 100%     0%        Mix.Tasks.Phx.Server                     lib/mix/tasks/phx.server.ex                                           1          0        1         YES
 100%     0%        Phoenix                                  lib/phoenix.ex                                                        3          0        3         YES
-100%     0%        Phoenix.Channel                          lib/phoenix/channel.ex                                                12         0        12        YES
-100%     0%        Phoenix.Channel.Server                   lib/phoenix/channel/server.ex                                         17         0        17        YES
+100%     17%       Phoenix.Channel                          lib/phoenix/channel.ex                                                12         0        10        YES
+100%     18%       Phoenix.Channel.Server                   lib/phoenix/channel/server.ex                                         17         0        14        YES
 100%     0%        Phoenix.CodeReloader                     lib/phoenix/code_reloader.ex                                          2          0        2         YES
 40%      0%        Phoenix.CodeReloader.Proxy               lib/phoenix/code_reloader/proxy.ex                                    5          3        5         YES
 33%      0%        Phoenix.CodeReloader.Server              lib/phoenix/code_reloader/server.ex                                   6          4        6         YES
-88%      0%        Phoenix.Config                           lib/phoenix/config.ex                                                 8          1        8         YES
-100%     0%        Phoenix.Controller                       lib/phoenix/controller.ex                                             42         0        42        YES
+88%      25%       Phoenix.Config                           lib/phoenix/config.ex                                                 8          1        6         YES
+100%     52%       Phoenix.Controller                       lib/phoenix/controller.ex                                             42         0        20        YES
 100%     0%        Phoenix.Controller.Pipeline              lib/phoenix/controller/pipeline.ex                                    6          0        6         YES
-100%     0%        Phoenix.Digester                         lib/phoenix/digester.ex                                               2          0        2         YES
+100%     100%      Phoenix.Digester                         lib/phoenix/digester.ex                                               2          0        0         YES
 100%     0%        Phoenix.Endpoint                         lib/phoenix/endpoint.ex                                               25         0        25        YES
 100%     0%        Phoenix.Endpoint.Cowboy2Adapter          lib/phoenix/endpoint/cowboy2_adapter.ex                               3          0        3         YES
 0%       0%        Phoenix.Endpoint.Cowboy2Handler          lib/phoenix/endpoint/cowboy2_handler.ex                               5          5        5         YES
@@ -108,7 +108,7 @@ NA       NA        Phoenix.NotAcceptableError               lib/phoenix/exceptio
 100%     0%        Phoenix.MissingParamError                lib/phoenix/exceptions.ex                                             1          0        1         YES
 0%       0%        Phoenix.ActionClauseError                lib/phoenix/exceptions.ex                                             2          2        2         NO
 60%      0%        Phoenix.Logger                           lib/phoenix/logger.ex                                                 5          2        5         YES
-83%      0%        Phoenix.Naming                           lib/phoenix/naming.ex                                                 6          1        6         YES
+83%      100%      Phoenix.Naming                           lib/phoenix/naming.ex                                                 6          1        0         YES
 NA       NA        Phoenix.Param.Map                        lib/phoenix/param.ex                                                  0          0        0         NO
 NA       NA        Phoenix.Param.Integer                    lib/phoenix/param.ex                                                  0          0        0         NO
 NA       NA        Phoenix.Param.BitString                  lib/phoenix/param.ex                                                  0          0        0         NO
@@ -121,7 +121,7 @@ NA       NA        Phoenix.Router.NoRouteError              lib/phoenix/router.e
 100%     0%        Phoenix.Router.ConsoleFormatter          lib/phoenix/router/console_formatter.ex                               1          0        1         YES
 95%      0%        Phoenix.Router.Helpers                   lib/phoenix/router/helpers.ex                                         20         1        20        YES
 100%     0%        Phoenix.Router.Resource                  lib/phoenix/router/resource.ex                                        1          0        1         YES
-100%     0%        Phoenix.Router.Route                     lib/phoenix/router/route.ex                                           5          0        5         YES
+100%     20%       Phoenix.Router.Route                     lib/phoenix/router/route.ex                                           5          0        4         YES
 100%     0%        Phoenix.Router.Scope                     lib/phoenix/router/scope.ex                                           9          0        9         YES
 NA       NA        Phoenix.Socket.InvalidMessageError       lib/phoenix/socket.ex                                                 0          0        0         YES
 57%      0%        Phoenix.Socket                           lib/phoenix/socket.ex                                                 14         6        14        YES
@@ -134,13 +134,13 @@ NA       NA        Phoenix.Socket.Serializer                lib/phoenix/socket/s
 0%       0%        Phoenix.Socket.V2.JSONSerializer         lib/phoenix/socket/serializers/v2_json_serializer.ex                  3          3        3         YES
 100%     0%        Phoenix.Socket.Transport                 lib/phoenix/socket/transport.ex                                       6          0        6         YES
 NA       NA        Phoenix.Template.UndefinedError          lib/phoenix/template.ex                                               0          0        0         YES
-100%     0%        Phoenix.Template                         lib/phoenix/template.ex                                               11         0        11        YES
+100%     45%       Phoenix.Template                         lib/phoenix/template.ex                                               11         0        6         YES
 0%       0%        Phoenix.Template.EExEngine               lib/phoenix/template/eex_engine.ex                                    1          1        1         YES
 NA       NA        Phoenix.Template.Engine                  lib/phoenix/template/engine.ex                                        0          0        0         YES
 0%       0%        Phoenix.Template.ExsEngine               lib/phoenix/template/exs_engine.ex                                    1          1        1         YES
 NA       NA        Phoenix.ChannelTest.NoopSerializer       lib/phoenix/test/channel_test.ex                                      0          0        0         YES
-100%     0%        Phoenix.ChannelTest                      lib/phoenix/test/channel_test.ex                                      19         0        19        YES
-100%     0%        Phoenix.ConnTest                         lib/phoenix/test/conn_test.ex                                         17         0        17        YES
+100%     11%       Phoenix.ChannelTest                      lib/phoenix/test/channel_test.ex                                      19         0        17        YES
+100%     94%       Phoenix.ConnTest                         lib/phoenix/test/conn_test.ex                                         17         0        1         YES
 100%     0%        Phoenix.Token                            lib/phoenix/token.ex                                                  2          0        2         YES
 67%      0%        Phoenix.Transports.LongPoll              lib/phoenix/transports/long_poll.ex                                   3          1        3         YES
 50%      0%        Phoenix.Transports.LongPoll.Server       lib/phoenix/transports/long_poll_server.ex                            4          2        4         YES
@@ -152,7 +152,7 @@ Summary:
 Passed Modules: 72
 Failed Modules: 7
 Total Doc Coverage: 85.1%
-Total Spec Coverage: 0.0%
+Total Spec Coverage: 15.3%
 
 Doctor validation has passed!
 ```
