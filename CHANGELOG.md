@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0] - 2019-6-10
+
+### Added
+
+- Travis CI and tests
+
+### Fixed
+
+- Incorrect reporting on failed modules
+
 ## [0.6.0] - 2019-6-5
 
 ### Added
