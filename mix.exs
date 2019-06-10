@@ -10,6 +10,7 @@ defmodule Doctor.MixProject do
       source_url: "https://github.com/akoutmos/doctor",
       homepage_url: "https://hex.pm/packages/doctor",
       description: "Simple utility to create documentation coverage reports",
+      elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       docs: [
         main: "readme",
@@ -26,6 +27,9 @@ defmodule Doctor.MixProject do
       extra_applications: [:logger]
     ]
   end
+
+  defp elixirc_paths(:test), do: ["lib", "test/sample_files"]
+  defp elixirc_paths(_), do: ["lib"]
 
   defp package() do
     [

@@ -87,13 +87,13 @@ defmodule Doctor.ReportUtils do
   Checks whether the provided module passed validation
   """
   def module_passed_validation?(%ModuleReport{} = module_report, %Config{} = config) do
+    doc_cov = Decimal.to_float(module_report.doc_coverage) >= config.min_module_doc_coverage
+    spec_cov = Decimal.to_float(module_report.spec_coverage) >= config.min_module_spec_coverage
+
     if config.moduledoc_required do
-      module_report.doc_coverage >= config.min_module_doc_coverage and
-        module_report.spec_coverage >= config.min_module_spec_coverage and
-        module_report.has_module_doc
+      doc_cov and spec_cov and module_report.has_module_doc
     else
-      module_report.doc_coverage >= config.min_module_doc_coverage and
-        module_report.spec_coverage >= config.min_module_spec_coverage
+      doc_cov and spec_cov
     end
   end
 
@@ -103,8 +103,12 @@ defmodule Doctor.ReportUtils do
   def doctor_report_passed?(module_report_list, %Config{} = config) do
     all_modules_pass =
       module_report_list
-      |> Enum.find_value(true, fn module_report ->
-        not module_passed_validation?(module_report, config)
+      |> Enum.reduce_while(nil, fn module_report, _acc ->
+        if module_passed_validation?(module_report, config) do
+          {:cont, true}
+        else
+          {:halt, false}
+        end
       end)
 
     overall_doc_cov_pass =
