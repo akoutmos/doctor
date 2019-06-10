@@ -1,6 +1,6 @@
 # Doctor
 
-[![Hex.pm](https://img.shields.io/hexpm/v/doctor.svg)](http://hex.pm/packages/doctor)
+[![Hex.pm](https://img.shields.io/hexpm/v/doctor.svg)](http://hex.pm/packages/doctor) [![Build Status](https://travis-ci.org/akoutmos/doctor.svg?branch=master)](https://travis-ci.org/akoutmos/doctor)
 
 Ensure that your documentation is healthy with Doctor! This library contains a mix task which you can run against your project to generate a documentation coverage report. Items which are reported on include: the presence of module docs, which functions do/don't have docs, and which functions do/don't have typespecs. You can generate a `.doctor.exs` config file to specify what thresholds are acceptable for your project. If documentation coverage drops below your specified thresholds, the `mix doctor` task will return a non zero exit status.
 
