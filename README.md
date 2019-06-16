@@ -25,8 +25,9 @@ Documentation can be found at [https://hexdocs.pm/doctor](https://hexdocs.pm/doc
 
 Doctor comes with 2 mix tasks. One to run the documentation coverage report, and another to generate a `.doctor.exs` config file.
 
-To run the doctor mix task and generate a report run: `mix doctor`
-To generate a `.doctor.exs` config file with defaults, run: `mix doctor.gen.config`
+To run the doctor mix task and generate a report, run: `mix doctor`.
+To generate a `.doctor.exs` config file with defaults, run: `mix doctor.gen.config`.
+The `--short` option can be used to suppress the `File`, `No Docs`, and `No Specs` columns.
 
 ## Sample report
 
@@ -35,7 +36,7 @@ Report created for Doctor itself:
 ```
 Doctor file found. Loading configuration.
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-DOC COV  SPEC COV  MODULE                                   FILE                                                                  FUNCTIONS  NO DOCS  NO SPECS  MODULE DOC
+Doc Cov  Spec Cov  Module                                   File                                                                  Functions  No Docs  No Specs  Module Doc
 100%     0%        Doctor.CLI                               lib/cli/cli.ex                                                        1          0        1         YES
 100%     0%        Doctor.Config                            lib/config.ex                                                         3          0        3         YES
 100%     0%        Doctor.Docs                              lib/docs.ex                                                           1          0        1         YES
