@@ -16,6 +16,7 @@ defmodule Mix.Tasks.DoctorTest do
 
     test "should output the summary report with the correct output if given the --summary flag" do
       Mix.Tasks.Doctor.run(["--summary"])
+      remove_at_exit_hook()
       doctor_output = get_shell_output()
 
       assert doctor_output == [
@@ -32,6 +33,7 @@ defmodule Mix.Tasks.DoctorTest do
 
     test "should output the short report with the correct output if given the --short flag" do
       Mix.Tasks.Doctor.run(["--short"])
+      remove_at_exit_hook()
       doctor_output = get_shell_output()
 
       assert doctor_output == [
@@ -68,6 +70,7 @@ defmodule Mix.Tasks.DoctorTest do
 
     test "should output the full report with the correct output if given the --full flag" do
       Mix.Tasks.Doctor.run(["--full"])
+      remove_at_exit_hook()
       doctor_output = get_shell_output()
 
       assert doctor_output == [
@@ -151,5 +154,18 @@ defmodule Mix.Tasks.DoctorTest do
     Enum.map(message_mailbox, fn {:mix_shell, :info, message} ->
       message
     end)
+  end
+
+  defp remove_at_exit_hook() do
+    at_exit_hooks = :elixir_config.get(:at_exit)
+
+    filtered_hooks =
+      Enum.reject(at_exit_hooks, fn hook ->
+        function_info = Function.info(hook)
+
+        Keyword.get(function_info, :module) == Mix.Tasks.Doctor
+      end)
+
+    :elixir_config.put(:at_exit, filtered_hooks)
   end
 end
