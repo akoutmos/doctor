@@ -32,13 +32,13 @@ defmodule Mix.Tasks.Doctor do
 
   defp load_config_file(file) do
     if File.exists?(file) do
-      IO.info("Doctor file found. Loading configuration.")
+      Mix.shell().info("Doctor file found. Loading configuration.")
 
       {config, _bindings} = Code.eval_file(file)
 
       config
     else
-      IO.info("Doctor file not found. Using defaults.")
+      Mix.shell().info("Doctor file not found. Using defaults.")
 
       %{}
     end

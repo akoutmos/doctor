@@ -6,7 +6,7 @@ defmodule Doctor.Reporters.Summary do
 
   @behaviour Doctor.Reporter
 
-  alias Mix.Shell.IO
+  alias Elixir.IO.ANSI
   alias Doctor.ReportUtils
 
   @doc """
@@ -31,7 +31,7 @@ defmodule Doctor.Reporters.Summary do
   defp print_divider do
     "-"
     |> String.duplicate(45)
-    |> IO.info()
+    |> Mix.shell().info()
   end
 
   defp print_footer(pass, passed, failed, doc_coverage, spec_coverage) do
@@ -39,16 +39,16 @@ defmodule Doctor.Reporters.Summary do
     spec_coverage = Decimal.round(spec_coverage, 1)
 
     print_divider()
-    IO.info("Summary:\n")
-    IO.info("Passed Modules: #{passed}")
-    IO.info("Failed Modules: #{failed}")
-    IO.info("Total Doc Coverage: #{doc_coverage}%")
-    IO.info("Total Spec Coverage: #{spec_coverage}%\n")
+    Mix.shell().info("Summary:\n")
+    Mix.shell().info("Passed Modules: #{passed}")
+    Mix.shell().info("Failed Modules: #{failed}")
+    Mix.shell().info("Total Doc Coverage: #{doc_coverage}%")
+    Mix.shell().info("Total Spec Coverage: #{spec_coverage}%\n")
 
     if pass do
-      IO.info("Doctor validation has passed!")
+      Mix.shell().info("Doctor validation has passed!")
     else
-      IO.error("Doctor validation has failed!")
+      Mix.shell().info(ANSI.red() <> "Doctor validation has failed!" <> ANSI.reset())
     end
   end
 end

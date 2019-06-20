@@ -86,12 +86,19 @@ defmodule Doctor.ReportUtils do
   @doc """
   Checks whether the provided module passed validation
   """
-  def module_passed_validation?(%ModuleReport{} = module_report, %Config{} = config) do
-    doc_cov = Decimal.to_float(module_report.doc_coverage) >= config.min_module_doc_coverage
-    spec_cov = Decimal.to_float(module_report.spec_coverage) >= config.min_module_spec_coverage
+  def module_passed_validation?(
+        %ModuleReport{
+          doc_coverage: doc_coverage,
+          spec_coverage: spec_coverage,
+          has_module_doc: has_module_doc
+        },
+        %Config{} = config
+      ) do
+    doc_cov = calc_coverage_pass(doc_coverage, config.min_module_doc_coverage)
+    spec_cov = calc_coverage_pass(spec_coverage, config.min_module_spec_coverage)
 
     if config.moduledoc_required do
-      doc_cov and spec_cov and module_report.has_module_doc
+      doc_cov and spec_cov and has_module_doc
     else
       doc_cov and spec_cov
     end
@@ -125,4 +132,10 @@ defmodule Doctor.ReportUtils do
 
     all_modules_pass and overall_doc_cov_pass and overall_spec_cov_pass
   end
+
+  defp calc_coverage_pass(coverage, threshold) when not is_nil(coverage) do
+    Decimal.to_float(coverage) >= threshold
+  end
+
+  defp calc_coverage_pass(_coverage, _threshold), do: true
 end
