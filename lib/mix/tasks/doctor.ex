@@ -5,7 +5,6 @@ defmodule Mix.Tasks.Doctor do
 
   alias Doctor.Config
   alias Doctor.Reporters.{Full, Short, Summary}
-  alias Mix.Shell.IO
 
   @shortdoc "Documentation coverage report"
   @recursive true
