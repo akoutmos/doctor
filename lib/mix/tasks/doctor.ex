@@ -30,6 +30,15 @@ defmodule Mix.Tasks.Doctor do
   end
 
   defp load_config_file(file) do
+    # If we are performing this operation on an umbrella app then look to
+    # the project root for the config file
+    file =
+      if Mix.Task.recursing?() do
+        Path.join(["..", "..", file])
+      else
+        file
+      end
+
     if File.exists?(file) do
       Mix.shell().info("Doctor file found. Loading configuration.")
 
