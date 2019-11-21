@@ -13,17 +13,22 @@ defmodule Mix.Tasks.Doctor do
   This Mix task generates a Doctor report of the project.
   """
   def run(args) do
-    result =
+    config =
       Config.config_file()
       |> load_config_file()
       |> merge_defaults()
       |> merge_cli_args(args)
-      |> Doctor.CLI.run_report()
+
+    result = Doctor.CLI.run_report(config)
 
     unless result do
       System.at_exit(fn _ ->
         exit({:shutdown, 1})
       end)
+
+      if config.raise do
+        Mix.raise("Doctor has encountered an error.")
+      end
     end
 
     :ok
@@ -68,6 +73,9 @@ defmodule Mix.Tasks.Doctor do
 
         "--summary", acc ->
           Map.merge(acc, %{reporter: Summary})
+
+        "--raise", acc ->
+          Map.merge(acc, %{raise: true})
 
         _, acc ->
           acc

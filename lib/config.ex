@@ -13,6 +13,7 @@ defmodule Doctor.Config do
             min_overall_spec_coverage: 0,
             min_module_doc_coverage: 40,
             min_module_spec_coverage: 0,
+            raise: false,
             ignore_modules: [],
             ignore_paths: [],
             reporter: Doctor.Reporters.Full
