@@ -14,7 +14,7 @@ by adding `doctor` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:doctor, "~> 0.10.0"}
+    {:doctor, "~> 0.11.0"}
   ]
 end
 ```
@@ -29,11 +29,35 @@ To run the doctor mix task and generate a report, run: `mix doctor`.
 To generate a `.doctor.exs` config file with defaults, run: `mix doctor.gen.config`.
 The `--short` option can be used to suppress the `File`, `No Docs`, and `No Specs` columns.
 
-## Sample report
+## Configuration
+
+Below is a sample `.doctor.exs` file with some sample values for the various fields:
+
+```elixir
+%Doctor.Config{
+  ignore_modules: [Skip.This.Module, Also.Skip.This.Module],
+  ignore_paths: ["lib/skip/this/one/file.ex", ~r(lib/skip/all/these/files/.*)],
+  min_module_doc_coverage: 40,
+  min_module_spec_coverage: 0,
+  min_overall_doc_coverage: 100,
+  min_overall_spec_coverage: 0,
+  moduledoc_required: true,
+  raise: false,
+  reporter: Doctor.Reporters.Full
+}
+```
+
+For the reporter field, the following reporters included with Doctor:
+
+- `Doctor.Reporters.Full`
+- `Doctor.Reporters.Short`
+- `Doctor.Reporters.Summary`
+
+## Sample reports
 
 Report created for Doctor itself:
 
-```
+```text
 Doctor file found. Loading configuration.
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Doc Cov  Spec Cov  Module                                   File                                                                  Functions  No Docs  No Specs  Module Doc
@@ -64,7 +88,7 @@ Doctor validation has passed!
 
 Report created for Phoenix:
 
-```
+```text
 Doctor file not found. Using defaults.
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Doc Cov  Spec Cov  Module                                   File                                                                  Functions  No Docs  No Specs  Module Doc

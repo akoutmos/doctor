@@ -21,7 +21,7 @@ defmodule Doctor.CLI do
 
       # Filter out any files/modules that were specified in the config
       |> Enum.reject(fn module_info -> module_info.module in args.ignore_modules end)
-      |> Enum.reject(fn module_info -> filter_ignore_paths(module_info, args.ignore_paths) end)
+      |> Enum.reject(fn module_info -> filter_ignore_paths(module_info.file_relative_path, args.ignore_paths) end)
 
       # Asynchronously get the user defined functions from the modules
       |> Enum.map(&async_fetch_user_defined_functions/1)
@@ -61,13 +61,29 @@ defmodule Doctor.CLI do
     modules
   end
 
-  defp filter_ignore_paths(module_info, ignore_paths) do
-    Enum.reduce_while(ignore_paths, false, fn pattern, _acc ->
-      if Regex.match?(pattern, module_info.file_relative_path) do
-        {:halt, true}
-      else
-        {:cont, false}
-      end
+  defp filter_ignore_paths(file_relative_path, ignore_paths) do
+    ignore_paths
+    |> Enum.reduce_while(false, fn pattern, _acc ->
+      compare_ignore_path(file_relative_path, pattern)
     end)
   end
+
+  defp compare_ignore_path(file_relative_path, %Regex{} = ignore_pattern) do
+    if Regex.match?(ignore_pattern, file_relative_path) do
+      {:halt, true}
+    else
+      {:cont, false}
+    end
+  end
+
+  defp compare_ignore_path(file_relative_path, ignore_string) when is_bitstring(ignore_string) do
+    if file_relative_path == ignore_string do
+      {:halt, true}
+    else
+      {:cont, false}
+    end
+  end
+
+  defp compare_ignore_path(_, ignore_value),
+    do: raise("Encountered invalid ignore_paths entry: #{inspect(ignore_value)}")
 end
