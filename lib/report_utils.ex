@@ -66,9 +66,13 @@ defmodule Doctor.ReportUtils do
     total_functions = count_total_functions(module_report_list)
     documented_functions = count_total_documented_functions(module_report_list)
 
-    documented_functions
-    |> Decimal.div(total_functions)
-    |> Decimal.mult(100)
+    if total_functions > 0 do
+      documented_functions
+      |> Decimal.div(total_functions)
+      |> Decimal.mult(100)
+    else
+      Decimal.new(0)
+    end
   end
 
   @doc """
@@ -78,9 +82,13 @@ defmodule Doctor.ReportUtils do
     total_functions = count_total_functions(module_report_list)
     speced_functions = count_total_speced_functions(module_report_list)
 
-    speced_functions
-    |> Decimal.div(total_functions)
-    |> Decimal.mult(100)
+    if total_functions > 0 do
+      speced_functions
+      |> Decimal.div(total_functions)
+      |> Decimal.mult(100)
+    else
+      Decimal.new(0)
+    end
   end
 
   @doc """
@@ -110,7 +118,7 @@ defmodule Doctor.ReportUtils do
   def doctor_report_passed?(module_report_list, %Config{} = config) do
     all_modules_pass =
       module_report_list
-      |> Enum.reduce_while(nil, fn module_report, _acc ->
+      |> Enum.reduce_while(false, fn module_report, _acc ->
         if module_passed_validation?(module_report, config) do
           {:cont, true}
         else

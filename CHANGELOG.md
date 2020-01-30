@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.0] - 2020-1-29
+
+### Added
+
+- Ability to pass in a file name as a string for ignore_paths
+
 ## [0.10.0] - 2019-11-20
 
 ### Added
