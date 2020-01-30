@@ -47,7 +47,7 @@ Below is a sample `.doctor.exs` file with some sample values for the various fie
 }
 ```
 
-For the reporter field, the following reporters included with Doctor include:
+For the reporter field, the following reporters included with Doctor:
 
 - `Doctor.Reporters.Full`
 - `Doctor.Reporters.Short`
