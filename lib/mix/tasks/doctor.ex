@@ -1,5 +1,34 @@
 defmodule Mix.Tasks.Doctor do
-  @moduledoc false
+  @moduledoc """
+  Doctor is a command line utility that can be used to ensure that your project
+  documentation remains healthy. For more in depth documentation on Doctor or to
+  file bug/feature requests, please check out https://github.com/akoutmos/doctor.
+
+  The `mix doctor` command supports the following CLI flags (all of these options
+  and more are also configurable from your `.doctor.exs` file). The following CLI
+  flags are supported:
+
+  ```
+  --full       When generating a Doctor report of your project, use
+               the Doctor.Reporters.Full reporter.
+
+  --short      When generating a Doctor report of your project, use
+               the Doctor.Reporters.Short reporter.
+
+  --summary    When generating a Doctor report of your project, use
+               the Doctor.Reporters.Summary reporter.
+
+  --raise      If any of your modules fails Doctor validation, then
+               raise an error and return a non-zero exit status.
+
+  --umbrella   By default, in an umbrella project, each app will be
+               evaluated independently against the specified thresholds
+               in your .doctor.exs file. This flag changes that behavior
+               by aggregating the results of all your umbrella apps,
+               and then comparing those results to the configured
+               thresholds.
+  ```
+  """
 
   use Mix.Task
 
@@ -10,15 +39,19 @@ defmodule Mix.Tasks.Doctor do
   @recursive true
   @umbrella_accumulator Doctor.Umbrella
 
-  @doc """
-  This Mix task generates a Doctor report of the project.
-  """
+  @impl true
   def run(args) do
+    default_config_opts = Config.config_defaults()
+    cli_arg_opts = parse_cli_args(args)
+    config_file_opts = load_config_file(cli_arg_opts)
+
+    # Aggregate all of the various options sources
+    # Precedence order is:
+    # default < config file < cli args
     config =
-      Config.config_file()
-      |> load_config_file()
-      |> merge_defaults()
-      |> merge_cli_args(args)
+      default_config_opts
+      |> Map.merge(config_file_opts)
+      |> Map.merge(cli_arg_opts)
 
     if config.umbrella do
       run_umbrella(config)
@@ -82,14 +115,30 @@ defmodule Mix.Tasks.Doctor do
     pid
   end
 
-  defp load_config_file(file) do
+  defp load_config_file(%{config_file_path: file_path} = _cli_args) do
+    full_path = Path.expand(file_path)
+
+    if File.exists?(full_path) do
+      Mix.shell().info("Doctor file found. Loading configuration.")
+
+      {config, _bindings} = Code.eval_file(full_path)
+
+      config
+    else
+      Mix.shell().error("Doctor file not found at path \"#{full_path}\". Using defaults.")
+
+      %{}
+    end
+  end
+
+  defp load_config_file(_) do
     # If we are performing this operation on an umbrella app then look to
     # the project root for the config file
     file =
       if Mix.Task.recursing?() do
-        Path.join(["..", "..", file])
+        Path.join(["..", "..", Config.config_file()])
       else
-        file
+        Config.config_file()
       end
 
     if File.exists?(file) do
@@ -105,33 +154,28 @@ defmodule Mix.Tasks.Doctor do
     end
   end
 
-  defp merge_defaults(config) do
-    Map.merge(Config.config_defaults(), config)
-  end
+  defp parse_cli_args(args) do
+    {parsed_args, _args, _invalid} =
+      OptionParser.parse(args,
+        strict: [
+          full: :boolean,
+          short: :boolean,
+          summary: :boolean,
+          raise: :boolean,
+          umbrella: :boolean,
+          config_file: :string
+        ]
+      )
 
-  defp merge_cli_args(config, args) do
-    options =
-      args
-      |> Enum.reduce(%{}, fn
-        "--full", acc ->
-          Map.merge(acc, %{reporter: Full})
-
-        "--short", acc ->
-          Map.merge(acc, %{reporter: Short})
-
-        "--summary", acc ->
-          Map.merge(acc, %{reporter: Summary})
-
-        "--raise", acc ->
-          Map.merge(acc, %{raise: true})
-
-        "--umbrella", acc ->
-          Map.merge(acc, %{umbrella: true})
-
-        _, acc ->
-          acc
-      end)
-
-    Map.merge(config, options)
+    parsed_args
+    |> Enum.reduce(%{}, fn
+      {:full, true}, acc -> Map.merge(acc, %{reporter: Full})
+      {:short, true}, acc -> Map.merge(acc, %{reporter: Short})
+      {:summary, true}, acc -> Map.merge(acc, %{reporter: Summary})
+      {:raise, true}, acc -> Map.merge(acc, %{raise: true})
+      {:umbrella, true}, acc -> Map.merge(acc, %{umbrella: true})
+      {:config_file, file_path}, acc -> Map.merge(acc, %{config_file_path: file_path})
+      _unexpected_arg, acc -> acc
+    end)
   end
 end

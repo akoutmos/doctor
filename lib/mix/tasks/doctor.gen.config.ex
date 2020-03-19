@@ -1,5 +1,27 @@
 defmodule Mix.Tasks.Doctor.Gen.Config do
-  @moduledoc false
+  @moduledoc """
+  Doctor is a command line utility that can be used to ensure that your project
+  documentation remains healthy. For more in depth documentation on Doctor or to
+  file bug/feature requests, please check out https://github.com/akoutmos/doctor.
+
+  The `mix doctor.gen.config` command can be used to create a `.doctor.exs` file
+  with the default Doctor settings. The default file contents are:
+
+  ```
+  %Doctor.Config{
+    ignore_modules: [],
+    ignore_paths: [],
+    min_module_doc_coverage: 40,
+    min_module_spec_coverage: 0,
+    min_overall_doc_coverage: 100,
+    min_overall_spec_coverage: 0,
+    moduledoc_required: true,
+    raise: false,
+    umbrella: false,
+    reporter: Doctor.Reporters.Full
+  }
+  ```
+  """
 
   use Mix.Task
 
