@@ -14,7 +14,7 @@ by adding `doctor` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:doctor, "~> 0.11.0"}
+    {:doctor, "~> 0.12.0"}
   ]
 end
 ```
@@ -27,7 +27,66 @@ Doctor comes with 2 mix tasks. One to run the documentation coverage report, and
 
 To run the doctor mix task and generate a report, run: `mix doctor`.
 To generate a `.doctor.exs` config file with defaults, run: `mix doctor.gen.config`.
-The `--short` option can be used to suppress the `File`, `No Docs`, and `No Specs` columns.
+To get help documentation, run `mix help doctor` and `mix help doctor.gen.config`. The outputs of those help menus can be seen here:
+
+Running `mix help doctor` yields:
+
+```terminal
+                                   mix doctor
+
+Doctor is a command line utility that can be used to ensure that your project
+documentation remains healthy. For more in depth documentation on Doctor or to
+file bug/feature requests, please check out https://github.com/akoutmos/doctor.
+
+The mix doctor command supports the following CLI flags (all of these options
+and more are also configurable from your .doctor.exs file). The following CLI
+flags are supported:
+
+    --full       When generating a Doctor report of your project, use
+                 the Doctor.Reporters.Full reporter.
+
+    --short      When generating a Doctor report of your project, use
+                 the Doctor.Reporters.Short reporter.
+
+    --summary    When generating a Doctor report of your project, use
+                 the Doctor.Reporters.Summary reporter.
+
+    --raise      If any of your modules fails Doctor validation, then
+                 raise an error and return a non-zero exit status.
+
+    --umbrella   By default, in an umbrella project, each app will be
+                 evaluated independently against the specified thresholds
+                 in your .doctor.exs file. This flag changes that behavior
+                 by aggregating the results of all your umbrella apps,
+                 and then comparing those results to the configured
+                 thresholds.
+```
+
+Running `mix help doctor.gen.config` yields:
+
+```terminal
+                             mix doctor.gen.config
+
+Doctor is a command line utility that can be used to ensure that your project
+documentation remains healthy. For more in depth documentation on Doctor or to
+file bug/feature requests, please check out https://github.com/akoutmos/doctor.
+
+The mix doctor.gen.config command can be used to create a .doctor.exs file with
+the default Doctor settings. The default file contents are:
+
+    %Doctor.Config{
+      ignore_modules: [],
+      ignore_paths: [],
+      min_module_doc_coverage: 40,
+      min_module_spec_coverage: 0,
+      min_overall_doc_coverage: 50,
+      min_overall_spec_coverage: 0,
+      moduledoc_required: true,
+      raise: false,
+      reporter: Doctor.Reporters.Full,
+      umbrella: false
+    }
+```
 
 ## Configuration
 

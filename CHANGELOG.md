@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.12.0] - 2020-3-19
+
+### Added
+
+- Ability to aggregate umbrella results into one report
+- Ability to pass custom path to config file
+- CLI docs via `mix help doctor` and `mix help doctor.gen.config`
+
 ## [0.11.0] - 2020-1-29
 
 ### Added
