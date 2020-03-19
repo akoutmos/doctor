@@ -7,6 +7,6 @@
   min_overall_spec_coverage: 0,
   moduledoc_required: true,
   raise: false,
-  umbrella: false,
-  reporter: Doctor.Reporters.Full
+  reporter: Doctor.Reporters.Full,
+  umbrella: false
 }
