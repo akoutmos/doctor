@@ -9,28 +9,31 @@ defmodule Doctor.CLI do
   @doc """
   Given the CLI arguments, run the report on the project,
   """
-  def run_report(args) do
+  def generate_module_report_list(args) do
     # Using the project's app name, fetch all the modules associated with the app
-    module_report_list =
-      Project.config()
-      |> Keyword.get(:app)
-      |> get_application_modules()
+    Project.config()
+    |> Keyword.get(:app)
+    |> get_application_modules()
 
-      # Fetch the module information from the list of application modules
-      |> Enum.map(&generate_module_entry/1)
+    # Fetch the module information from the list of application modules
+    |> Enum.map(&generate_module_entry/1)
 
-      # Filter out any files/modules that were specified in the config
-      |> Enum.reject(fn module_info -> module_info.module in args.ignore_modules end)
-      |> Enum.reject(fn module_info -> filter_ignore_paths(module_info.file_relative_path, args.ignore_paths) end)
+    # Filter out any files/modules that were specified in the config
+    |> Enum.reject(fn module_info -> module_info.module in args.ignore_modules end)
+    |> Enum.reject(fn module_info -> filter_ignore_paths(module_info.file_relative_path, args.ignore_paths) end)
 
-      # Asynchronously get the user defined functions from the modules
-      |> Enum.map(&async_fetch_user_defined_functions/1)
-      |> Enum.map(&Task.await(&1, 15_000))
+    # Asynchronously get the user defined functions from the modules
+    |> Enum.map(&async_fetch_user_defined_functions/1)
+    |> Enum.map(&Task.await(&1, 15_000))
 
-      # Build report struct for each module
-      |> Enum.sort(&(&1.file_relative_path < &2.file_relative_path))
-      |> Enum.map(&ModuleReport.build/1)
+    # Build report struct for each module
+    |> Enum.sort(&(&1.file_relative_path < &2.file_relative_path))
+    |> Enum.map(&ModuleReport.build/1)
+  end
 
+  @doc """
+  """
+  def process_module_report_list(module_report_list, args) do
     # Invoke the configured module reporter and return whether Doctor validation passed/failed
     args.reporter.generate_report(module_report_list, args)
     ReportUtils.doctor_report_passed?(module_report_list, args)

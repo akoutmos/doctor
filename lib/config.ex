@@ -14,6 +14,7 @@ defmodule Doctor.Config do
             min_module_doc_coverage: 40,
             min_module_spec_coverage: 0,
             raise: false,
+            umbrella: false,
             ignore_modules: [],
             ignore_paths: [],
             reporter: Doctor.Reporters.Full
@@ -21,7 +22,7 @@ defmodule Doctor.Config do
   @doc """
   Get the configuration defaults as a Config struct
   """
-  def config_defaults_as_map, do: %Config{}
+  def config_defaults, do: %Config{}
 
   @doc """
   Get the configuration defaults as a string

@@ -3,11 +3,12 @@ defmodule Mix.Tasks.Doctor do
 
   use Mix.Task
 
-  alias Doctor.Config
+  alias Doctor.{CLI, Config}
   alias Doctor.Reporters.{Full, Short, Summary}
 
   @shortdoc "Documentation coverage report"
   @recursive true
+  @umbrella_accumulator Doctor.Umbrella
 
   @doc """
   This Mix task generates a Doctor report of the project.
@@ -19,7 +20,32 @@ defmodule Mix.Tasks.Doctor do
       |> merge_defaults()
       |> merge_cli_args(args)
 
-    result = Doctor.CLI.run_report(config)
+    if config.umbrella do
+      run_umbrella(config)
+    else
+      run_default(config)
+    end
+  end
+
+  defp run_umbrella(config) do
+    module_report_list = CLI.generate_module_report_list(config)
+
+    acc_pid =
+      case Process.whereis(@umbrella_accumulator) do
+        nil -> init_umbrella_acc(config)
+        pid -> pid
+      end
+
+    Agent.update(acc_pid, fn acc ->
+      acc ++ module_report_list
+    end)
+  end
+
+  defp run_default(config) do
+    result =
+      config
+      |> CLI.generate_module_report_list()
+      |> CLI.process_module_report_list(config)
 
     unless result do
       System.at_exit(fn _ ->
@@ -27,11 +53,31 @@ defmodule Mix.Tasks.Doctor do
       end)
 
       if config.raise do
-        Mix.raise("Doctor has encountered an error.")
+        Mix.raise("Doctor validation has failed and raised an error")
       end
     end
 
     :ok
+  end
+
+  defp init_umbrella_acc(config) do
+    {:ok, pid} = Agent.start_link(fn -> [] end, name: @umbrella_accumulator)
+
+    System.at_exit(fn _ ->
+      Agent.get(pid, fn module_report_list ->
+        result = CLI.process_module_report_list(module_report_list, config)
+
+        unless result do
+          if config.raise do
+            Mix.raise("Doctor validation has failed and raised an error")
+          end
+
+          exit({:shutdown, 1})
+        end
+      end)
+    end)
+
+    pid
   end
 
   defp load_config_file(file) do
@@ -58,7 +104,7 @@ defmodule Mix.Tasks.Doctor do
   end
 
   defp merge_defaults(config) do
-    Map.merge(Config.config_defaults_as_map(), config)
+    Map.merge(Config.config_defaults(), config)
   end
 
   defp merge_cli_args(config, args) do
@@ -76,6 +122,9 @@ defmodule Mix.Tasks.Doctor do
 
         "--raise", acc ->
           Map.merge(acc, %{raise: true})
+
+        "--umbrella", acc ->
+          Map.merge(acc, %{umbrella: true})
 
         _, acc ->
           acc
