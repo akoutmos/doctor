@@ -32,6 +32,8 @@ defmodule Doctor.CLI do
   end
 
   @doc """
+  Given a list of individual module reports, process each item in the
+  list with the configured reporter and return a pass or fail boolean
   """
   def process_module_report_list(module_report_list, args) do
     # Invoke the configured module reporter and return whether Doctor validation passed/failed
