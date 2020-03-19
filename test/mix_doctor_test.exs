@@ -93,12 +93,12 @@ defmodule Mix.Tasks.DoctorTest do
     test "should output the summary report along with an error when an invalid  doctor file path is provided" do
       Mix.Tasks.Doctor.run(["--summary", "--config-file", "./not_a_real_file.exs"])
       remove_at_exit_hook()
-      doctor_output = get_shell_output()
+      [[first_line] | rest_doctor_output] = get_shell_output()
 
-      assert doctor_output == [
-               [
-                 "Doctor file not found at path \"/home/akoutmos/Documents/open_source_libs/doctor/not_a_real_file.exs\". Using defaults."
-               ],
+      assert first_line =~ "Doctor file not found at path"
+      assert first_line =~ "not_a_real_file.exs"
+
+      assert rest_doctor_output == [
                ["---------------------------------------------"],
                ["Summary:\n"],
                ["Passed Modules: 16"],
