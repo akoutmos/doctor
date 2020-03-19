@@ -43,6 +43,7 @@ Below is a sample `.doctor.exs` file with some sample values for the various fie
   min_overall_spec_coverage: 0,
   moduledoc_required: true,
   raise: false,
+  umbrella: false,
   reporter: Doctor.Reporters.Full
 }
 ```
