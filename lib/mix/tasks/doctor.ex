@@ -39,6 +39,8 @@ defmodule Mix.Tasks.Doctor do
     Agent.update(acc_pid, fn acc ->
       acc ++ module_report_list
     end)
+
+    :ok
   end
 
   defp run_default(config) do
@@ -64,17 +66,17 @@ defmodule Mix.Tasks.Doctor do
     {:ok, pid} = Agent.start_link(fn -> [] end, name: @umbrella_accumulator)
 
     System.at_exit(fn _ ->
-      Agent.get(pid, fn module_report_list ->
-        result = CLI.process_module_report_list(module_report_list, config)
+      module_report_list = Agent.get(pid, & &1)
+      Agent.stop(pid)
+      result = CLI.process_module_report_list(module_report_list, config)
 
-        unless result do
-          if config.raise do
-            Mix.raise("Doctor validation has failed and raised an error")
-          end
-
-          exit({:shutdown, 1})
+      unless result do
+        if config.raise do
+          Mix.raise("Doctor validation has failed and raised an error")
         end
-      end)
+
+        exit({:shutdown, 1})
+      end
     end)
 
     pid
