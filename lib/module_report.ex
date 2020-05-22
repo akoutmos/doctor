@@ -8,6 +8,17 @@ defmodule Doctor.ModuleReport do
   alias __MODULE__
   alias Doctor.ModuleInformation
 
+  @type t :: %ModuleReport{
+          doc_coverage: Decimal.t(),
+          spec_coverage: Decimal.t(),
+          file: String.t(),
+          module: module(),
+          functions: integer(),
+          missed_docs: integer(),
+          missed_specs: integer(),
+          has_module_doc: boolean()
+        }
+
   defstruct ~w(doc_coverage spec_coverage file module functions missed_docs missed_specs has_module_doc)a
 
   @doc """

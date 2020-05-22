@@ -7,6 +7,20 @@ defmodule Doctor.ModuleInformation do
   alias __MODULE__
   alias Doctor.{Docs, Specs}
 
+  @type t :: %ModuleInformation{
+          module: module(),
+          behaviours: [module()],
+          file_full_path: String.t(),
+          file_relative_path: String.t(),
+          file_ast: list(),
+          docs_version: atom(),
+          module_doc: map(),
+          metadata: map(),
+          docs: [%Docs{}],
+          specs: list(),
+          user_defined_functions: [{atom(), integer(), atom() | boolean()}]
+        }
+
   defstruct ~w(module file_full_path file_relative_path file_ast docs_version module_doc metadata docs specs user_defined_functions behaviours)a
 
   @doc """
