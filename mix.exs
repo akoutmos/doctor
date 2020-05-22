@@ -4,7 +4,7 @@ defmodule Doctor.MixProject do
   def project do
     [
       app: :doctor,
-      version: "0.12.0",
+      version: "0.13.0",
       elixir: "~> 1.7",
       name: "Doctor",
       source_url: "https://github.com/akoutmos/doctor",
@@ -43,8 +43,8 @@ defmodule Doctor.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:decimal, "~> 1.7"},
-      {:ex_doc, ">= 0.0.0", only: :dev}
+      {:decimal, "~> 1.8"},
+      {:ex_doc, "~> 0.22", only: :dev}
     ]
   end
 end

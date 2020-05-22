@@ -37,6 +37,23 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.doc_coverage == Decimal.new("57.14285714285714285714285714")
   end
 
+  test "build/1 should build the correct report struct for a file that implements behaviour callbacks" do
+    module_report =
+      Doctor.BehaviourModule
+      |> Code.fetch_docs()
+      |> ModuleInformation.build(Doctor.BehaviourModule)
+      |> ModuleInformation.load_file_ast()
+      |> ModuleInformation.load_user_defined_functions()
+      |> ModuleReport.build()
+
+    assert module_report.functions == 3
+    assert module_report.has_module_doc
+    assert module_report.missed_docs == 0
+    assert module_report.missed_specs == 0
+    assert module_report.module == "Doctor.BehaviourModule"
+    assert module_report.doc_coverage == Decimal.new("100")
+  end
+
   test "build/1 should build the correct report struct for a file with no coverage" do
     module_report =
       Doctor.NoDocs

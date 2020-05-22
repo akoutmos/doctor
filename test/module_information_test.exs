@@ -43,13 +43,13 @@ defmodule Doctor.ModuleInformationTest do
     assert module_information != nil
 
     assert Enum.sort(module_information.user_defined_functions) == [
-             func_1: 1,
-             func_2: 1,
-             func_3: 1,
-             func_4: 1,
-             func_5: 2,
-             func_5: 3,
-             func_6: 1
+             {:func_1, 1, :none},
+             {:func_2, 1, :none},
+             {:func_3, 1, :none},
+             {:func_4, 1, :none},
+             {:func_5, 2, :none},
+             {:func_5, 3, :none},
+             {:func_6, 1, :none}
            ]
   end
 end

@@ -37,7 +37,7 @@ defmodule Mix.Tasks.DoctorTest do
                  "NA       NA        Doctor                                   lib/doctor.ex                                                         0          0        0         YES       "
                ],
                [
-                 "100%     0%        Mix.Tasks.Doctor                         lib/mix/tasks/doctor.ex                                               1          0        1         YES       "
+                 "100%     100%      Mix.Tasks.Doctor                         lib/mix/tasks/doctor.ex                                               1          0        0         YES       "
                ],
                [
                  "100%     0%        Mix.Tasks.Doctor.Gen.Config              lib/mix/tasks/doctor.gen.config.ex                                    1          0        1         YES       "
@@ -73,6 +73,9 @@ defmodule Mix.Tasks.DoctorTest do
                  "100%     100%      Doctor.AllDocs                           test/sample_files/all_docs.ex                                         7          0        0         YES       "
                ],
                [
+                 "100%     100%      Doctor.BehaviourModule                   test/sample_files/behaviour_module.ex                                 3          0        0         YES       "
+               ],
+               [
                  "\e[31m0%       0%        Doctor.NoDocs                            test/sample_files/no_docs.ex                                          7          7        7         NO        \e[0m"
                ],
                [
@@ -82,10 +85,10 @@ defmodule Mix.Tasks.DoctorTest do
                  "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
                ],
                ["Summary:\n"],
-               ["Passed Modules: 16"],
+               ["Passed Modules: 17"],
                ["Failed Modules: 2"],
-               ["Total Doc Coverage: 78.7%"],
-               ["Total Spec Coverage: 23.4%\n"],
+               ["Total Doc Coverage: 80.0%"],
+               ["Total Spec Coverage: 30.0%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
              ]
     end
@@ -101,10 +104,10 @@ defmodule Mix.Tasks.DoctorTest do
       assert rest_doctor_output == [
                ["---------------------------------------------"],
                ["Summary:\n"],
-               ["Passed Modules: 16"],
+               ["Passed Modules: 17"],
                ["Failed Modules: 2"],
-               ["Total Doc Coverage: 78.7%"],
-               ["Total Spec Coverage: 23.4%\n"],
+               ["Total Doc Coverage: 80.0%"],
+               ["Total Spec Coverage: 30.0%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
              ]
     end
@@ -118,10 +121,10 @@ defmodule Mix.Tasks.DoctorTest do
                ["Doctor file found. Loading configuration."],
                ["---------------------------------------------"],
                ["Summary:\n"],
-               ["Passed Modules: 16"],
+               ["Passed Modules: 17"],
                ["Failed Modules: 2"],
-               ["Total Doc Coverage: 78.7%"],
-               ["Total Spec Coverage: 23.4%\n"],
+               ["Total Doc Coverage: 80.0%"],
+               ["Total Spec Coverage: 30.0%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
              ]
     end
@@ -135,10 +138,10 @@ defmodule Mix.Tasks.DoctorTest do
                ["Doctor file found. Loading configuration."],
                ["---------------------------------------------"],
                ["Summary:\n"],
-               ["Passed Modules: 16"],
+               ["Passed Modules: 17"],
                ["Failed Modules: 2"],
-               ["Total Doc Coverage: 78.7%"],
-               ["Total Spec Coverage: 23.4%\n"],
+               ["Total Doc Coverage: 80.0%"],
+               ["Total Spec Coverage: 30.0%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
              ]
     end
@@ -156,7 +159,7 @@ defmodule Mix.Tasks.DoctorTest do
                ["100%     0%        3          Doctor.Config                            YES       "],
                ["100%     0%        1          Doctor.Docs                              YES       "],
                ["NA       NA        0          Doctor                                   YES       "],
-               ["100%     0%        1          Mix.Tasks.Doctor                         YES       "],
+               ["100%     100%      1          Mix.Tasks.Doctor                         YES       "],
                ["100%     0%        1          Mix.Tasks.Doctor.Gen.Config              YES       "],
                ["100%     0%        3          Doctor.ModuleInformation                 YES       "],
                ["100%     0%        1          Doctor.ModuleReport                      YES       "],
@@ -168,14 +171,15 @@ defmodule Mix.Tasks.DoctorTest do
                ["100%     0%        1          Doctor.Reporters.Summary                 YES       "],
                ["100%     0%        1          Doctor.Specs                             YES       "],
                ["100%     100%      7          Doctor.AllDocs                           YES       "],
+               ["100%     100%      3          Doctor.BehaviourModule                   YES       "],
                ["\e[31m0%       0%        7          Doctor.NoDocs                            NO        \e[0m"],
                ["\e[31m57%      57%       7          Doctor.PartialDocs                       NO        \e[0m"],
                ["---------------------------------------------------------------------------------"],
                ["Summary:\n"],
-               ["Passed Modules: 16"],
+               ["Passed Modules: 17"],
                ["Failed Modules: 2"],
-               ["Total Doc Coverage: 78.7%"],
-               ["Total Spec Coverage: 23.4%\n"],
+               ["Total Doc Coverage: 80.0%"],
+               ["Total Spec Coverage: 30.0%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
              ]
     end
@@ -206,7 +210,7 @@ defmodule Mix.Tasks.DoctorTest do
                  "NA       NA        Doctor                                   lib/doctor.ex                                                         0          0        0         YES       "
                ],
                [
-                 "100%     0%        Mix.Tasks.Doctor                         lib/mix/tasks/doctor.ex                                               1          0        1         YES       "
+                 "100%     100%      Mix.Tasks.Doctor                         lib/mix/tasks/doctor.ex                                               1          0        0         YES       "
                ],
                [
                  "100%     0%        Mix.Tasks.Doctor.Gen.Config              lib/mix/tasks/doctor.gen.config.ex                                    1          0        1         YES       "
@@ -242,6 +246,9 @@ defmodule Mix.Tasks.DoctorTest do
                  "100%     100%      Doctor.AllDocs                           test/sample_files/all_docs.ex                                         7          0        0         YES       "
                ],
                [
+                 "100%     100%      Doctor.BehaviourModule                   test/sample_files/behaviour_module.ex                                 3          0        0         YES       "
+               ],
+               [
                  "\e[31m0%       0%        Doctor.NoDocs                            test/sample_files/no_docs.ex                                          7          7        7         NO        \e[0m"
                ],
                [
@@ -251,10 +258,10 @@ defmodule Mix.Tasks.DoctorTest do
                  "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
                ],
                ["Summary:\n"],
-               ["Passed Modules: 16"],
+               ["Passed Modules: 17"],
                ["Failed Modules: 2"],
-               ["Total Doc Coverage: 78.7%"],
-               ["Total Spec Coverage: 23.4%\n"],
+               ["Total Doc Coverage: 80.0%"],
+               ["Total Spec Coverage: 30.0%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
              ]
     end

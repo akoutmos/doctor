@@ -14,7 +14,7 @@ by adding `doctor` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:doctor, "~> 0.12.0"}
+    {:doctor, "~> 0.13.0"}
   ]
 end
 ```
