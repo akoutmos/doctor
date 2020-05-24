@@ -80,7 +80,7 @@ defmodule Doctor.ModuleReport do
         {function, arity} in function_specs ->
           false
 
-        is_boolean(impl) and impl ->
+        is_boolean(impl) and impl and module_info.behaviours != [] ->
           false
 
         is_atom(impl) and Module.concat([impl]) in module_info.behaviours ->
