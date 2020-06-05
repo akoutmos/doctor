@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.14.0] - 2020-3-19
+
+### Added
+
+- Additional configuration option struct_type_spec_required that checks for struct module type specs
+
 ## [0.13.0] - 2020-5-20
 
 ### Fixed
