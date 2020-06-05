@@ -79,14 +79,20 @@ defmodule Mix.Tasks.DoctorTest do
                  "\e[31m0%       0%        Doctor.NoDocs                            test/sample_files/no_docs.ex                              7          7        7         No          N/A        \e[0m"
                ],
                [
+                 "\e[31mN/A      N/A       Doctor.NoStructSpecModule                test/sample_files/no_struct_spec_module.ex                0          0        0         No          No         \e[0m"
+               ],
+               [
                  "\e[31m57%      57%       Doctor.PartialDocs                       test/sample_files/partial_docs.ex                         7          3        3         No          N/A        \e[0m"
+               ],
+               [
+                 "\e[31mN/A      N/A       Doctor.StructSpecModule                  test/sample_files/struct_spec_module.ex                   0          0        0         No          Yes        \e[0m"
                ],
                [
                  "---------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
                ],
                ["Summary:\n"],
                ["Passed Modules: 17"],
-               ["Failed Modules: 2"],
+               ["Failed Modules: 4"],
                ["Total Doc Coverage: 80.4%"],
                ["Total Spec Coverage: 29.4%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
@@ -105,7 +111,7 @@ defmodule Mix.Tasks.DoctorTest do
                ["---------------------------------------------"],
                ["Summary:\n"],
                ["Passed Modules: 17"],
-               ["Failed Modules: 2"],
+               ["Failed Modules: 4"],
                ["Total Doc Coverage: 80.4%"],
                ["Total Spec Coverage: 29.4%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
@@ -122,7 +128,7 @@ defmodule Mix.Tasks.DoctorTest do
                ["---------------------------------------------"],
                ["Summary:\n"],
                ["Passed Modules: 17"],
-               ["Failed Modules: 2"],
+               ["Failed Modules: 4"],
                ["Total Doc Coverage: 80.4%"],
                ["Total Spec Coverage: 29.4%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
@@ -139,7 +145,7 @@ defmodule Mix.Tasks.DoctorTest do
                ["---------------------------------------------"],
                ["Summary:\n"],
                ["Passed Modules: 17"],
-               ["Failed Modules: 2"],
+               ["Failed Modules: 4"],
                ["Total Doc Coverage: 80.4%"],
                ["Total Spec Coverage: 29.4%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
@@ -176,12 +182,18 @@ defmodule Mix.Tasks.DoctorTest do
                  "\e[31m0%       0%        7          Doctor.NoDocs                            No          N/A        \e[0m"
                ],
                [
+                 "\e[31mN/A      N/A       0          Doctor.NoStructSpecModule                No          No         \e[0m"
+               ],
+               [
                  "\e[31m57%      57%       7          Doctor.PartialDocs                       No          N/A        \e[0m"
+               ],
+               [
+                 "\e[31mN/A      N/A       0          Doctor.StructSpecModule                  No          Yes        \e[0m"
                ],
                ["----------------------------------------------------------------------------------------------"],
                ["Summary:\n"],
                ["Passed Modules: 17"],
-               ["Failed Modules: 2"],
+               ["Failed Modules: 4"],
                ["Total Doc Coverage: 80.4%"],
                ["Total Spec Coverage: 29.4%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
@@ -256,14 +268,20 @@ defmodule Mix.Tasks.DoctorTest do
                  "\e[31m0%       0%        Doctor.NoDocs                            test/sample_files/no_docs.ex                              7          7        7         No          N/A        \e[0m"
                ],
                [
+                 "\e[31mN/A      N/A       Doctor.NoStructSpecModule                test/sample_files/no_struct_spec_module.ex                0          0        0         No          No         \e[0m"
+               ],
+               [
                  "\e[31m57%      57%       Doctor.PartialDocs                       test/sample_files/partial_docs.ex                         7          3        3         No          N/A        \e[0m"
+               ],
+               [
+                 "\e[31mN/A      N/A       Doctor.StructSpecModule                  test/sample_files/struct_spec_module.ex                   0          0        0         No          Yes        \e[0m"
                ],
                [
                  "---------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
                ],
                ["Summary:\n"],
                ["Passed Modules: 17"],
-               ["Failed Modules: 2"],
+               ["Failed Modules: 4"],
                ["Total Doc Coverage: 80.4%"],
                ["Total Spec Coverage: 29.4%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
