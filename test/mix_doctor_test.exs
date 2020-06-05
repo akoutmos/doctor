@@ -19,76 +19,76 @@ defmodule Mix.Tasks.DoctorTest do
       assert doctor_output == [
                ["Doctor file found. Loading configuration."],
                [
-                 "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
+                 "---------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
                ],
                [
-                 "Doc Cov  Spec Cov  Module                                   File                                                                  Functions  No Docs  No Specs  Module Doc"
+                 "Doc Cov  Spec Cov  Module                                   File                                                      Functions  No Docs  No Specs  Module Doc  Struct Spec"
                ],
                [
-                 "100%     0%        Doctor.CLI                               lib/cli/cli.ex                                                        2          0        2         YES       "
+                 "100%     0%        Doctor.CLI                               lib/cli/cli.ex                                            2          0        2         Yes         N/A        "
                ],
                [
-                 "100%     0%        Doctor.Config                            lib/config.ex                                                         3          0        3         YES       "
+                 "100%     0%        Doctor.Config                            lib/config.ex                                             3          0        3         Yes         Yes        "
                ],
                [
-                 "100%     0%        Doctor.Docs                              lib/docs.ex                                                           1          0        1         YES       "
+                 "100%     0%        Doctor.Docs                              lib/docs.ex                                               1          0        1         Yes         Yes        "
                ],
                [
-                 "NA       NA        Doctor                                   lib/doctor.ex                                                         0          0        0         YES       "
+                 "N/A      N/A       Doctor                                   lib/doctor.ex                                             0          0        0         Yes         N/A        "
                ],
                [
-                 "100%     100%      Mix.Tasks.Doctor                         lib/mix/tasks/doctor.ex                                               1          0        0         YES       "
+                 "100%     100%      Mix.Tasks.Doctor                         lib/mix/tasks/doctor.ex                                   1          0        0         Yes         N/A        "
                ],
                [
-                 "100%     0%        Mix.Tasks.Doctor.Gen.Config              lib/mix/tasks/doctor.gen.config.ex                                    1          0        1         YES       "
+                 "100%     0%        Mix.Tasks.Doctor.Gen.Config              lib/mix/tasks/doctor.gen.config.ex                        1          0        1         Yes         N/A        "
                ],
                [
-                 "100%     0%        Doctor.ModuleInformation                 lib/module_information.ex                                             3          0        3         YES       "
+                 "100%     0%        Doctor.ModuleInformation                 lib/module_information.ex                                 4          0        4         Yes         Yes        "
                ],
                [
-                 "100%     0%        Doctor.ModuleReport                      lib/module_report.ex                                                  1          0        1         YES       "
+                 "100%     0%        Doctor.ModuleReport                      lib/module_report.ex                                      1          0        1         Yes         Yes        "
                ],
                [
-                 "100%     0%        Doctor.ReportUtils                       lib/report_utils.ex                                                   9          0        9         YES       "
+                 "100%     0%        Doctor.ReportUtils                       lib/report_utils.ex                                       9          0        9         Yes         N/A        "
                ],
                [
-                 "NA       NA        Doctor.Reporter                          lib/reporter.ex                                                       0          0        0         YES       "
+                 "N/A      N/A       Doctor.Reporter                          lib/reporter.ex                                           0          0        0         Yes         N/A        "
                ],
                [
-                 "100%     0%        Doctor.Reporters.Full                    lib/reporters/full.ex                                                 1          0        1         YES       "
+                 "100%     0%        Doctor.Reporters.Full                    lib/reporters/full.ex                                     1          0        1         Yes         N/A        "
                ],
                [
-                 "100%     0%        Doctor.Reporters.OutputUtils             lib/reporters/output_utils.ex                                         1          0        1         YES       "
+                 "100%     0%        Doctor.Reporters.OutputUtils             lib/reporters/output_utils.ex                             1          0        1         Yes         N/A        "
                ],
                [
-                 "100%     0%        Doctor.Reporters.Short                   lib/reporters/short.ex                                                1          0        1         YES       "
+                 "100%     0%        Doctor.Reporters.Short                   lib/reporters/short.ex                                    1          0        1         Yes         N/A        "
                ],
                [
-                 "100%     0%        Doctor.Reporters.Summary                 lib/reporters/summary.ex                                              1          0        1         YES       "
+                 "100%     0%        Doctor.Reporters.Summary                 lib/reporters/summary.ex                                  1          0        1         Yes         N/A        "
                ],
                [
-                 "100%     0%        Doctor.Specs                             lib/specs.ex                                                          1          0        1         YES       "
+                 "100%     0%        Doctor.Specs                             lib/specs.ex                                              1          0        1         Yes         Yes        "
                ],
                [
-                 "100%     100%      Doctor.AllDocs                           test/sample_files/all_docs.ex                                         7          0        0         YES       "
+                 "100%     100%      Doctor.AllDocs                           test/sample_files/all_docs.ex                             7          0        0         Yes         N/A        "
                ],
                [
-                 "100%     100%      Doctor.BehaviourModule                   test/sample_files/behaviour_module.ex                                 3          0        0         YES       "
+                 "100%     100%      Doctor.BehaviourModule                   test/sample_files/behaviour_module.ex                     3          0        0         Yes         N/A        "
                ],
                [
-                 "\e[31m0%       0%        Doctor.NoDocs                            test/sample_files/no_docs.ex                                          7          7        7         NO        \e[0m"
+                 "\e[31m0%       0%        Doctor.NoDocs                            test/sample_files/no_docs.ex                              7          7        7         No          N/A        \e[0m"
                ],
                [
-                 "\e[31m57%      57%       Doctor.PartialDocs                       test/sample_files/partial_docs.ex                                     7          3        3         NO        \e[0m"
+                 "\e[31m57%      57%       Doctor.PartialDocs                       test/sample_files/partial_docs.ex                         7          3        3         No          N/A        \e[0m"
                ],
                [
-                 "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
+                 "---------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
                ],
                ["Summary:\n"],
                ["Passed Modules: 17"],
                ["Failed Modules: 2"],
-               ["Total Doc Coverage: 80.0%"],
-               ["Total Spec Coverage: 30.0%\n"],
+               ["Total Doc Coverage: 80.4%"],
+               ["Total Spec Coverage: 29.4%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
              ]
     end
@@ -106,8 +106,8 @@ defmodule Mix.Tasks.DoctorTest do
                ["Summary:\n"],
                ["Passed Modules: 17"],
                ["Failed Modules: 2"],
-               ["Total Doc Coverage: 80.0%"],
-               ["Total Spec Coverage: 30.0%\n"],
+               ["Total Doc Coverage: 80.4%"],
+               ["Total Spec Coverage: 29.4%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
              ]
     end
@@ -123,8 +123,8 @@ defmodule Mix.Tasks.DoctorTest do
                ["Summary:\n"],
                ["Passed Modules: 17"],
                ["Failed Modules: 2"],
-               ["Total Doc Coverage: 80.0%"],
-               ["Total Spec Coverage: 30.0%\n"],
+               ["Total Doc Coverage: 80.4%"],
+               ["Total Spec Coverage: 29.4%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
              ]
     end
@@ -140,8 +140,8 @@ defmodule Mix.Tasks.DoctorTest do
                ["Summary:\n"],
                ["Passed Modules: 17"],
                ["Failed Modules: 2"],
-               ["Total Doc Coverage: 80.0%"],
-               ["Total Spec Coverage: 30.0%\n"],
+               ["Total Doc Coverage: 80.4%"],
+               ["Total Spec Coverage: 29.4%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
              ]
     end
@@ -153,33 +153,37 @@ defmodule Mix.Tasks.DoctorTest do
 
       assert doctor_output == [
                ["Doctor file found. Loading configuration."],
-               ["---------------------------------------------------------------------------------"],
-               ["Doc Cov  Spec Cov  Functions  Module                                   Module Doc"],
-               ["100%     0%        2          Doctor.CLI                               YES       "],
-               ["100%     0%        3          Doctor.Config                            YES       "],
-               ["100%     0%        1          Doctor.Docs                              YES       "],
-               ["NA       NA        0          Doctor                                   YES       "],
-               ["100%     100%      1          Mix.Tasks.Doctor                         YES       "],
-               ["100%     0%        1          Mix.Tasks.Doctor.Gen.Config              YES       "],
-               ["100%     0%        3          Doctor.ModuleInformation                 YES       "],
-               ["100%     0%        1          Doctor.ModuleReport                      YES       "],
-               ["100%     0%        9          Doctor.ReportUtils                       YES       "],
-               ["NA       NA        0          Doctor.Reporter                          YES       "],
-               ["100%     0%        1          Doctor.Reporters.Full                    YES       "],
-               ["100%     0%        1          Doctor.Reporters.OutputUtils             YES       "],
-               ["100%     0%        1          Doctor.Reporters.Short                   YES       "],
-               ["100%     0%        1          Doctor.Reporters.Summary                 YES       "],
-               ["100%     0%        1          Doctor.Specs                             YES       "],
-               ["100%     100%      7          Doctor.AllDocs                           YES       "],
-               ["100%     100%      3          Doctor.BehaviourModule                   YES       "],
-               ["\e[31m0%       0%        7          Doctor.NoDocs                            NO        \e[0m"],
-               ["\e[31m57%      57%       7          Doctor.PartialDocs                       NO        \e[0m"],
-               ["---------------------------------------------------------------------------------"],
+               ["----------------------------------------------------------------------------------------------"],
+               ["Doc Cov  Spec Cov  Functions  Module                                   Module Doc  Struct Spec"],
+               ["100%     0%        2          Doctor.CLI                               Yes         N/A        "],
+               ["100%     0%        3          Doctor.Config                            Yes         Yes        "],
+               ["100%     0%        1          Doctor.Docs                              Yes         Yes        "],
+               ["N/A      N/A       0          Doctor                                   Yes         N/A        "],
+               ["100%     100%      1          Mix.Tasks.Doctor                         Yes         N/A        "],
+               ["100%     0%        1          Mix.Tasks.Doctor.Gen.Config              Yes         N/A        "],
+               ["100%     0%        4          Doctor.ModuleInformation                 Yes         Yes        "],
+               ["100%     0%        1          Doctor.ModuleReport                      Yes         Yes        "],
+               ["100%     0%        9          Doctor.ReportUtils                       Yes         N/A        "],
+               ["N/A      N/A       0          Doctor.Reporter                          Yes         N/A        "],
+               ["100%     0%        1          Doctor.Reporters.Full                    Yes         N/A        "],
+               ["100%     0%        1          Doctor.Reporters.OutputUtils             Yes         N/A        "],
+               ["100%     0%        1          Doctor.Reporters.Short                   Yes         N/A        "],
+               ["100%     0%        1          Doctor.Reporters.Summary                 Yes         N/A        "],
+               ["100%     0%        1          Doctor.Specs                             Yes         Yes        "],
+               ["100%     100%      7          Doctor.AllDocs                           Yes         N/A        "],
+               ["100%     100%      3          Doctor.BehaviourModule                   Yes         N/A        "],
+               [
+                 "\e[31m0%       0%        7          Doctor.NoDocs                            No          N/A        \e[0m"
+               ],
+               [
+                 "\e[31m57%      57%       7          Doctor.PartialDocs                       No          N/A        \e[0m"
+               ],
+               ["----------------------------------------------------------------------------------------------"],
                ["Summary:\n"],
                ["Passed Modules: 17"],
                ["Failed Modules: 2"],
-               ["Total Doc Coverage: 80.0%"],
-               ["Total Spec Coverage: 30.0%\n"],
+               ["Total Doc Coverage: 80.4%"],
+               ["Total Spec Coverage: 29.4%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
              ]
     end
@@ -192,76 +196,76 @@ defmodule Mix.Tasks.DoctorTest do
       assert doctor_output == [
                ["Doctor file found. Loading configuration."],
                [
-                 "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
+                 "---------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
                ],
                [
-                 "Doc Cov  Spec Cov  Module                                   File                                                                  Functions  No Docs  No Specs  Module Doc"
+                 "Doc Cov  Spec Cov  Module                                   File                                                      Functions  No Docs  No Specs  Module Doc  Struct Spec"
                ],
                [
-                 "100%     0%        Doctor.CLI                               lib/cli/cli.ex                                                        2          0        2         YES       "
+                 "100%     0%        Doctor.CLI                               lib/cli/cli.ex                                            2          0        2         Yes         N/A        "
                ],
                [
-                 "100%     0%        Doctor.Config                            lib/config.ex                                                         3          0        3         YES       "
+                 "100%     0%        Doctor.Config                            lib/config.ex                                             3          0        3         Yes         Yes        "
                ],
                [
-                 "100%     0%        Doctor.Docs                              lib/docs.ex                                                           1          0        1         YES       "
+                 "100%     0%        Doctor.Docs                              lib/docs.ex                                               1          0        1         Yes         Yes        "
                ],
                [
-                 "NA       NA        Doctor                                   lib/doctor.ex                                                         0          0        0         YES       "
+                 "N/A      N/A       Doctor                                   lib/doctor.ex                                             0          0        0         Yes         N/A        "
                ],
                [
-                 "100%     100%      Mix.Tasks.Doctor                         lib/mix/tasks/doctor.ex                                               1          0        0         YES       "
+                 "100%     100%      Mix.Tasks.Doctor                         lib/mix/tasks/doctor.ex                                   1          0        0         Yes         N/A        "
                ],
                [
-                 "100%     0%        Mix.Tasks.Doctor.Gen.Config              lib/mix/tasks/doctor.gen.config.ex                                    1          0        1         YES       "
+                 "100%     0%        Mix.Tasks.Doctor.Gen.Config              lib/mix/tasks/doctor.gen.config.ex                        1          0        1         Yes         N/A        "
                ],
                [
-                 "100%     0%        Doctor.ModuleInformation                 lib/module_information.ex                                             3          0        3         YES       "
+                 "100%     0%        Doctor.ModuleInformation                 lib/module_information.ex                                 4          0        4         Yes         Yes        "
                ],
                [
-                 "100%     0%        Doctor.ModuleReport                      lib/module_report.ex                                                  1          0        1         YES       "
+                 "100%     0%        Doctor.ModuleReport                      lib/module_report.ex                                      1          0        1         Yes         Yes        "
                ],
                [
-                 "100%     0%        Doctor.ReportUtils                       lib/report_utils.ex                                                   9          0        9         YES       "
+                 "100%     0%        Doctor.ReportUtils                       lib/report_utils.ex                                       9          0        9         Yes         N/A        "
                ],
                [
-                 "NA       NA        Doctor.Reporter                          lib/reporter.ex                                                       0          0        0         YES       "
+                 "N/A      N/A       Doctor.Reporter                          lib/reporter.ex                                           0          0        0         Yes         N/A        "
                ],
                [
-                 "100%     0%        Doctor.Reporters.Full                    lib/reporters/full.ex                                                 1          0        1         YES       "
+                 "100%     0%        Doctor.Reporters.Full                    lib/reporters/full.ex                                     1          0        1         Yes         N/A        "
                ],
                [
-                 "100%     0%        Doctor.Reporters.OutputUtils             lib/reporters/output_utils.ex                                         1          0        1         YES       "
+                 "100%     0%        Doctor.Reporters.OutputUtils             lib/reporters/output_utils.ex                             1          0        1         Yes         N/A        "
                ],
                [
-                 "100%     0%        Doctor.Reporters.Short                   lib/reporters/short.ex                                                1          0        1         YES       "
+                 "100%     0%        Doctor.Reporters.Short                   lib/reporters/short.ex                                    1          0        1         Yes         N/A        "
                ],
                [
-                 "100%     0%        Doctor.Reporters.Summary                 lib/reporters/summary.ex                                              1          0        1         YES       "
+                 "100%     0%        Doctor.Reporters.Summary                 lib/reporters/summary.ex                                  1          0        1         Yes         N/A        "
                ],
                [
-                 "100%     0%        Doctor.Specs                             lib/specs.ex                                                          1          0        1         YES       "
+                 "100%     0%        Doctor.Specs                             lib/specs.ex                                              1          0        1         Yes         Yes        "
                ],
                [
-                 "100%     100%      Doctor.AllDocs                           test/sample_files/all_docs.ex                                         7          0        0         YES       "
+                 "100%     100%      Doctor.AllDocs                           test/sample_files/all_docs.ex                             7          0        0         Yes         N/A        "
                ],
                [
-                 "100%     100%      Doctor.BehaviourModule                   test/sample_files/behaviour_module.ex                                 3          0        0         YES       "
+                 "100%     100%      Doctor.BehaviourModule                   test/sample_files/behaviour_module.ex                     3          0        0         Yes         N/A        "
                ],
                [
-                 "\e[31m0%       0%        Doctor.NoDocs                            test/sample_files/no_docs.ex                                          7          7        7         NO        \e[0m"
+                 "\e[31m0%       0%        Doctor.NoDocs                            test/sample_files/no_docs.ex                              7          7        7         No          N/A        \e[0m"
                ],
                [
-                 "\e[31m57%      57%       Doctor.PartialDocs                       test/sample_files/partial_docs.ex                                     7          3        3         NO        \e[0m"
+                 "\e[31m57%      57%       Doctor.PartialDocs                       test/sample_files/partial_docs.ex                         7          3        3         No          N/A        \e[0m"
                ],
                [
-                 "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
+                 "---------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
                ],
                ["Summary:\n"],
                ["Passed Modules: 17"],
                ["Failed Modules: 2"],
-               ["Total Doc Coverage: 80.0%"],
-               ["Total Spec Coverage: 30.0%\n"],
+               ["Total Doc Coverage: 80.4%"],
+               ["Total Spec Coverage: 29.4%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
              ]
     end

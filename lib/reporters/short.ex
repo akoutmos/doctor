@@ -14,7 +14,7 @@ defmodule Doctor.Reporters.Short do
   @module_width 41
   @functions_width 11
   @module_doc_width 12
-  @struct_type_spec_width 10
+  @struct_type_spec_width 11
 
   @doc """
   Generate a full Doctor report and print to STDOUT
@@ -69,7 +69,7 @@ defmodule Doctor.Reporters.Short do
         {"Functions", @functions_width},
         {"Module", @module_width},
         {"Module Doc", @module_doc_width},
-        {"Struct Doc", @struct_type_spec_width, 0}
+        {"Struct Spec", @struct_type_spec_width, 0}
       ])
 
     Mix.shell().info(output_header)
@@ -77,7 +77,7 @@ defmodule Doctor.Reporters.Short do
 
   defp print_divider do
     "-"
-    |> String.duplicate(93)
+    |> String.duplicate(94)
     |> Mix.shell().info()
   end
 
