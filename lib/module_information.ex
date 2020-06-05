@@ -7,6 +7,8 @@ defmodule Doctor.ModuleInformation do
   alias __MODULE__
   alias Doctor.{Docs, Specs}
 
+  @type thing :: boolean()
+
   @type t :: %ModuleInformation{
           module: module(),
           behaviours: [module()],
@@ -18,10 +20,24 @@ defmodule Doctor.ModuleInformation do
           metadata: map(),
           docs: [%Docs{}],
           specs: list(),
-          user_defined_functions: [{atom(), integer(), atom() | boolean()}]
+          user_defined_functions: [{atom(), integer(), atom() | boolean()}],
+          struct_type_spec: atom() | boolean()
         }
 
-  defstruct ~w(module file_full_path file_relative_path file_ast docs_version module_doc metadata docs specs user_defined_functions behaviours)a
+  defstruct ~w(
+    module
+    file_full_path
+    file_relative_path
+    file_ast
+    docs_version
+    module_doc
+    metadata
+    docs
+    specs
+    user_defined_functions
+    behaviours
+    struct_type_spec
+  )a
 
   @doc """
   Breaks down the docs format entry returned from Code.fetch_docs(MODULE)
@@ -40,7 +56,8 @@ defmodule Doctor.ModuleInformation do
       metadata: metadata,
       docs: Enum.map(docs, &Docs.build/1),
       specs: Enum.map(module_specs, &Specs.build/1),
-      user_defined_functions: nil
+      user_defined_functions: nil,
+      struct_type_spec: contains_struct_type_spec?(module)
     }
   end
 
@@ -55,6 +72,23 @@ defmodule Doctor.ModuleInformation do
       |> Code.string_to_quoted!()
 
     %{module_info | file_ast: ast}
+  end
+
+  @doc """
+  Checks the provided module for a __struct__ function which is injected into the module
+  whenever you use `defstruct`
+  """
+  def contains_struct_type_spec?(module) do
+    if function_exported?(module, :__struct__, 0) or function_exported?(module, :__struct__, 1) do
+      {:ok, specs} = Code.Typespec.fetch_types(module)
+
+      Enum.any?(specs, fn
+        {:type, {:t, _, _}} -> true
+        _ -> false
+      end)
+    else
+      :not_struct
+    end
   end
 
   @doc """

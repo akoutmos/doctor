@@ -13,7 +13,8 @@ defmodule Doctor.Reporters.Short do
   @spec_cov_width 10
   @module_width 41
   @functions_width 11
-  @module_doc_width 10
+  @module_doc_width 12
+  @struct_type_spec_width 10
 
   @doc """
   Generate a full Doctor report and print to STDOUT
@@ -26,6 +27,7 @@ defmodule Doctor.Reporters.Short do
       doc_cov = massage_coverage(module_report.doc_coverage)
       spec_cov = massage_coverage(module_report.spec_coverage)
       module_doc = massage_module_doc(module_report.has_module_doc)
+      struct_type_spec = massage_struct_type_spec(module_report.has_struct_type_spec)
 
       output_line =
         OutputUtils.generate_table_line([
@@ -33,7 +35,8 @@ defmodule Doctor.Reporters.Short do
           {spec_cov, @spec_cov_width},
           {module_report.functions, @functions_width},
           {module_report.module, @module_width},
-          {module_doc, @module_doc_width}
+          {module_doc, @module_doc_width},
+          {struct_type_spec, @struct_type_spec_width, 0}
         ])
 
       if ReportUtils.module_passed_validation?(module_report, args) do
@@ -65,7 +68,8 @@ defmodule Doctor.Reporters.Short do
         {"Spec Cov", @spec_cov_width},
         {"Functions", @functions_width},
         {"Module", @module_width},
-        {"Module Doc", @module_doc_width, 0}
+        {"Module Doc", @module_doc_width},
+        {"Struct Doc", @struct_type_spec_width, 0}
       ])
 
     Mix.shell().info(output_header)
@@ -73,7 +77,7 @@ defmodule Doctor.Reporters.Short do
 
   defp print_divider do
     "-"
-    |> String.duplicate(81)
+    |> String.duplicate(93)
     |> Mix.shell().info()
   end
 
@@ -99,11 +103,15 @@ defmodule Doctor.Reporters.Short do
     if coverage do
       "#{Decimal.round(coverage)}%"
     else
-      "NA"
+      "N/A"
     end
   end
 
   defp massage_module_doc(module_doc) do
-    if module_doc, do: "YES", else: "NO"
+    if module_doc, do: "Yes", else: "No"
   end
+
+  defp massage_struct_type_spec(:not_struct), do: "N/A"
+  defp massage_struct_type_spec(true), do: "Yes"
+  defp massage_struct_type_spec(false), do: "No"
 end

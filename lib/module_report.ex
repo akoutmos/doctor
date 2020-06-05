@@ -16,10 +16,21 @@ defmodule Doctor.ModuleReport do
           functions: integer(),
           missed_docs: integer(),
           missed_specs: integer(),
-          has_module_doc: boolean()
+          has_module_doc: boolean(),
+          has_struct_type_spec: atom() | boolean()
         }
 
-  defstruct ~w(doc_coverage spec_coverage file module functions missed_docs missed_specs has_module_doc)a
+  defstruct ~w(
+    doc_coverage
+    spec_coverage
+    file
+    module
+    functions
+    missed_docs
+    missed_specs
+    has_module_doc
+    has_struct_type_spec
+  )a
 
   @doc """
   Given a ModuleInformation struct with the necessary fields completed,
@@ -34,7 +45,8 @@ defmodule Doctor.ModuleReport do
       functions: length(module_info.user_defined_functions),
       missed_docs: calculate_missed_docs(module_info),
       missed_specs: calculate_missed_specs(module_info),
-      has_module_doc: has_module_doc?(module_info)
+      has_module_doc: has_module_doc?(module_info),
+      has_struct_type_spec: module_info.struct_type_spec
     }
   end
 
