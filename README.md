@@ -84,6 +84,7 @@ the default Doctor settings. The default file contents are:
       moduledoc_required: true,
       raise: false,
       reporter: Doctor.Reporters.Full,
+      struct_type_spec_required: true,
       umbrella: false
     }
 ```

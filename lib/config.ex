@@ -8,17 +8,31 @@ defmodule Doctor.Config do
 
   alias __MODULE__
 
-  defstruct moduledoc_required: true,
-            struct_type_spec_required: true,
-            min_overall_doc_coverage: 50,
-            min_overall_spec_coverage: 0,
+  @type t :: %Config{
+          ignore_modules: [],
+          ignore_paths: [],
+          min_module_doc_coverage: integer() | float(),
+          min_module_spec_coverage: integer() | float(),
+          min_overall_doc_coverage: integer() | float(),
+          min_overall_spec_coverage: integer() | float(),
+          moduledoc_required: boolean(),
+          raise: boolean(),
+          reporter: module(),
+          struct_type_spec_required: boolean(),
+          umbrella: boolean()
+        }
+
+  defstruct ignore_modules: [],
+            ignore_paths: [],
             min_module_doc_coverage: 40,
             min_module_spec_coverage: 0,
+            min_overall_doc_coverage: 50,
+            min_overall_spec_coverage: 0,
+            moduledoc_required: true,
             raise: false,
-            umbrella: false,
-            ignore_modules: [],
-            ignore_paths: [],
-            reporter: Doctor.Reporters.Full
+            reporter: Doctor.Reporters.Full,
+            struct_type_spec_required: true,
+            umbrella: false
 
   @doc """
   Get the configuration defaults as a Config struct

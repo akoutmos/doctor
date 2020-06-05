@@ -6,6 +6,11 @@ defmodule Doctor.Specs do
 
   alias __MODULE__
 
+  @type t :: %Specs{
+          name: atom(),
+          arity: integer()
+        }
+
   defstruct ~w(name arity)a
 
   @doc """

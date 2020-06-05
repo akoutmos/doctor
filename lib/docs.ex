@@ -6,6 +6,13 @@ defmodule Doctor.Docs do
 
   alias __MODULE__
 
+  @type t :: %Docs{
+          kind: atom(),
+          name: atom(),
+          arity: integer(),
+          doc: map()
+        }
+
   defstruct ~w(kind name arity doc)a
 
   @doc """

@@ -7,8 +7,6 @@ defmodule Doctor.ModuleInformation do
   alias __MODULE__
   alias Doctor.{Docs, Specs}
 
-  @type thing :: boolean()
-
   @type t :: %ModuleInformation{
           module: module(),
           behaviours: [module()],
