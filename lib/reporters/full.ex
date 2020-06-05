@@ -12,11 +12,12 @@ defmodule Doctor.Reporters.Full do
   @doc_cov_width 9
   @spec_cov_width 10
   @module_width 41
-  @file_width 70
+  @file_width 58
   @functions_width 11
   @missed_docs_width 9
   @missed_specs_width 10
-  @module_doc_width 10
+  @module_doc_width 12
+  @struct_type_spec_width 11
 
   @doc """
   Generate a full Doctor report and print to STDOUT
@@ -29,6 +30,7 @@ defmodule Doctor.Reporters.Full do
       doc_cov = massage_coverage(module_report.doc_coverage)
       spec_cov = massage_coverage(module_report.spec_coverage)
       module_doc = massage_module_doc(module_report.has_module_doc)
+      struct_type_spec = massage_struct_type_spec(module_report.has_struct_type_spec)
 
       output_line =
         OutputUtils.generate_table_line([
@@ -39,7 +41,8 @@ defmodule Doctor.Reporters.Full do
           {module_report.functions, @functions_width},
           {module_report.missed_docs, @missed_docs_width},
           {module_report.missed_specs, @missed_specs_width},
-          {module_doc, @module_doc_width}
+          {module_doc, @module_doc_width},
+          {struct_type_spec, @struct_type_spec_width, 0}
         ])
 
       if ReportUtils.module_passed_validation?(module_report, args) do
@@ -74,7 +77,8 @@ defmodule Doctor.Reporters.Full do
         {"Functions", @functions_width},
         {"No Docs", @missed_docs_width},
         {"No Specs", @missed_specs_width},
-        {"Module Doc", @module_doc_width, 0}
+        {"Module Doc", @module_doc_width},
+        {"Struct Spec", @struct_type_spec_width, 0}
       ])
 
     Mix.shell().info(output_header)
@@ -82,7 +86,7 @@ defmodule Doctor.Reporters.Full do
 
   defp print_divider do
     "-"
-    |> String.duplicate(170)
+    |> String.duplicate(171)
     |> Mix.shell().info()
   end
 
@@ -108,11 +112,15 @@ defmodule Doctor.Reporters.Full do
     if coverage do
       "#{Decimal.round(coverage)}%"
     else
-      "NA"
+      "N/A"
     end
   end
 
   defp massage_module_doc(module_doc) do
-    if module_doc, do: "YES", else: "NO"
+    if module_doc, do: "Yes", else: "No"
   end
+
+  defp massage_struct_type_spec(:not_struct), do: "N/A"
+  defp massage_struct_type_spec(true), do: "Yes"
+  defp massage_struct_type_spec(false), do: "No"
 end

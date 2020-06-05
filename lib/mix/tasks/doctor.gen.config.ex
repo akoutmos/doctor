@@ -18,6 +18,7 @@ defmodule Mix.Tasks.Doctor.Gen.Config do
     moduledoc_required: true,
     raise: false,
     reporter: Doctor.Reporters.Full,
+    struct_type_spec_required: true,
     umbrella: false
   }
   ```

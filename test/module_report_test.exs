@@ -70,4 +70,40 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.module == "Doctor.NoDocs"
     assert module_report.doc_coverage == Decimal.new("0")
   end
+
+  test "build/1 should build the correct report struct for a file with struct specs" do
+    module_report =
+      Doctor.StructSpecModule
+      |> Code.fetch_docs()
+      |> ModuleInformation.build(Doctor.StructSpecModule)
+      |> ModuleInformation.load_file_ast()
+      |> ModuleInformation.load_user_defined_functions()
+      |> ModuleReport.build()
+
+    assert module_report.functions == 0
+    refute module_report.has_module_doc
+    assert module_report.has_struct_type_spec
+    assert module_report.missed_docs == 0
+    assert module_report.missed_specs == 0
+    assert module_report.module == "Doctor.StructSpecModule"
+    assert module_report.doc_coverage == nil
+  end
+
+  test "build/1 should build the correct report struct for a file with no struct specs" do
+    module_report =
+      Doctor.NoStructSpecModule
+      |> Code.fetch_docs()
+      |> ModuleInformation.build(Doctor.NoStructSpecModule)
+      |> ModuleInformation.load_file_ast()
+      |> ModuleInformation.load_user_defined_functions()
+      |> ModuleReport.build()
+
+    assert module_report.functions == 0
+    refute module_report.has_module_doc
+    refute module_report.has_struct_type_spec
+    assert module_report.missed_docs == 0
+    assert module_report.missed_specs == 0
+    assert module_report.module == "Doctor.NoStructSpecModule"
+    assert module_report.doc_coverage == nil
+  end
 end
