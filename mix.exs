@@ -17,7 +17,15 @@ defmodule Doctor.MixProject do
         extras: ["README.md"]
       ],
       package: package(),
-      deps: deps()
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test,
+        "coveralls.travis": :test
+      ]
     ]
   end
 
@@ -44,7 +52,8 @@ defmodule Doctor.MixProject do
   defp deps do
     [
       {:decimal, "~> 1.8"},
-      {:ex_doc, "~> 0.22", only: :dev}
+      {:ex_doc, "~> 0.22", only: :dev},
+      {:excoveralls, "~> 0.12", only: :test, runtime: false}
     ]
   end
 end

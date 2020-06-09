@@ -1,10 +1,18 @@
 # Doctor
 
-[![Hex.pm](https://img.shields.io/hexpm/v/doctor.svg)](http://hex.pm/packages/doctor) [![Build Status](https://travis-ci.org/akoutmos/doctor.svg?branch=master)](https://travis-ci.org/akoutmos/doctor)
+[![Hex.pm](https://img.shields.io/hexpm/v/doctor.svg)](http://hex.pm/packages/doctor) [![Build
+Status](https://travis-ci.org/akoutmos/doctor.svg?branch=master)](https://travis-ci.org/akoutmos/doctor) [![Coverage
+Status](https://coveralls.io/repos/github/akoutmos/doctor/badge.svg?branch=master)](https://coveralls.io/github/akoutmos/doctor?branch=master)
 
-Ensure that your documentation is healthy with Doctor! This library contains a mix task which you can run against your project to generate a documentation coverage report. Items which are reported on include: the presence of module docs, which functions do/don't have docs, and which functions do/don't have typespecs. You can generate a `.doctor.exs` config file to specify what thresholds are acceptable for your project. If documentation coverage drops below your specified thresholds, the `mix doctor` task will return a non zero exit status.
+Ensure that your documentation is healthy with Doctor! This library contains a mix task that you can run against your
+project to generate a documentation coverage report. Items which are reported on include: the presence of module docs,
+which functions do/don't have docs, which functions do/don't have typespecs, and if your struct modules provide
+typespecs. You can generate a `.doctor.exs` config file to specify what thresholds are acceptable for your project. If
+documentation coverage drops below your specified thresholds, the `mix doctor` task will return a non zero exit status.
 
-The primary motivation with this tool is to have something simple which can be hooked up into CI to ensure that project documentation standards are respected and upheld.
+The primary motivation with this tool is to have something simple which can be hooked up into CI to ensure that project
+documentation standards are respected and upheld. This is particular useful in a team environment when you want to
+maintain a minimum threshold for documentation coverage.
 
 ## Installation
 
@@ -20,6 +28,32 @@ end
 ```
 
 Documentation can be found at [https://hexdocs.pm/doctor](https://hexdocs.pm/doctor).
+
+## Comparison with other tools
+
+There are a few tools in the Elixir ecosystem that overlap slightly in functionality with Doctor. It is useful for
+you to know how Doctor differs from these tools and some use cases that Doctor serves.
+
+Credo: [Credo](https://github.com/rrrene/credo) is a phenomenal library that can be used to perform a wide range of
+static analysis against your codebase. It can check for lingering `IO.inspect()` statements, it can check for unsafe
+atom conversions, and it can also check that the cyclomatic complexity of control statements is within a particular
+range to name a few.
+
+The one area where Doctor and Credo do overlap is that with either tool you have the capability to
+enforce that `@moduledoc` attributes are present in modules. Given that this is the only overlap between the two tools,
+I generally use both in my projects :).
+
+Inch: [Inch](https://github.com/rrrene/inch_ex) is another great tool written by René Föhring that is specifically
+catered to analyzing a projects documentation (very much like Doctor). Inch will scan your project's source files and
+check for the presence of function documentation and report back to you what grade it thinks your project has earned.
+
+Inch does not appear to support checking for function typespecs, returning non-zero status codes when validation fails,
+tuning thresholds via a configuration file, or checking for struct module typespecs. On the other hand, these were
+things that were important to me personally and so I wrote Doctor to fill that void. In a team context, I find Doctor to
+be invaluable in ensuring that a project maintains a certain level of documentation by failing CI/CD if certain
+thresholds have not been met.
+
+If I have misrepresented any of the aforementioned libraries...feel free to open up an issue :).
 
 ## Usage
 
@@ -95,16 +129,17 @@ Below is a sample `.doctor.exs` file with some sample values for the various fie
 
 ```elixir
 %Doctor.Config{
-  ignore_modules: [Skip.This.Module, Also.Skip.This.Module],
-  ignore_paths: ["lib/skip/this/one/file.ex", ~r(lib/skip/all/these/files/.*)],
+  ignore_modules: [],
+  ignore_paths: [],
   min_module_doc_coverage: 40,
   min_module_spec_coverage: 0,
-  min_overall_doc_coverage: 100,
+  min_overall_doc_coverage: 50,
   min_overall_spec_coverage: 0,
   moduledoc_required: true,
   raise: false,
-  umbrella: false,
-  reporter: Doctor.Reporters.Full
+  reporter: Doctor.Reporters.Full,
+  struct_type_spec_required: true,
+  umbrella: false
 }
 ```
 
@@ -119,30 +154,47 @@ For the reporter field, the following reporters included with Doctor:
 Report created for Doctor itself:
 
 ```text
-Doctor file found. Loading configuration.
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Doc Cov  Spec Cov  Module                                   File                                                                  Functions  No Docs  No Specs  Module Doc
-100%     0%        Doctor.CLI                               lib/cli/cli.ex                                                        1          0        1         YES
-100%     0%        Doctor.Config                            lib/config.ex                                                         3          0        3         YES
-100%     0%        Doctor.Docs                              lib/docs.ex                                                           1          0        1         YES
-NA       NA        Doctor                                   lib/doctor.ex                                                         0          0        0         YES
-100%     0%        Mix.Tasks.Doctor                         lib/mix/tasks/doctor.ex                                               1          0        1         YES
-100%     0%        Mix.Tasks.Doctor.Gen.Config              lib/mix/tasks/doctor.gen.config.ex                                    1          0        1         YES
-100%     0%        Doctor.ModuleInformation                 lib/module_information.ex                                             3          0        3         YES
-100%     0%        Doctor.ModuleReport                      lib/module_report.ex                                                  1          0        1         YES
-100%     0%        Doctor.ReportUtils                       lib/report_utils.ex                                                   9          0        9         YES
-NA       NA        Doctor.Reporter                          lib/reporter.ex                                                       0          0        0         YES
-100%     0%        Doctor.Reporters.Full                    lib/reporters/full.ex                                                 1          0        1         YES
-100%     0%        Doctor.Reporters.OutputUtils             lib/reporters/output_utils.ex                                         1          0        1         YES
-100%     0%        Doctor.Reporters.Summary                 lib/reporters/summary.ex                                              1          0        1         YES
-100%     0%        Doctor.Specs                             lib/specs.ex                                                          1          0        1         YES
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+onfiguration.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Doc Cov  Spec Cov  Module                                   File
+Functions  No Docs  No Specs  Module Doc  Struct Spec
+100%     0%        Doctor.CLI                               lib/cli/cli.ex                                            2
+0        2         Yes         N/A
+100%     0%        Doctor.Config                            lib/config.ex                                             3
+0        3         Yes         Yes
+100%     0%        Doctor.Docs                              lib/docs.ex                                               1
+0        1         Yes         Yes
+N/A      N/A       Doctor                                   lib/doctor.ex                                             0
+0        0         Yes         N/A
+100%     100%      Mix.Tasks.Doctor                         lib/mix/tasks/doctor.ex                                   1
+0        0         Yes         N/A
+100%     0%        Mix.Tasks.Doctor.Gen.Config              lib/mix/tasks/doctor.gen.config.ex                        1
+0        1         Yes         N/A
+100%     0%        Doctor.ModuleInformation                 lib/module_information.ex                                 4
+0        4         Yes         Yes
+100%     0%        Doctor.ModuleReport                      lib/module_report.ex                                      1
+0        1         Yes         Yes
+100%     0%        Doctor.ReportUtils                       lib/report_utils.ex                                       9
+0        9         Yes         N/A
+N/A      N/A       Doctor.Reporter                          lib/reporter.ex                                           0
+0        0         Yes         N/A
+100%     0%        Doctor.Reporters.Full                    lib/reporters/full.ex                                     1
+0        1         Yes         N/A
+100%     0%        Doctor.Reporters.OutputUtils             lib/reporters/output_utils.ex                             1
+0        1         Yes         N/A
+100%     0%        Doctor.Reporters.Short                   lib/reporters/short.ex                                    1
+0        1         Yes         N/A
+100%     0%        Doctor.Reporters.Summary                 lib/reporters/summary.ex                                  1
+0        1         Yes         N/A
+100%     0%        Doctor.Specs                             lib/specs.ex                                              1
+0        1         Yes         Yes
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Summary:
 
-Passed Modules: 14
+Passed Modules: 15
 Failed Modules: 0
 Total Doc Coverage: 100.0%
-Total Spec Coverage: 0.0%
+Total Spec Coverage: 3.7%
 
 Doctor validation has passed!
 ```
