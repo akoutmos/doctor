@@ -34,7 +34,7 @@ Documentation can be found at [https://hexdocs.pm/doctor](https://hexdocs.pm/doc
 There are a few tools in the Elixir ecosystem that overlap slightly in functionality with Doctor. It is useful for
 you to know how Doctor differs from these tools and some use cases that Doctor serves.
 
-#### Credo
+**Credo**
 
 [Credo](https://github.com/rrrene/credo) is a phenomenal library that can be used to perform a wide range of
 static analysis checks against your codebase. It can check for lingering `IO.inspect()` statements, it can check for
@@ -45,7 +45,7 @@ The one area where Doctor and Credo do overlap is that with either tool you have
 enforce that `@moduledoc` attributes are present in modules. Given that this is the only overlap between the two tools,
 I generally use both in my projects and perform both validations during CI/CD.
 
-#### Inch
+**Inch**
 
 [Inch](https://github.com/rrrene/inch_ex) is another great tool written by René Föhring that is specifically
 catered to analyzing a project's documentation (very much like Doctor). Inch will scan your project's source files and
