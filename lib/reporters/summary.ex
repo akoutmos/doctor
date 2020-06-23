@@ -12,6 +12,7 @@ defmodule Doctor.Reporters.Summary do
   @doc """
   Generate a short summary Doctor report and print to STDOUT
   """
+  @impl true
   def generate_report(module_reports, args) do
     overall_pass = ReportUtils.doctor_report_passed?(module_reports, args)
     overall_passed = ReportUtils.count_total_passed_modules(module_reports, args)

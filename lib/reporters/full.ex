@@ -22,6 +22,7 @@ defmodule Doctor.Reporters.Full do
   @doc """
   Generate a full Doctor report and print to STDOUT
   """
+  @impl true
   def generate_report(module_reports, args) do
     print_divider()
     print_header()
