@@ -2,19 +2,17 @@ defmodule Mix.Tasks.Doctor.Explain do
   @moduledoc """
   Figuring out why a particular module failed Doctor validation can sometimes
   be a bit difficult when the relevant information is embedded within a table with
-  other validation results. This Mix command takes as its only argument the name of
-  a module and will provide a detailed report as to whether the module passed
-  validation or what exactly caused it to fail validation. Note that `mix doctor.explain`
-  takes a module name instead of a file path since you can define multiple modules
-  in a single file.
+  other validation results.
 
-  To use this Mix command do the following from the terminal:
+  The `mix doctor.explain` command has only a single required argument. That argument
+  is the name of the module that you wish to get a detailed report of. For example you
+  could run the following from the terminal:
 
   ```
   $ mix doctor.explain MyApp.Some.Module
   ```
 
-  To generate a report like the following:
+  To generate a report like this:
 
   ```
   Doctor file found. Loading configuration.
@@ -29,16 +27,34 @@ defmodule Mix.Tasks.Doctor.Explain do
     Has Module Doc:  ✓
     Has Struct Spec: N/A
   ```
+
+  In addition, the following CLI flags are supported (similarly to the `mix doctor`
+  command):
+
+  ```
+  --config_file  Provide a relative or absolute path to a `.doctor.exs`
+                 file to use during the execution of the mix command.
+
+  --raise        If any of your modules fails Doctor validation, then
+                 raise an error and return a non-zero exit status.
+  ```
+
+  To use these command line args you would do something like so:
+
+  ```
+  $ mix doctor.explain --raise --config_file /some/path/to/some/.doctor.exs MyApp.Some.Module
+  ```
+
+  Note that `mix doctor.explain` takes a module name instead of a file path since you can
+  define multiple modules in a single file.
   """
 
   use Mix.Task
 
   alias Doctor.{CLI, Config}
-  alias Doctor.Reporters.{Full, Short, Summary}
 
   @shortdoc "Documentation coverage report"
   @recursive true
-  @umbrella_accumulator Doctor.Umbrella
 
   @impl true
   def run(args) do
@@ -60,7 +76,7 @@ defmodule Mix.Tasks.Doctor.Explain do
         [_mix_command, module] ->
           module
 
-        error ->
+        _error ->
           raise "Invalid Argument: mix doctor.explain takes only a single module name as an argument"
       end
 
@@ -70,6 +86,10 @@ defmodule Mix.Tasks.Doctor.Explain do
       System.at_exit(fn _ ->
         exit({:shutdown, 1})
       end)
+
+      if config.raise do
+        Mix.raise("Doctor validation has failed and raised an error")
+      end
     end
 
     :ok
@@ -118,22 +138,14 @@ defmodule Mix.Tasks.Doctor.Explain do
     {parsed_args, _args, _invalid} =
       OptionParser.parse(args,
         strict: [
-          full: :boolean,
-          short: :boolean,
-          summary: :boolean,
           raise: :boolean,
-          umbrella: :boolean,
           config_file: :string
         ]
       )
 
     parsed_args
     |> Enum.reduce(%{}, fn
-      {:full, true}, acc -> Map.merge(acc, %{reporter: Full})
-      {:short, true}, acc -> Map.merge(acc, %{reporter: Short})
-      {:summary, true}, acc -> Map.merge(acc, %{reporter: Summary})
       {:raise, true}, acc -> Map.merge(acc, %{raise: true})
-      {:umbrella, true}, acc -> Map.merge(acc, %{umbrella: true})
       {:config_file, file_path}, acc -> Map.merge(acc, %{config_file_path: file_path})
       _unexpected_arg, acc -> acc
     end)
