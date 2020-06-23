@@ -53,7 +53,7 @@ defmodule Mix.Tasks.Doctor.Explain do
 
   alias Doctor.{CLI, Config}
 
-  @shortdoc "Documentation coverage report"
+  @shortdoc "Debug why are particular module is failing validation"
   @recursive true
 
   @impl true

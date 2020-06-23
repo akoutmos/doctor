@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.15.0] - 2020-6-23
+
+### Added
+
+- Added `mix doctor.explain` command so that it is easier to debug why a particular module is failing validation
+
+### Fixed
+
+- Modules with behaviours that are aliased were not being counted properly
+
 ## [0.14.0] - 2020-3-19
 
 ### Added
