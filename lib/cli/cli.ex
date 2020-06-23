@@ -5,6 +5,7 @@ defmodule Doctor.CLI do
 
   alias Mix.Project
   alias Doctor.{ModuleInformation, ModuleReport, ReportUtils}
+  alias Doctor.Reporters.ModuleExplain
 
   @doc """
   Given the CLI arguments, run the report on the project,
@@ -29,6 +30,29 @@ defmodule Doctor.CLI do
     # Build report struct for each module
     |> Enum.sort(&(&1.file_relative_path < &2.file_relative_path))
     |> Enum.map(&ModuleReport.build/1)
+  end
+
+  @doc """
+  Generate a report for a single project module.
+  """
+  def generate_single_module_report(module_name, args) do
+    Project.config()
+    |> Keyword.get(:app)
+    |> get_application_modules()
+    |> Enum.find(:not_found, fn module ->
+      Atom.to_string(module) == "Elixir.#{module_name}"
+    end)
+    |> case do
+      :not_found ->
+        raise "Could not find module #{inspect(module_name)} in application"
+
+      module ->
+        module
+        |> generate_module_entry()
+        |> async_fetch_user_defined_functions()
+        |> Task.await(15_000)
+    end
+    |> ModuleExplain.generate_report(args)
   end
 
   @doc """
