@@ -17,8 +17,9 @@ defmodule Doctor.Reporters.Short do
   @struct_type_spec_width 11
 
   @doc """
-  Generate a full Doctor report and print to STDOUT
+  Generate a short Doctor report and print to STDOUT
   """
+  @impl true
   def generate_report(module_reports, args) do
     print_divider()
     print_header()

@@ -34,6 +34,7 @@ defmodule Mix.Tasks.Doctor.Gen.Config do
   @doc """
   This Mix task generates a .doctor.exs configuration file
   """
+  @impl true
   def run(_args) do
     create_file =
       if File.exists?(Config.config_file()) do

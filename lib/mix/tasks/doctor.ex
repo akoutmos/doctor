@@ -9,24 +9,27 @@ defmodule Mix.Tasks.Doctor do
   flags are supported:
 
   ```
-  --full       When generating a Doctor report of your project, use
-               the Doctor.Reporters.Full reporter.
+  --config_file  Provide a relative or absolute path to a `.doctor.exs`
+                 file to use during the execution of the mix command.
 
-  --short      When generating a Doctor report of your project, use
-               the Doctor.Reporters.Short reporter.
+  --full         When generating a Doctor report of your project, use
+                 the Doctor.Reporters.Full reporter.
 
-  --summary    When generating a Doctor report of your project, use
-               the Doctor.Reporters.Summary reporter.
+  --short        When generating a Doctor report of your project, use
+                 the Doctor.Reporters.Short reporter.
 
-  --raise      If any of your modules fails Doctor validation, then
-               raise an error and return a non-zero exit status.
+  --summary      When generating a Doctor report of your project, use
+                 the Doctor.Reporters.Summary reporter.
 
-  --umbrella   By default, in an umbrella project, each app will be
-               evaluated independently against the specified thresholds
-               in your .doctor.exs file. This flag changes that behavior
-               by aggregating the results of all your umbrella apps,
-               and then comparing those results to the configured
-               thresholds.
+  --raise        If any of your modules fails Doctor validation, then
+                 raise an error and return a non-zero exit status.
+
+  --umbrella     By default, in an umbrella project, each app will be
+                 evaluated independently against the specified thresholds
+                 in your .doctor.exs file. This flag changes that behavior
+                 by aggregating the results of all your umbrella apps,
+                 and then comparing those results to the configured
+                 thresholds.
   ```
   """
 
