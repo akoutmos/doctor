@@ -193,8 +193,8 @@ defmodule Doctor.ModuleInformation do
     value
   end
 
-  defp normalize_impl([{:__aliases__, _, [module]}]) do
-    module
+  defp normalize_impl([{:__aliases__, _, module}]) do
+    Module.concat(module)
   end
 
   defp normalize_impl(value) do

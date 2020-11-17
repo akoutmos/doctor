@@ -1,35 +1,50 @@
 defmodule Doctor.ModuleInformationTest do
   use ExUnit.Case
 
-  alias Doctor.ModuleInformation
+  alias Doctor.{ModuleInformation, ModuleReport}
 
-  test "build/2 should find all of the docs for a module where all docs are present" do
-    full_func_list = [:func_1, :func_2, :func_3, :func_4, :func_5, :func_5, :func_6]
+  describe "build/2" do
+    test "should find all of the docs for a module where all docs are present" do
+      full_func_list = [:func_1, :func_2, :func_3, :func_4, :func_5, :func_5, :func_6]
 
-    module_information =
-      Doctor.AllDocs
-      |> Code.fetch_docs()
-      |> ModuleInformation.build(Doctor.AllDocs)
+      module_information =
+        Doctor.AllDocs
+        |> Code.fetch_docs()
+        |> ModuleInformation.build(Doctor.AllDocs)
 
-    docs =
-      module_information.docs
-      |> Enum.map(fn func_doc ->
-        func_doc.name
-      end)
-      |> Enum.sort()
+      docs =
+        module_information.docs
+        |> Enum.map(fn func_doc ->
+          func_doc.name
+        end)
+        |> Enum.sort()
 
-    specs =
-      module_information.specs
-      |> Enum.map(fn func_spec ->
-        func_spec.name
-      end)
-      |> Enum.sort()
+      specs =
+        module_information.specs
+        |> Enum.map(fn func_spec ->
+          func_spec.name
+        end)
+        |> Enum.sort()
 
-    assert is_map(module_information.module_doc)
-    assert module_information.file_ast == nil
-    assert module_information.file_relative_path == "test/sample_files/all_docs.ex"
-    assert specs == full_func_list
-    assert docs == full_func_list
+      assert is_map(module_information.module_doc)
+      assert module_information.file_ast == nil
+      assert module_information.file_relative_path == "test/sample_files/all_docs.ex"
+      assert specs == full_func_list
+      assert docs == full_func_list
+    end
+
+    test "should report behaviour functions properly" do
+      module_report =
+        Doctor.AnotherBehaviourModule
+        |> Code.fetch_docs()
+        |> ModuleInformation.build(Doctor.AnotherBehaviourModule)
+        |> ModuleInformation.load_file_ast()
+        |> ModuleInformation.load_user_defined_functions()
+        |> ModuleReport.build()
+
+      assert module_report.missed_specs == 0
+      assert module_report.missed_docs == 0
+    end
   end
 
   test "load_user_defined_functions/1 should load user defined functions from AST" do
