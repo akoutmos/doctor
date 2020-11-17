@@ -51,9 +51,9 @@ defmodule Doctor.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:decimal, "~> 1.8"},
-      {:ex_doc, "~> 0.22", only: :dev},
-      {:excoveralls, "~> 0.12", only: :test, runtime: false}
+      {:decimal, "~> 2.0"},
+      {:ex_doc, "~> 0.23", only: :dev},
+      {:excoveralls, "~> 0.13", only: :test, runtime: false}
     ]
   end
 end
