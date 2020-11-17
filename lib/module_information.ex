@@ -198,7 +198,6 @@ defmodule Doctor.ModuleInformation do
   end
 
   defp normalize_impl(value) do
-    IO.inspect(value)
     value
   end
 
