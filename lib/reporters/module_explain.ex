@@ -115,6 +115,8 @@ defmodule Doctor.Reporters.ModuleExplain do
   end
 
   defp print_doc_coverage(%ModuleReport{} = module_report, %Config{} = config) do
+    IO.inspect(module_report)
+
     doc_coverage =
       module_report.doc_coverage
       |> Decimal.round(1)
