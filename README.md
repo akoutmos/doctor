@@ -1,8 +1,12 @@
 # Doctor
 
-[![Hex.pm](https://img.shields.io/hexpm/v/doctor.svg)](http://hex.pm/packages/doctor) [![Build
-Status](https://travis-ci.org/akoutmos/doctor.svg?branch=master)](https://travis-ci.org/akoutmos/doctor) [![Coverage
-Status](https://coveralls.io/repos/github/akoutmos/doctor/badge.svg?branch=master)](https://coveralls.io/github/akoutmos/doctor?branch=master)
+[![Module Version](https://img.shields.io/hexpm/v/doctor.svg)](https://hex.pm/packages/doctor)
+[![Build Status](https://travis-ci.org/akoutmos/doctor.svg?branch=master)](https://travis-ci.org/akoutmos/doctor)
+[![Coverage Status](https://coveralls.io/repos/github/akoutmos/doctor/badge.svg?branch=master)](https://coveralls.io/github/akoutmos/doctor?branch=master)
+[![Hex Docs](https://img.shields.io/badge/hex-docs-lightgreen.svg)](https://hexdocs.pm/doctor/)
+[![Total Download](https://img.shields.io/hexpm/dt/doctor.svg)](https://hex.pm/packages/doctor)
+[![License](https://img.shields.io/hexpm/l/doctor.svg)](https://github.com/akoutmos/doctor/blob/master/LICENSE)
+[![Last Updated](https://img.shields.io/github/last-commit/akoutmos/doctor.svg)](https://github.com/akoutmos/doctor/commits/master)
 
 Ensure that your documentation is healthy with Doctor! This library contains a mix task that you can run against your
 project to generate a documentation coverage report. Items which are reported on include: the presence of module docs,
@@ -16,8 +20,7 @@ maintain a minimum threshold for documentation coverage.
 
 ## Installation
 
-[Available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `doctor` to your list of dependencies in `mix.exs`:
+Adding `:doctor` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
@@ -158,7 +161,8 @@ For the reporter field, the following reporters included with Doctor:
 Report created for Doctor itself:
 
 ```text
-onfiguration.
+$ mix doctor
+Doctor file found. Loading configuration.
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Doc Cov  Spec Cov  Module                                   File
 Functions  No Docs  No Specs  Module Doc  Struct Spec
@@ -206,6 +210,7 @@ Doctor validation has passed!
 Report created for Phoenix:
 
 ```text
+$ mix doctor
 Doctor file not found. Using defaults.
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Doc Cov  Spec Cov  Module                                   File                                                                  Functions  No Docs  No Specs  Module Doc

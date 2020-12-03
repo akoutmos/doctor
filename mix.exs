@@ -1,20 +1,22 @@
 defmodule Doctor.MixProject do
   use Mix.Project
 
+  @source_url "https://github.com/akoutmos/doctor"
+
   def project do
     [
       app: :doctor,
       version: "0.15.0",
       elixir: "~> 1.7",
       name: "Doctor",
-      source_url: "https://github.com/akoutmos/doctor",
+      source_url: @source_url,
       homepage_url: "https://hex.pm/packages/doctor",
       description: "Simple utility to create documentation coverage reports",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       docs: [
         main: "readme",
-        extras: ["README.md"]
+        extras: ["README.md", "CHANGELOG.md"]
       ],
       package: package(),
       deps: deps(),
@@ -29,7 +31,6 @@ defmodule Doctor.MixProject do
     ]
   end
 
-  # Run "mix help compile.app" to learn about applications.
   def application do
     [
       extra_applications: [:logger]
@@ -44,15 +45,17 @@ defmodule Doctor.MixProject do
       name: "doctor",
       files: ~w(lib mix.exs README.md LICENSE CHANGELOG.md),
       licenses: ["MIT"],
-      links: %{"GitHub" => "https://github.com/akoutmos/doctor"}
+      links: %{
+        "Changelog" => "https://hexdocs.pm/doctor/changelog.html",
+        "GitHub" => @source_url
+      }
     ]
   end
 
-  # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
       {:decimal, "~> 2.0"},
-      {:ex_doc, "~> 0.23", only: :dev},
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:excoveralls, "~> 0.13", only: :test, runtime: false}
     ]
   end
