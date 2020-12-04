@@ -60,7 +60,7 @@ defmodule Doctor.ReportUtils do
   end
 
   @doc """
-  Calculate the overal doc coverage in the codebase
+  Calculate the overall doc coverage in the codebase
   """
   def calc_overall_doc_coverage(module_report_list) do
     total_functions = count_total_functions(module_report_list)
@@ -76,7 +76,7 @@ defmodule Doctor.ReportUtils do
   end
 
   @doc """
-  Calculate the overal spec coverage in the codebase
+  Calculate the overall spec coverage in the codebase
   """
   def calc_overall_spec_coverage(module_report_list) do
     total_functions = count_total_functions(module_report_list)
