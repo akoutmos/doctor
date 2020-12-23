@@ -92,7 +92,16 @@ defmodule Doctor.CLI do
   end
 
   defp filter_ignore_module_prefixes(module, ignore_prefixes) do
-    Enum.any?(ignore_prefixes, fn prefix -> String.starts_with?("#{module}", "#{prefix}") end)
+    Enum.any?(ignore_prefixes, fn
+      "Elixir." <> _rest = prefix -> compare_ignore_module_prefix("#{module}", prefix)
+      prefix when is_binary(prefix) -> compare_ignore_module_prefix("#{module}", "Elixir." <> prefix)
+      prefix when is_atom(prefix) -> String.starts_with?("#{module}", "#{prefix}")
+      _ -> false
+    end)
+  end
+
+  defp compare_ignore_module_prefix(module, prefix) do
+    String.starts_with?("#{module}", prefix)
   end
 
   defp filter_ignore_paths(file_relative_path, ignore_paths) do
