@@ -92,14 +92,7 @@ defmodule Doctor.CLI do
   end
 
   defp filter_ignore_module_prefixes(module, ignore_prefixes) do
-    ignore_prefixes
-    |> Enum.reduce_while(false, fn prefix, _acc ->
-      if "#{module}" =~ "#{prefix}" do
-        {:halt, true}
-      else
-        {:cont, false}
-      end
-    end)
+    Enum.any?(ignore_prefixes, fn prefix -> "#{module}" =~ "#{prefix}" end)
   end
 
   defp filter_ignore_paths(file_relative_path, ignore_paths) do
