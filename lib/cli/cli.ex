@@ -101,7 +101,10 @@ defmodule Doctor.CLI do
   end
 
   defp compare_ignore_module_prefix(module, prefix) do
-    String.starts_with?("#{module}", prefix)
+    module
+    |> to_string()
+    |> Regex.compile!()
+    |> Regex.match?(prefix)
   end
 
   defp filter_ignore_paths(file_relative_path, ignore_paths) do
