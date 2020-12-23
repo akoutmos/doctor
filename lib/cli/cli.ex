@@ -94,7 +94,7 @@ defmodule Doctor.CLI do
   defp filter_ignore_module_prefixes(module, ignore_prefixes) do
     ignore_prefixes
     |> Enum.reduce_while(false, fn prefix, _acc ->
-      if prefix in "#{module}" do
+      if "#{module}" =~ "#{prefix}" do
         {:halt, true}
       else
         {:cont, false}
