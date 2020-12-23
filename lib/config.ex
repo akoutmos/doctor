@@ -9,8 +9,7 @@ defmodule Doctor.Config do
   alias __MODULE__
 
   @type t :: %Config{
-          ignore_modules: [module()],
-          ignore_module_prefixes: [module() | binary()],
+          ignore_modules: [module() | binary()],
           ignore_paths: [binary()],
           min_module_doc_coverage: integer() | float(),
           min_module_spec_coverage: integer() | float(),
@@ -24,7 +23,6 @@ defmodule Doctor.Config do
         }
 
   defstruct ignore_modules: [],
-            ignore_module_prefixes: [],
             ignore_paths: [],
             min_module_doc_coverage: 40,
             min_module_spec_coverage: 0,

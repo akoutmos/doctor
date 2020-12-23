@@ -21,7 +21,7 @@ defmodule Doctor.CLI do
 
     # Filter out any files/modules that were specified in the config
     |> Enum.reject(fn module_info -> module_info.module in args.ignore_modules end)
-    |> Enum.reject(fn module_info -> filter_ignore_module_prefixes(module_info.module, args.ignore_module_prefixes) end)
+    |> Enum.reject(fn module_info -> filter_ignore_module_regex(module_info.module, args.ignore_modules) end)
     |> Enum.reject(fn module_info -> filter_ignore_paths(module_info.file_relative_path, args.ignore_paths) end)
 
     # Asynchronously get the user defined functions from the modules
@@ -91,7 +91,7 @@ defmodule Doctor.CLI do
     modules
   end
 
-  defp filter_ignore_module_prefixes(module, ignore_prefixes) do
+  defp filter_ignore_module_regex(module, ignore_pres
     Enum.any?(ignore_prefixes, fn
       "Elixir." <> _rest = prefix -> compare_ignore_module_prefix("#{module}", prefix)
       prefix when is_binary(prefix) -> compare_ignore_module_prefix("#{module}", "Elixir." <> prefix)
