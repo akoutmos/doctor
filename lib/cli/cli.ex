@@ -21,6 +21,7 @@ defmodule Doctor.CLI do
 
     # Filter out any files/modules that were specified in the config
     |> Enum.reject(fn module_info -> module_info.module in args.ignore_modules end)
+    |> Enum.reject(fn module_info -> filter_ignore_module_prefixes(module_info.module, args.ignore_module_prefixes) end)
     |> Enum.reject(fn module_info -> filter_ignore_paths(module_info.file_relative_path, args.ignore_paths) end)
 
     # Asynchronously get the user defined functions from the modules
@@ -88,6 +89,17 @@ defmodule Doctor.CLI do
     {:ok, modules} = :application.get_key(application, :modules)
 
     modules
+  end
+
+  defp filter_ignore_module_prefixes(module, ignore_prefixes) do
+    ignore_prefixes
+    |> Enum.reduce_while(false, fn prefix, _acc ->
+      if prefix in "#{module}" do
+        {:halt, true}
+      else
+        {:cont, false}
+      end
+    end)
   end
 
   defp filter_ignore_paths(file_relative_path, ignore_paths) do
