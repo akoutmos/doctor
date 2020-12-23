@@ -10,7 +10,7 @@ defmodule Doctor.Config do
 
   @type t :: %Config{
           ignore_modules: [module()],
-          ignore_module_prefixes: [module()],
+          ignore_module_prefixes: [module() | binary()],
           ignore_paths: [binary()],
           min_module_doc_coverage: integer() | float(),
           min_module_spec_coverage: integer() | float(),

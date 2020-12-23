@@ -92,7 +92,7 @@ defmodule Doctor.CLI do
   end
 
   defp filter_ignore_module_prefixes(module, ignore_prefixes) do
-    Enum.any?(ignore_prefixes, fn prefix -> "#{module}" =~ "#{prefix}" end)
+    Enum.any?(ignore_prefixes, fn prefix -> String.starts_with?("#{module}", "#{prefix}") end)
   end
 
   defp filter_ignore_paths(file_relative_path, ignore_paths) do
