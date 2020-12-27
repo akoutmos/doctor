@@ -20,7 +20,7 @@ defmodule Doctor.CLI do
     |> Enum.map(&generate_module_entry/1)
 
     # Filter out any files/modules that were specified in the config
-    |> Enum.reject(fn module_info -> module_info.module in args.ignore_modules end)
+    |> Enum.reject(fn module_info -> filter_ignore_modules(module_info.module, args.ignore_modules) end)
     |> Enum.reject(fn module_info -> filter_ignore_paths(module_info.file_relative_path, args.ignore_paths) end)
 
     # Asynchronously get the user defined functions from the modules
@@ -115,4 +115,35 @@ defmodule Doctor.CLI do
 
   defp compare_ignore_path(_, ignore_value),
     do: raise("Encountered invalid ignore_paths entry: #{inspect(ignore_value)}")
+
+  defp filter_ignore_modules(module, ignore_modules) do
+    ignore_modules
+    |> Enum.reduce_while(false, fn pattern, _acc ->
+      compare_ignore_module(module, pattern)
+    end)
+  end
+
+  defp compare_ignore_module(module, %Regex{} = ignore_pattern) do
+    module_as_string =
+      module
+      |> Atom.to_string()
+      |> String.trim_leading("Elixir.")
+
+    if Regex.match?(ignore_pattern, module_as_string) do
+      {:halt, true}
+    else
+      {:cont, false}
+    end
+  end
+
+  defp compare_ignore_module(module, ignore_module) when is_atom(ignore_module) do
+    if module == ignore_module do
+      {:halt, true}
+    else
+      {:cont, false}
+    end
+  end
+
+  defp compare_ignore_module(_, ignore_value),
+    do: raise("Encountered invalid ignore_module entry: #{inspect(ignore_value)}")
 end

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.16.0] - 2020-12-27
+
+- Fixed spec coverage bug
+- Added ability to filter modules using Regex
+
 ## [0.15.0] - 2020-6-23
 
 ### Added

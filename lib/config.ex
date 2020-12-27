@@ -9,8 +9,8 @@ defmodule Doctor.Config do
   alias __MODULE__
 
   @type t :: %Config{
-          ignore_modules: [],
-          ignore_paths: [],
+          ignore_modules: [Regex.t() | String.t()],
+          ignore_paths: [Regex.t() | module()],
           min_module_doc_coverage: integer() | float(),
           min_module_spec_coverage: integer() | float(),
           min_overall_doc_coverage: integer() | float(),
