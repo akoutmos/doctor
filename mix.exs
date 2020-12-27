@@ -6,7 +6,7 @@ defmodule Doctor.MixProject do
   def project do
     [
       app: :doctor,
-      version: "0.15.0",
+      version: "0.16.0",
       elixir: "~> 1.7",
       name: "Doctor",
       source_url: @source_url,
