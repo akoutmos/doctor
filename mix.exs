@@ -46,8 +46,9 @@ defmodule Doctor.MixProject do
       files: ~w(lib mix.exs README.md LICENSE CHANGELOG.md),
       licenses: ["MIT"],
       links: %{
+        "GitHub" => @source_url,
         "Changelog" => "https://hexdocs.pm/doctor/changelog.html",
-        "GitHub" => @source_url
+        "Sponsor" => "https://github.com/sponsors/akoutmos"
       }
     ]
   end
