@@ -98,10 +98,10 @@ defmodule Mix.Tasks.DoctorTest do
       assert rest_doctor_output == [
                ["---------------------------------------------"],
                ["Summary:\n"],
-               ["Passed Modules: 19"],
+               ["Passed Modules: 21"],
                ["Failed Modules: 6"],
                ["Total Doc Coverage: 83.3%"],
-               ["Total Spec Coverage: 35.0%\n"],
+               ["Total Spec Coverage: 36.4%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
              ]
     end
