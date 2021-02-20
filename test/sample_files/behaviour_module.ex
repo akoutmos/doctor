@@ -16,6 +16,10 @@ defmodule Doctor.BehaviourModule do
     {:reply, head, tail}
   end
 
+  def handle_call(:nop, _from, state) do
+    {:reply, state}
+  end
+
   @impl true
   def handle_cast({:push, element}, state) do
     {:noreply, [element | state]}

@@ -141,14 +141,9 @@ defmodule Doctor.ModuleInformation do
          {:def, _def_line, [{:when, _line_when, [{function_name, _function_line, args}, _guard]}, _do_block]} = ast,
          %{last_impl: impl} = acc
        ) do
-    function_artity = get_function_arity(args)
+    function_arity = get_function_arity(args)
 
-    updated_acc =
-      acc
-      |> Map.put(:last_impl, :none)
-      |> Map.update(:functions, [], fn functions ->
-        [{function_name, function_artity, impl} | functions]
-      end)
+    updated_acc = update_acc_for_def(acc, function_name, function_arity, impl)
 
     {ast, updated_acc}
   end
@@ -157,14 +152,9 @@ defmodule Doctor.ModuleInformation do
          {:def, _def_line, [{function_name, _function_line, args}, _do_block]} = ast,
          %{last_impl: impl} = acc
        ) do
-    function_artity = get_function_arity(args)
+    function_arity = get_function_arity(args)
 
-    updated_acc =
-      acc
-      |> Map.put(:last_impl, :none)
-      |> Map.update(:functions, [], fn functions ->
-        [{function_name, function_artity, impl} | functions]
-      end)
+    updated_acc = update_acc_for_def(acc, function_name, function_arity, impl)
 
     {ast, updated_acc}
   end
@@ -173,20 +163,35 @@ defmodule Doctor.ModuleInformation do
          {:def, _def_line, [{function_name, _function_line, args}]} = ast,
          %{last_impl: impl} = acc
        ) do
-    function_artity = get_function_arity(args)
+    function_arity = get_function_arity(args)
 
-    updated_acc =
-      acc
-      |> Map.put(:last_impl, :none)
-      |> Map.update(:functions, [], fn functions ->
-        [{function_name, function_artity, impl} | functions]
-      end)
+    updated_acc = update_acc_for_def(acc, function_name, function_arity, impl)
 
     {ast, updated_acc}
   end
 
   defp parse_ast_node_for_def(ast, acc) do
     {ast, acc}
+  end
+
+  defp update_acc_for_def(acc, function_name, function_arity, last_impl) do
+    impl =
+      case last_impl do
+        :none ->
+          acc[:functions]
+          |> Enum.filter(fn {name, arity, _impl} -> name == function_name and arity == function_arity end)
+          |> Enum.at(0, {function_name, function_arity, :none})
+          |> Kernel.elem(2)
+
+        last_impl ->
+          last_impl
+      end
+
+    acc
+    |> Map.put(:last_impl, :none)
+    |> Map.update(:functions, [], fn functions ->
+      [{function_name, function_arity, impl} | functions]
+    end)
   end
 
   defp normalize_impl([value]) when is_boolean(value) do
