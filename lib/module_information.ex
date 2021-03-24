@@ -19,7 +19,8 @@ defmodule Doctor.ModuleInformation do
           docs: [%Docs{}],
           specs: list(),
           user_defined_functions: [{atom(), integer(), atom() | boolean()}],
-          struct_type_spec: atom() | boolean()
+          struct_type_spec: atom() | boolean(),
+          properties: Keyword.t()
         }
 
   defstruct ~w(
@@ -35,6 +36,7 @@ defmodule Doctor.ModuleInformation do
     user_defined_functions
     behaviours
     struct_type_spec
+    properties
   )a
 
   @doc """
@@ -55,7 +57,10 @@ defmodule Doctor.ModuleInformation do
       docs: Enum.map(docs, &Docs.build/1),
       specs: Enum.map(module_specs, &Specs.build/1),
       user_defined_functions: nil,
-      struct_type_spec: contains_struct_type_spec?(module)
+      struct_type_spec: contains_struct_type_spec?(module),
+      properties: [
+        is_exception: is_exception?(module)
+      ]
     }
   end
 
@@ -77,16 +82,29 @@ defmodule Doctor.ModuleInformation do
   whenever you use `defstruct`
   """
   def contains_struct_type_spec?(module) do
-    if function_exported?(module, :__struct__, 0) or function_exported?(module, :__struct__, 1) do
-      {:ok, specs} = Code.Typespec.fetch_types(module)
+    cond do
+      is_exception?(module) ->
+        :not_struct
 
-      Enum.any?(specs, fn
-        {:type, {:t, _, _}} -> true
-        _ -> false
-      end)
-    else
-      :not_struct
+      is_struct?(module) ->
+        {:ok, specs} = Code.Typespec.fetch_types(module)
+
+        Enum.any?(specs, fn
+          {:type, {:t, _, _}} -> true
+          _ -> false
+        end)
+
+      true ->
+        :not_struct
     end
+  end
+
+  defp is_struct?(module) do
+    function_exported?(module, :__struct__, 0) or function_exported?(module, :__struct__, 1)
+  end
+
+  defp is_exception?(module) when is_atom(module) do
+    function_exported?(module, :__struct__, 0) and :__exception__ in Map.keys(module.__struct__())
   end
 
   @doc """
