@@ -24,6 +24,9 @@ defmodule Mix.Tasks.Doctor do
   --raise        If any of your modules fails Doctor validation, then
                  raise an error and return a non-zero exit status.
 
+  --failed       If set only the failed modules will be reported. Works with
+                 --full and --short options
+
   --umbrella     By default, in an umbrella project, each app will be
                  evaluated independently against the specified thresholds
                  in your .doctor.exs file. This flag changes that behavior
@@ -165,6 +168,7 @@ defmodule Mix.Tasks.Doctor do
           short: :boolean,
           summary: :boolean,
           raise: :boolean,
+          failed: :boolean,
           umbrella: :boolean,
           config_file: :string
         ]
@@ -176,6 +180,7 @@ defmodule Mix.Tasks.Doctor do
       {:short, true}, acc -> Map.merge(acc, %{reporter: Short})
       {:summary, true}, acc -> Map.merge(acc, %{reporter: Summary})
       {:raise, true}, acc -> Map.merge(acc, %{raise: true})
+      {:failed, true}, acc -> Map.merge(acc, %{failed: true})
       {:umbrella, true}, acc -> Map.merge(acc, %{umbrella: true})
       {:config_file, file_path}, acc -> Map.merge(acc, %{config_file_path: file_path})
       _unexpected_arg, acc -> acc

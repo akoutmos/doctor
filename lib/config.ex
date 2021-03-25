@@ -20,7 +20,8 @@ defmodule Doctor.Config do
           raise: boolean(),
           reporter: module(),
           struct_type_spec_required: boolean(),
-          umbrella: boolean()
+          umbrella: boolean(),
+          failed: false
         }
 
   defstruct ignore_modules: [],
@@ -34,7 +35,8 @@ defmodule Doctor.Config do
             raise: false,
             reporter: Doctor.Reporters.Full,
             struct_type_spec_required: true,
-            umbrella: false
+            umbrella: false,
+            failed: false
 
   @doc """
   Get the configuration defaults as a Config struct
