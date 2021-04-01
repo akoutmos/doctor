@@ -32,7 +32,7 @@ defmodule Mix.Tasks.Doctor.Explain do
   command):
 
   ```
-  --config_file  Provide a relative or absolute path to a `.doctor.exs`
+  --config-file  Provide a relative or absolute path to a `.doctor.exs`
                  file to use during the execution of the mix command.
 
   --raise        If any of your modules fails Doctor validation, then
@@ -59,7 +59,7 @@ defmodule Mix.Tasks.Doctor.Explain do
   @impl true
   def run(args) do
     default_config_opts = Config.config_defaults()
-    cli_arg_opts = parse_cli_args(args)
+    {cli_arg_opts, args} = parse_cli_args(args)
     config_file_opts = load_config_file(cli_arg_opts)
 
     # Aggregate all of the various options sources
@@ -72,8 +72,8 @@ defmodule Mix.Tasks.Doctor.Explain do
 
     # Get the module name from args
     module_name =
-      case System.argv() do
-        [_mix_command, module] ->
+      case args do
+        [module] ->
           module
 
         _error ->
@@ -135,7 +135,7 @@ defmodule Mix.Tasks.Doctor.Explain do
   end
 
   defp parse_cli_args(args) do
-    {parsed_args, _args, _invalid} =
+    {parsed_args, args, _invalid} =
       OptionParser.parse(args,
         strict: [
           raise: :boolean,
@@ -143,11 +143,14 @@ defmodule Mix.Tasks.Doctor.Explain do
         ]
       )
 
-    parsed_args
-    |> Enum.reduce(%{}, fn
-      {:raise, true}, acc -> Map.merge(acc, %{raise: true})
-      {:config_file, file_path}, acc -> Map.merge(acc, %{config_file_path: file_path})
-      _unexpected_arg, acc -> acc
-    end)
+    parsed_args =
+      parsed_args
+      |> Enum.reduce(%{}, fn
+        {:raise, true}, acc -> Map.merge(acc, %{raise: true})
+        {:config_file, file_path}, acc -> Map.merge(acc, %{config_file_path: file_path})
+        _unexpected_arg, acc -> acc
+      end)
+
+    {parsed_args, args}
   end
 end

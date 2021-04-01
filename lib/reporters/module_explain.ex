@@ -9,6 +9,7 @@ defmodule Doctor.Reporters.ModuleExplain do
     - `min_module_doc_coverage`
     - `min_module_spec_coverage`
     - `moduledoc_required`
+    - `exception_moduledoc_required`
     - `struct_type_spec_required`
   """
 
@@ -75,25 +76,48 @@ defmodule Doctor.Reporters.ModuleExplain do
     print_struct_spec(module_report, config)
 
     # Determine whether the module passed or failed
-    doc_coverage =
-      module_report.doc_coverage
-      |> Decimal.round(1)
-      |> Decimal.to_float()
+    valid_module?(module_report, config)
+  end
 
-    spec_coverage =
-      module_report.spec_coverage
-      |> Decimal.round(1)
-      |> Decimal.to_float()
+  defp valid_module?(module_report, config) do
+    valid_struct_spec?(module_report, config) and
+      valid_moduledoc?(module_report, config) and
+      valid_doc_coverage?(module_report, config) and
+      valid_spec_coverage?(module_report, config)
+  end
 
-    ((config.struct_type_spec_required and module_report.has_struct_type_spec == :not_struct) or
-       module_report.has_struct_type_spec) and
-      (config.moduledoc_required and module_report.has_module_doc) and
-      doc_coverage >= config.min_module_doc_coverage and
-      spec_coverage >= config.min_module_spec_coverage
+  defp valid_struct_spec?(module_report, config) do
+    (config.struct_type_spec_required and module_report.has_struct_type_spec == :not_struct) or
+      module_report.has_struct_type_spec
+  end
+
+  defp valid_moduledoc?(module_report, config) do
+    (not config.exception_moduledoc_required and module_report.properties[:is_exception]) or
+      (config.moduledoc_required and module_report.has_module_doc)
+  end
+
+  defp valid_doc_coverage?(module_report, config) do
+    doc_coverage(module_report) >= config.min_module_doc_coverage
+  end
+
+  defp valid_spec_coverage?(module_report, config) do
+    spec_coverage(module_report) >= config.min_module_spec_coverage
+  end
+
+  defp doc_coverage(module_report) do
+    module_report.doc_coverage
+    |> Decimal.round(1)
+    |> Decimal.to_float()
+  end
+
+  defp spec_coverage(module_report) do
+    module_report.spec_coverage
+    |> Decimal.round(1)
+    |> Decimal.to_float()
   end
 
   defp print_struct_spec(%ModuleReport{} = module_report, %Config{} = config) do
-    if config.struct_type_spec_required and module_report.has_struct_type_spec do
+    if valid_struct_spec?(module_report, config) do
       OutputUtils.print_success(
         "  Has Struct Spec: #{OutputUtils.print_pass_or_fail(module_report.has_struct_type_spec)}"
       )
@@ -105,20 +129,28 @@ defmodule Doctor.Reporters.ModuleExplain do
   end
 
   defp print_module_doc(%ModuleReport{} = module_report, %Config{} = config) do
-    if config.moduledoc_required and module_report.has_module_doc do
+    if valid_moduledoc?(module_report, config) do
       OutputUtils.print_success("  Has Module Doc:  #{OutputUtils.print_pass_or_fail(module_report.has_module_doc)}")
     else
+      config_option =
+        case module_report.properties[:is_exception] do
+          true ->
+            "an 'exception_moduledoc_required'"
+
+          _ ->
+            "a 'moduledoc_required'"
+        end
+
       OutputUtils.print_error(
-        "  Has Module Doc:  #{OutputUtils.print_pass_or_fail(module_report.has_module_doc)}  --> Your config has a 'moduledoc_required' value of true"
+        "  Has Module Doc:  #{OutputUtils.print_pass_or_fail(module_report.has_module_doc)}  --> Your config has #{
+          config_option
+        } value of true"
       )
     end
   end
 
   defp print_doc_coverage(%ModuleReport{} = module_report, %Config{} = config) do
-    doc_coverage =
-      module_report.doc_coverage
-      |> Decimal.round(1)
-      |> Decimal.to_float()
+    doc_coverage = doc_coverage(module_report)
 
     if doc_coverage >= config.min_module_doc_coverage do
       OutputUtils.print_success("  Doc Coverage:    #{doc_coverage}%")
@@ -132,10 +164,7 @@ defmodule Doctor.Reporters.ModuleExplain do
   end
 
   defp print_spec_coverage(%ModuleReport{} = module_report, %Config{} = config) do
-    spec_coverage =
-      module_report.spec_coverage
-      |> Decimal.round(1)
-      |> Decimal.to_float()
+    spec_coverage = spec_coverage(module_report)
 
     if spec_coverage >= config.min_module_spec_coverage do
       OutputUtils.print_success("  Spec Coverage:   #{spec_coverage}%")

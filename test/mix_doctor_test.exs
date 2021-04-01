@@ -99,9 +99,26 @@ defmodule Mix.Tasks.DoctorTest do
                ["---------------------------------------------"],
                ["Summary:\n"],
                ["Passed Modules: 21"],
+               ["Failed Modules: 7"],
+               ["Total Doc Coverage: 83.6%"],
+               ["Total Spec Coverage: 37.3%\n"],
+               ["\e[31mDoctor validation has failed!\e[0m"]
+             ]
+    end
+
+    test "should not report exceptions missing docs if `exception_moduledoc_required` is set to `false`" do
+      Mix.Tasks.Doctor.run(["--summary", "--config-file", "./test/configs/exceptions_moduledoc_not_required.exs"])
+      remove_at_exit_hook()
+      doctor_output = get_shell_output()
+
+      assert doctor_output == [
+               ["Doctor file found. Loading configuration."],
+               ["---------------------------------------------"],
+               ["Summary:\n"],
+               ["Passed Modules: 22"],
                ["Failed Modules: 6"],
-               ["Total Doc Coverage: 83.3%"],
-               ["Total Spec Coverage: 36.4%\n"],
+               ["Total Doc Coverage: 83.6%"],
+               ["Total Spec Coverage: 37.3%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
              ]
     end
@@ -249,6 +266,54 @@ defmodule Mix.Tasks.DoctorTest do
                ["Total Doc Coverage: 100.0%"],
                ["Total Spec Coverage: 17.1%\n"],
                ["Doctor validation has passed!"]
+             ]
+    end
+  end
+
+  describe "mix doctor.explain" do
+    test "exception module with missing doc if `exception_moduledoc_required` is set to `true`" do
+      Mix.Tasks.Doctor.Explain.run([
+        "--config-file",
+        "./test/configs/exceptions_moduledoc_required.exs",
+        "Doctor.Exception"
+      ])
+
+      remove_at_exit_hook()
+      doctor_output = get_shell_output()
+
+      assert doctor_output == [
+               ["Doctor file found. Loading configuration."],
+               ["\nFunction          @doc  @spec  "],
+               ["-----------------------------"],
+               ["exception/1       ✓     ✓     "],
+               ["\nModule Results:"],
+               ["\e[32m  Doc Coverage:    100.0%\e[0m"],
+               ["\e[32m  Spec Coverage:   100.0%\e[0m"],
+               ["\e[31m  Has Module Doc:  ✗  --> Your config has an 'exception_moduledoc_required' value of true\e[0m"],
+               ["\e[32m  Has Struct Spec: N/A\e[0m"]
+             ]
+    end
+
+    test "exception module with missing doc if `exception_moduledoc_required` is set to `false`" do
+      Mix.Tasks.Doctor.Explain.run([
+        "--config-file",
+        "./test/configs/exceptions_moduledoc_not_required.exs",
+        "Doctor.Exception"
+      ])
+
+      remove_at_exit_hook()
+      doctor_output = get_shell_output()
+
+      assert doctor_output == [
+               ["Doctor file found. Loading configuration."],
+               ["\nFunction          @doc  @spec  "],
+               ["-----------------------------"],
+               ["exception/1       ✓     ✓     "],
+               ["\nModule Results:"],
+               ["\e[32m  Doc Coverage:    100.0%\e[0m"],
+               ["\e[32m  Spec Coverage:   100.0%\e[0m"],
+               ["\e[32m  Has Module Doc:  ✗\e[0m"],
+               ["\e[32m  Has Struct Spec: N/A\e[0m"]
              ]
     end
   end

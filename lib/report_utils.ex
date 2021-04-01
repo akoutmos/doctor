@@ -98,14 +98,13 @@ defmodule Doctor.ReportUtils do
         %ModuleReport{
           doc_coverage: doc_coverage,
           spec_coverage: spec_coverage,
-          has_module_doc: has_module_doc,
           has_struct_type_spec: has_struct_type_spec
-        },
+        } = module_report,
         %Config{} = config
       ) do
     doc_cov = calc_coverage_pass(doc_coverage, config.min_module_doc_coverage)
     spec_cov = calc_coverage_pass(spec_coverage, config.min_module_spec_coverage)
-    passed_module_doc = if config.moduledoc_required, do: has_module_doc, else: true
+    passed_module_doc = valid_module_doc?(module_report, config)
 
     passed_struct_type_spec =
       if config.struct_type_spec_required and has_struct_type_spec != :not_struct,
@@ -113,6 +112,18 @@ defmodule Doctor.ReportUtils do
         else: true
 
     doc_cov and spec_cov and passed_struct_type_spec and passed_module_doc
+  end
+
+  defp valid_module_doc?(%ModuleReport{properties: [is_exception: true]} = module_report, config) do
+    if config.exception_moduledoc_required do
+      module_report.has_module_doc
+    else
+      true
+    end
+  end
+
+  defp valid_module_doc?(module_report, config) do
+    if config.moduledoc_required, do: module_report.has_module_doc, else: true
   end
 
   @doc """

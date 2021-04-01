@@ -12,12 +12,13 @@ defmodule Doctor.ModuleReport do
           doc_coverage: Decimal.t(),
           spec_coverage: Decimal.t(),
           file: String.t(),
-          module: module(),
+          module: String.t(),
           functions: integer(),
           missed_docs: integer(),
           missed_specs: integer(),
           has_module_doc: boolean(),
-          has_struct_type_spec: atom() | boolean()
+          has_struct_type_spec: atom() | boolean(),
+          properties: Keyword.t()
         }
 
   defstruct ~w(
@@ -30,6 +31,7 @@ defmodule Doctor.ModuleReport do
     missed_specs
     has_module_doc
     has_struct_type_spec
+    properties
   )a
 
   @doc """
@@ -46,7 +48,8 @@ defmodule Doctor.ModuleReport do
       missed_docs: calculate_missed_docs(module_info),
       missed_specs: calculate_missed_specs(module_info),
       has_module_doc: has_module_doc?(module_info),
-      has_struct_type_spec: module_info.struct_type_spec
+      has_struct_type_spec: module_info.struct_type_spec,
+      properties: module_info.properties
     }
   end
 

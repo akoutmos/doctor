@@ -18,6 +18,7 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.missed_specs == 0
     assert module_report.module == "Doctor.AllDocs"
     assert module_report.doc_coverage == Decimal.new("100")
+    assert module_report.properties == [is_exception: false]
   end
 
   test "build/1 should build the correct report struct for a file with partial coverage" do
@@ -35,6 +36,7 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.missed_specs == 3
     assert module_report.module == "Doctor.PartialDocs"
     assert module_report.doc_coverage == Decimal.new("57.14285714285714285714285714")
+    assert module_report.properties == [is_exception: false]
   end
 
   test "build/1 should build the correct report struct for a file that implements behaviour callbacks" do
@@ -52,6 +54,7 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.missed_specs == 0
     assert module_report.module == "Doctor.BehaviourModule"
     assert module_report.doc_coverage == Decimal.new("100")
+    assert module_report.properties == [is_exception: false]
   end
 
   test "build/1 should build the correct report struct for a file that implements behaviour callbacks with multiple clauses" do
@@ -70,6 +73,7 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.module == "Doctor.FooBar"
     assert module_report.doc_coverage == Decimal.new("83.33333333333333333333333333")
     assert module_report.spec_coverage == Decimal.new("50.0")
+    assert module_report.properties == [is_exception: false]
   end
 
   test "build/1 should build the correct report struct for a file with no coverage" do
@@ -87,6 +91,7 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.missed_specs == 7
     assert module_report.module == "Doctor.NoDocs"
     assert module_report.doc_coverage == Decimal.new("0")
+    assert module_report.properties == [is_exception: false]
   end
 
   test "build/1 should build the correct report struct for a file with struct specs" do
@@ -105,6 +110,7 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.missed_specs == 0
     assert module_report.module == "Doctor.StructSpecModule"
     assert module_report.doc_coverage == nil
+    assert module_report.properties == [is_exception: false]
   end
 
   test "build/1 should build the correct report struct for a file with no struct specs" do
@@ -123,5 +129,25 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.missed_specs == 0
     assert module_report.module == "Doctor.NoStructSpecModule"
     assert module_report.doc_coverage == nil
+    assert module_report.properties == [is_exception: false]
+  end
+
+  test "build/1 should build the correct report for an exception" do
+    module_report =
+      Doctor.Exception
+      |> Code.fetch_docs()
+      |> ModuleInformation.build(Doctor.Exception)
+      |> ModuleInformation.load_file_ast()
+      |> ModuleInformation.load_user_defined_functions()
+      |> ModuleReport.build()
+
+    assert module_report.functions == 1
+    refute module_report.has_module_doc
+    assert module_report.has_struct_type_spec
+    assert module_report.missed_docs == 0
+    assert module_report.missed_specs == 0
+    assert module_report.module == "Doctor.Exception"
+    assert module_report.doc_coverage == Decimal.new("100")
+    assert module_report.properties == [is_exception: true]
   end
 end
