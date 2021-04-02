@@ -47,7 +47,9 @@ defmodule Doctor.Reporters.Full do
         ])
 
       if ReportUtils.module_passed_validation?(module_report, args) do
-        Mix.shell().info(output_line)
+        unless args.failed do
+          Mix.shell().info(output_line)
+        end
       else
         Mix.shell().info(ANSI.red() <> output_line <> ANSI.reset())
       end

@@ -123,6 +123,49 @@ defmodule Mix.Tasks.DoctorTest do
              ]
     end
 
+    test "should output the failed modules and the summary report when --failed is provided" do
+      Mix.Tasks.Doctor.run([
+        "--short",
+        "--failed",
+        "--config-file",
+        "./test/configs/exceptions_moduledoc_not_required.exs"
+      ])
+
+      remove_at_exit_hook()
+      doctor_output = get_shell_output()
+
+      assert doctor_output == [
+               ["Doctor file found. Loading configuration."],
+               ["----------------------------------------------------------------------------------------------"],
+               ["Doc Cov  Spec Cov  Functions  Module                                   Module Doc  Struct Spec"],
+               [
+                 "\e[31mN/A      N/A       0          Doctor.AnotherBehaviourModule.Behaviour  No          N/A        \e[0m"
+               ],
+               [
+                 "\e[31m100%     100%      1          Doctor.AnotherBehaviourModule            No          N/A        \e[0m"
+               ],
+               [
+                 "\e[31m0%       0%        7          Doctor.NoDocs                            No          N/A        \e[0m"
+               ],
+               [
+                 "\e[31mN/A      N/A       0          Doctor.NoStructSpecModule                No          No         \e[0m"
+               ],
+               [
+                 "\e[31m57%      57%       7          Doctor.PartialDocs                       No          N/A        \e[0m"
+               ],
+               [
+                 "\e[31mN/A      N/A       0          Doctor.StructSpecModule                  No          Yes        \e[0m"
+               ],
+               ["----------------------------------------------------------------------------------------------"],
+               ["Summary:\n"],
+               ["Passed Modules: 22"],
+               ["Failed Modules: 6"],
+               ["Total Doc Coverage: 83.6%"],
+               ["Total Spec Coverage: 37.3%\n"],
+               ["\e[31mDoctor validation has failed!\e[0m"]
+             ]
+    end
+
     test "should output the summary report when a doctor file path is provided" do
       Mix.Tasks.Doctor.run(["--summary", "--config-file", "./.doctor.exs"])
       remove_at_exit_hook()
