@@ -1,5 +1,5 @@
 defmodule Mix.Tasks.DoctorTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: false
 
   setup_all do
     original_shell = Mix.shell()
@@ -334,7 +334,7 @@ defmodule Mix.Tasks.DoctorTest do
       Enum.reject(at_exit_hooks, fn hook ->
         function_info = Function.info(hook)
 
-        Keyword.get(function_info, :module) == Mix.Tasks.Doctor
+        Keyword.get(function_info, :module) in [Mix.Tasks.Doctor, Mix.Tasks.Doctor.Explain]
       end)
 
     :elixir_config.put(:at_exit, filtered_hooks)
