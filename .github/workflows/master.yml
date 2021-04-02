@@ -42,8 +42,6 @@ jobs:
         run: mix compile --warnings-as-errors
       - name: Doctor documentation checks
         run: mix doctor
-      - name: Dialyzer checks
-        run: mix dialyzer
 
   unit_test:
     name: Run ExUnit tests
