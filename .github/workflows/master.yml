@@ -1,21 +1,72 @@
-on: push
+name: Doctor CI
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
-  test:
+  static_analysis:
+    name: Static Analysis
     runs-on: ubuntu-latest
-    name: OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Elixir
+        uses: erlef/setup-elixir@v1
+        with:
+          elixir-version: '1.11.2'
+          otp-version: '23.1'
+      - name: Restore dependencies cache
+        uses: actions/cache@v2
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-mix-
+      - name: Install dependencies
+        run: mix deps.get
+      - name: Mix Formatter
+        run: mix format --check-formatted
+      - name: Check for compiler warnings
+        run: mix compile --warnings-as-errors
+      - name: Doctor documentation checks
+        run: mix doctor
+
+  unit_test:
+    name: Run ExUnit tests
+    runs-on: ubuntu-latest
+
     strategy:
       matrix:
-        otp: [21.3.8.10, 22.1.7]
-        elixir: [1.8.2, 1.9.4]
-    env:
-      MIX_ENV: test
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        elixir:
+          - '1.10'
+          - '1.11.3'
+        otp:
+          - '22.0.2'
+          - '23.0'
+
     steps:
-      - uses: actions/checkout@v1.0.0
-      - uses: erlef/setup-elixir@v1
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Elixir
+        uses: erlef/setup-elixir@v1
         with:
-          otp-version: ${{matrix.otp}}
-          elixir-version: ${{matrix.elixir}}
-      - run: mix deps.get
-      - run: mix coveralls.github
+          elixir-version: ${{ matrix.elixir }}
+          otp-version: ${{ matrix.otp }}
+      - name: Restore dependencies cache
+        uses: actions/cache@v2
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-mix-
+      - name: Install dependencies
+        run: mix deps.get
+      - name: ExUnit tests
+        env:
+          MIX_ENV: test
+        run: mix test
