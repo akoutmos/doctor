@@ -95,6 +95,9 @@ flags are supported:
     --raise      If any of your modules fails Doctor validation, then
                  raise an error and return a non-zero exit status.
 
+    --failed     If set only the failed modules will be reported. Works with
+                 --full and --short options.
+
     --umbrella   By default, in an umbrella project, each app will be
                  evaluated independently against the specified thresholds
                  in your .doctor.exs file. This flag changes that behavior

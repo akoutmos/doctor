@@ -25,7 +25,7 @@ defmodule Mix.Tasks.Doctor do
                  raise an error and return a non-zero exit status.
 
   --failed       If set only the failed modules will be reported. Works with
-                 --full and --short options
+                 --full and --short options.
 
   --umbrella     By default, in an umbrella project, each app will be
                  evaluated independently against the specified thresholds
