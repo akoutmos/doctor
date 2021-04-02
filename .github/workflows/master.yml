@@ -40,8 +40,6 @@ jobs:
         run: mix format --check-formatted
       - name: Check for compiler warnings
         run: mix compile --warnings-as-errors
-      - name: Credo strict checks
-        run: mix credo --strict
       - name: Doctor documentation checks
         run: mix doctor
       - name: Dialyzer checks
