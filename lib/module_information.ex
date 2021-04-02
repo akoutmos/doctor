@@ -119,6 +119,33 @@ defmodule Doctor.ModuleInformation do
       |> Macro.prewalk(%{last_impl: :none, functions: []}, &parse_ast_node_for_def/2)
 
     %{module_info | user_defined_functions: Enum.uniq(functions)}
+    |> load_using_docs_and_specs()
+  end
+
+  defp load_using_docs_and_specs(%ModuleInformation{} = module_info) do
+    {_ast, modules} = Macro.prewalk(module_info.file_ast, %{}, &parse_ast_node_for_defmodules/2)
+
+    {_ast, using} =
+      modules
+      |> Map.get(module_info.module)
+      |> Macro.prewalk(%{using: :none}, &parse_ast_for_using/2)
+
+    acc = %{
+      last_doc: :none,
+      last_spec: :none,
+      using_docs: [],
+      using_specs: []
+    }
+
+    {_ast, extra} =
+      using[:using]
+      |> Macro.prewalk(acc, &parse_ast_using_node/2)
+
+    %{
+      module_info
+      | specs: module_info.specs ++ extra.using_specs,
+        docs: module_info.docs ++ extra.using_docs
+    }
   end
 
   defp get_module_behaviours(module) do
@@ -239,4 +266,79 @@ defmodule Doctor.ModuleInformation do
 
   defp get_function_arity(nil), do: 0
   defp get_function_arity(args), do: length(args)
+
+  defp parse_ast_for_using(
+         {:defmacro, _macro_line, [{:__using__, _line, [{:_opts, _opts_line, _opts}]}, do_block]} = ast,
+         _acc
+       ),
+       do: {ast, %{using: do_block}}
+
+  defp parse_ast_for_using(ast, acc), do: {ast, acc}
+
+  defp parse_ast_using_node(
+         {:@, _doc_line, [{:doc, _line, [doc]}]} = ast,
+         acc
+       ),
+       do: {ast, Map.put(acc, :last_doc, doc)}
+
+  defp parse_ast_using_node(
+         {:@, _spec_line, [{:spec, _line, _spec_info}]} = ast,
+         acc
+       ),
+       do: {ast, Map.put(acc, :last_spec, true)}
+
+  defp parse_ast_using_node(
+         {:def, _def_line, [{:when, _line_when, [{function_name, _function_line, args}, _guard]}, _do_block]} = ast,
+         acc
+       ) do
+    {ast, update_acc_for_using(function_name, args, acc)}
+  end
+
+  defp parse_ast_using_node(
+         {:def, _def_line, [{function_name, _function_line, args}, _do_block]} = ast,
+         acc
+       ) do
+    {ast, update_acc_for_using(function_name, args, acc)}
+  end
+
+  defp parse_ast_using_node(
+         {:def, _def_line, [{function_name, _function_line, args}]} = ast,
+         acc
+       ) do
+    {ast, update_acc_for_using(function_name, args, acc)}
+  end
+
+  defp parse_ast_using_node(ast, acc), do: {ast, acc}
+
+  defp update_acc_for_using(function_name, args, acc) do
+    function_arity = get_function_arity(args)
+
+    function_spec =
+      if acc.last_spec != :none do
+        [%Doctor.Specs{arity: function_arity, name: function_name}]
+      else
+        []
+      end
+
+    function_doc =
+      if acc.last_doc != :none do
+        [
+          %Doctor.Docs{
+            arity: function_arity,
+            doc: %{"en" => acc.last_doc},
+            kind: :function,
+            name: function_name
+          }
+        ]
+      else
+        []
+      end
+
+    %{
+      last_doc: :none,
+      last_spec: :none,
+      using_docs: acc.using_docs ++ function_doc,
+      using_specs: acc.using_specs ++ function_spec
+    }
+  end
 end
