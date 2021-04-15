@@ -65,9 +65,19 @@ defmodule Doctor.ModuleReport do
         {function, arity}
       end)
 
-    Enum.count(module_info.docs, fn doc ->
-      {doc.name, doc.arity} in function_arity_list and doc.doc == :none
-    end)
+    docs_arity_list = Enum.map(module_info.docs, fn doc -> {doc.name, doc.arity} end)
+
+    functions_not_in_docs =
+      Enum.count(function_arity_list, fn fun ->
+        fun not in docs_arity_list
+      end)
+
+    functions_without_docs =
+      Enum.count(module_info.docs, fn doc ->
+        {doc.name, doc.arity} in function_arity_list and doc.doc == :none
+      end)
+
+    functions_not_in_docs + functions_without_docs
   end
 
   defp calculate_doc_coverage(module_info) do

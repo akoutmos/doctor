@@ -98,10 +98,10 @@ defmodule Mix.Tasks.DoctorTest do
       assert rest_doctor_output == [
                ["---------------------------------------------"],
                ["Summary:\n"],
-               ["Passed Modules: 21"],
+               ["Passed Modules: 22"],
                ["Failed Modules: 7"],
-               ["Total Doc Coverage: 83.6%"],
-               ["Total Spec Coverage: 37.3%\n"],
+               ["Total Doc Coverage: 81.7%"],
+               ["Total Spec Coverage: 38.0%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
              ]
     end
@@ -116,9 +116,9 @@ defmodule Mix.Tasks.DoctorTest do
                ["---------------------------------------------"],
                ["Summary:\n"],
                ["Passed Modules: 22"],
-               ["Failed Modules: 6"],
-               ["Total Doc Coverage: 83.6%"],
-               ["Total Spec Coverage: 37.3%\n"],
+               ["Failed Modules: 7"],
+               ["Total Doc Coverage: 81.7%"],
+               ["Total Spec Coverage: 38.0%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
              ]
     end
@@ -156,12 +156,15 @@ defmodule Mix.Tasks.DoctorTest do
                [
                  "\e[31mN/A      N/A       0          Doctor.StructSpecModule                  No          Yes        \e[0m"
                ],
+               [
+                 "\e[31m50%      50%       4          Doctor.UseModule                         Yes         N/A        \e[0m"
+               ],
                ["----------------------------------------------------------------------------------------------"],
                ["Summary:\n"],
                ["Passed Modules: 22"],
-               ["Failed Modules: 6"],
-               ["Total Doc Coverage: 83.6%"],
-               ["Total Spec Coverage: 37.3%\n"],
+               ["Failed Modules: 7"],
+               ["Total Doc Coverage: 81.7%"],
+               ["Total Spec Coverage: 38.0%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
              ]
     end
@@ -356,6 +359,32 @@ defmodule Mix.Tasks.DoctorTest do
                ["\e[32m  Doc Coverage:    100.0%\e[0m"],
                ["\e[32m  Spec Coverage:   100.0%\e[0m"],
                ["\e[32m  Has Module Doc:  ✗\e[0m"],
+               ["\e[32m  Has Struct Spec: N/A\e[0m"]
+             ]
+    end
+
+    test "module with using macro and various inline functions" do
+      Mix.Tasks.Doctor.Explain.run([
+        "--config-file",
+        "./test/configs/exceptions_moduledoc_not_required.exs",
+        "Doctor.UseModule"
+      ])
+
+      remove_at_exit_hook()
+      doctor_output = get_shell_output()
+
+      assert doctor_output == [
+               ["Doctor file found. Loading configuration."],
+               ["\nFunction                     @doc  @spec  "],
+               ["----------------------------------------"],
+               ["fun_without_spec_and_doc/0   ✗     ✗     "],
+               ["fun_with_spec/0              ✗     ✓     "],
+               ["fun_with_doc/0               ✓     ✗     "],
+               ["fun_with_doc_and_spec/0      ✓     ✓     "],
+               ["\nModule Results:"],
+               ["\e[31m  Doc Coverage:    50.0%  --> Your config has a 'min_module_doc_coverage' value of 80\e[0m"],
+               ["\e[32m  Spec Coverage:   50.0%\e[0m"],
+               ["\e[32m  Has Module Doc:  ✓\e[0m"],
                ["\e[32m  Has Struct Spec: N/A\e[0m"]
              ]
     end
