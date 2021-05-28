@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.18.0] - 2021-5-27
+
+- @doc false assumes no explicit spec and does not count against results
+- Support for using macro (thanks to @pnezis)
+- No reporting of missing docs for exception modules (thanks to @pnezis)
+
 ## [0.17.0] - 2021-1-11
 
 - Bumped up the Elixir version due to use of Mix.Task.recursing/0

@@ -175,6 +175,12 @@ defmodule Doctor.ModuleInformation do
     |> Path.relative_to(File.cwd!())
   end
 
+  defp parse_ast_node_for_def({:@, _line_number, [{:doc, _, [false]}]} = ast, acc) do
+    updated_acc = Map.put(acc, :last_impl, false)
+
+    {ast, updated_acc}
+  end
+
   defp parse_ast_node_for_def({:@, _line_number, [{:impl, _, impl_def}]} = ast, acc) do
     normalized_impl = normalize_impl(impl_def)
     updated_acc = Map.put(acc, :last_impl, normalized_impl)
