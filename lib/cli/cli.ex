@@ -29,7 +29,7 @@ defmodule Doctor.CLI do
 
     # Build report struct for each module
     |> Enum.sort(&(&1.file_relative_path < &2.file_relative_path))
-    |> Enum.map(&ModuleReport.build/1)
+    |> Enum.map(fn module -> ModuleReport.build(module, args) end)
   end
 
   @doc """

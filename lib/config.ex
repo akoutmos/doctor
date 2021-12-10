@@ -21,6 +21,7 @@ defmodule Doctor.Config do
           reporter: module(),
           struct_type_spec_required: boolean(),
           umbrella: boolean(),
+          include_hidden_doc: boolean(),
           failed: false
         }
 
@@ -36,6 +37,7 @@ defmodule Doctor.Config do
             reporter: Doctor.Reporters.Full,
             struct_type_spec_required: true,
             umbrella: false,
+            include_hidden_doc: false,
             failed: false
 
   @doc """

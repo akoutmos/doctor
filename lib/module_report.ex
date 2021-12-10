@@ -6,7 +6,7 @@ defmodule Doctor.ModuleReport do
   """
 
   alias __MODULE__
-  alias Doctor.ModuleInformation
+  alias Doctor.{ModuleInformation, Config}
 
   @type t :: %ModuleReport{
           doc_coverage: Decimal.t(),
@@ -38,7 +38,7 @@ defmodule Doctor.ModuleReport do
   Given a ModuleInformation struct with the necessary fields completed,
   build the report.
   """
-  def build(%ModuleInformation{} = module_info) do
+  def build(%ModuleInformation{} = module_info, %Config{} = config) do
     %ModuleReport{
       doc_coverage: calculate_doc_coverage(module_info),
       spec_coverage: calculate_spec_coverage(module_info),
@@ -47,7 +47,7 @@ defmodule Doctor.ModuleReport do
       functions: length(module_info.user_defined_functions),
       missed_docs: calculate_missed_docs(module_info),
       missed_specs: calculate_missed_specs(module_info),
-      has_module_doc: has_module_doc?(module_info),
+      has_module_doc: has_module_doc?(module_info, config),
       has_struct_type_spec: module_info.struct_type_spec,
       properties: module_info.properties
     }
@@ -130,7 +130,15 @@ defmodule Doctor.ModuleReport do
     end
   end
 
-  defp has_module_doc?(module_info) do
-    module_info.module_doc != :none
+  defp has_module_doc?(module_info, config) do
+    failed_doc_cases = [:none, %{}]
+
+    failed_doc_cases =
+      case config.include_hidden_doc do
+        true -> failed_doc_cases ++ [:hidden]
+        _ -> failed_doc_cases
+      end
+
+    module_info.module_doc not in failed_doc_cases
   end
 end
