@@ -1,7 +1,7 @@
 # Doctor
 
 [![Module Version](https://img.shields.io/hexpm/v/doctor.svg)](https://hex.pm/packages/doctor)
-[![Build Status](https://travis-ci.org/akoutmos/doctor.svg?branch=master)](https://travis-ci.org/akoutmos/doctor)
+[![Doctor CI](https://img.shields.io/github/workflow/status/akoutmos/doctor/Doctor%20CI/master?label=Build%20Status)](https://github.com/akoutmos/doctor/actions)
 [![Coverage Status](https://coveralls.io/repos/github/akoutmos/doctor/badge.svg?branch=master)](https://coveralls.io/github/akoutmos/doctor?branch=master)
 [![Hex Docs](https://img.shields.io/badge/hex-docs-lightgreen.svg)](https://hexdocs.pm/doctor/)
 [![Total Download](https://img.shields.io/hexpm/dt/doctor.svg)](https://hex.pm/packages/doctor)
