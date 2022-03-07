@@ -6,7 +6,6 @@
 [![Hex Docs](https://img.shields.io/badge/hex-docs-lightgreen.svg)](https://hexdocs.pm/doctor/)
 [![Total Download](https://img.shields.io/hexpm/dt/doctor.svg)](https://hex.pm/packages/doctor)
 [![License](https://img.shields.io/hexpm/l/doctor.svg)](https://github.com/akoutmos/doctor/blob/master/LICENSE)
-[![Last Updated](https://img.shields.io/github/last-commit/akoutmos/doctor.svg)](https://github.com/akoutmos/doctor/commits/master)
 
 Ensure that your documentation is healthy with Doctor! This library contains a mix task that you can run against your
 project to generate a documentation coverage report. Items which are reported on include: the presence of module docs,
