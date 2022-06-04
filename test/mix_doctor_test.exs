@@ -87,7 +87,7 @@ defmodule Mix.Tasks.DoctorTest do
              ]
     end
 
-    test "should output the summary report along with an error when an invalid  doctor file path is provided" do
+    test "should output the summary report along with an error when an invalid doctor file path is provided" do
       Mix.Tasks.Doctor.run(["--summary", "--config-file", "./not_a_real_file.exs"])
       remove_at_exit_hook()
       [[first_line] | rest_doctor_output] = get_shell_output()
@@ -98,10 +98,10 @@ defmodule Mix.Tasks.DoctorTest do
       assert rest_doctor_output == [
                ["---------------------------------------------"],
                ["Summary:\n"],
-               ["Passed Modules: 22"],
+               ["Passed Modules: 24"],
                ["Failed Modules: 7"],
-               ["Total Doc Coverage: 81.7%"],
-               ["Total Spec Coverage: 38.0%\n"],
+               ["Total Doc Coverage: 82.2%"],
+               ["Total Spec Coverage: 39.7%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
              ]
     end
@@ -115,10 +115,10 @@ defmodule Mix.Tasks.DoctorTest do
                ["Doctor file found. Loading configuration."],
                ["---------------------------------------------"],
                ["Summary:\n"],
-               ["Passed Modules: 22"],
+               ["Passed Modules: 24"],
                ["Failed Modules: 7"],
-               ["Total Doc Coverage: 81.7%"],
-               ["Total Spec Coverage: 38.0%\n"],
+               ["Total Doc Coverage: 82.2%"],
+               ["Total Spec Coverage: 39.7%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
              ]
     end
@@ -161,10 +161,10 @@ defmodule Mix.Tasks.DoctorTest do
                ],
                ["----------------------------------------------------------------------------------------------"],
                ["Summary:\n"],
-               ["Passed Modules: 22"],
+               ["Passed Modules: 24"],
                ["Failed Modules: 7"],
-               ["Total Doc Coverage: 81.7%"],
-               ["Total Spec Coverage: 38.0%\n"],
+               ["Total Doc Coverage: 82.2%"],
+               ["Total Spec Coverage: 39.7%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
              ]
     end
