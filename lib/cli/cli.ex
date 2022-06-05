@@ -44,15 +44,15 @@ defmodule Doctor.CLI do
     end)
     |> case do
       :not_found ->
-        raise "Could not find module #{inspect(module_name)} in application"
+        :not_found
 
       module ->
         module
         |> generate_module_entry()
         |> async_fetch_user_defined_functions()
         |> Task.await(15_000)
+        |> ModuleExplain.generate_report(args)
     end
-    |> ModuleExplain.generate_report(args)
   end
 
   @doc """

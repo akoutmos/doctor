@@ -53,8 +53,9 @@ defmodule Mix.Tasks.Doctor.Explain do
 
   alias Doctor.{CLI, Config}
 
-  @shortdoc "Debug why are particular module is failing validation"
+  @shortdoc "Debug why a particular module is failing validation"
   @recursive true
+  @umbrella_accumulator Doctor.Umbrella
 
   @impl true
   def run(args) do
@@ -80,19 +81,77 @@ defmodule Mix.Tasks.Doctor.Explain do
           raise "Invalid Argument: mix doctor.explain takes only a single module name as an argument"
       end
 
-    result = CLI.generate_single_module_report(module_name, config)
+    if config.umbrella do
+      run_umbrella(module_name, config)
+    else
+      run_default(module_name, config)
+    end
+  end
 
-    unless result do
-      System.at_exit(fn _ ->
-        exit({:shutdown, 1})
-      end)
-
-      if config.raise do
-        Mix.raise("Doctor validation has failed and raised an error")
+  defp run_umbrella(module_name, config) do
+    acc_pid =
+      case Process.whereis(@umbrella_accumulator) do
+        nil -> init_umbrella_acc(module_name, config)
+        pid -> pid
       end
+
+    case CLI.generate_single_module_report(module_name, config) do
+      :not_found ->
+        :ok
+
+      result ->
+        Agent.update(acc_pid, fn %{result: acc_result} ->
+          %{found: true, result: acc_result && result}
+        end)
     end
 
     :ok
+  end
+
+  defp run_default(module_name, config) do
+    case CLI.generate_single_module_report(module_name, config) do
+      :not_found ->
+        raise "Could not find module #{inspect(module_name)} in application"
+
+      result ->
+        unless result do
+          System.at_exit(fn _ ->
+            exit({:shutdown, 1})
+          end)
+
+          if config.raise do
+            Mix.raise("Doctor validation has failed and raised an error")
+          end
+        end
+    end
+
+    :ok
+  end
+
+  defp init_umbrella_acc(module_name, config) do
+    {:ok, pid} = Agent.start_link(fn -> %{found: false, result: true} end, name: @umbrella_accumulator)
+
+    System.at_exit(fn _ ->
+      acc = Agent.get(pid, & &1)
+      Agent.stop(pid)
+      report_umbrella_result(acc, module_name, config)
+    end)
+
+    pid
+  end
+
+  defp report_umbrella_result(%{found: false}, module_name, _config) do
+    raise "Could not find module #{inspect(module_name)} in application"
+  end
+
+  defp report_umbrella_result(%{result: true}, _module_name, _config), do: :ok
+
+  defp report_umbrella_result(_acc, _module_name, config) do
+    if config.raise do
+      Mix.raise("Doctor validation has failed and raised an error")
+    end
+
+    exit({:shutdown, 1})
   end
 
   defp load_config_file(%{config_file_path: file_path} = _cli_args) do
