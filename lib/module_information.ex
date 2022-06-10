@@ -273,11 +273,8 @@ defmodule Doctor.ModuleInformation do
   defp get_function_arity(nil), do: 0
   defp get_function_arity(args), do: length(args)
 
-  defp parse_ast_for_using(
-         {:defmacro, _macro_line, [{:__using__, _line, [{:_opts, _opts_line, _opts}]}, do_block]} = ast,
-         _acc
-       ),
-       do: {ast, %{using: do_block}}
+  defp parse_ast_for_using({:defmacro, _macro_line, [{:__using__, _line, _args}, do_block]} = ast, _acc),
+    do: {ast, %{using: do_block}}
 
   defp parse_ast_for_using(ast, acc), do: {ast, acc}
 
