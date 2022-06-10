@@ -151,7 +151,7 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.properties == [is_exception: true]
   end
 
-  test "build/1 should build the correct report for a module wiht __using__ macro" do
+  test "build/1 should build the correct report for a module with __using__ macro" do
     module_report =
       Doctor.UseModule
       |> Code.fetch_docs()
@@ -168,6 +168,46 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.module == "Doctor.UseModule"
     assert module_report.doc_coverage == Decimal.new("50.0")
     assert module_report.spec_coverage == Decimal.new("50.0")
+    assert module_report.properties == [is_exception: false]
+  end
+
+  test "build/1 should build the correct report for a module with a nested module" do
+    module_report =
+      Doctor.ParentModule
+      |> Code.fetch_docs()
+      |> ModuleInformation.build(Doctor.ParentModule)
+      |> ModuleInformation.load_file_ast()
+      |> ModuleInformation.load_user_defined_functions()
+      |> ModuleReport.build()
+
+    assert module_report.functions == 1
+    assert module_report.has_module_doc
+    assert module_report.has_struct_type_spec == :not_struct
+    assert module_report.missed_docs == 0
+    assert module_report.missed_specs == 0
+    assert module_report.module == "Doctor.ParentModule"
+    assert module_report.doc_coverage == Decimal.new("100")
+    assert module_report.spec_coverage == Decimal.new("100")
+    assert module_report.properties == [is_exception: false]
+  end
+
+  test "build/1 should build the correct report for a nested module" do
+    module_report =
+      Doctor.ParentModule.Nested
+      |> Code.fetch_docs()
+      |> ModuleInformation.build(Doctor.ParentModule.Nested)
+      |> ModuleInformation.load_file_ast()
+      |> ModuleInformation.load_user_defined_functions()
+      |> ModuleReport.build()
+
+    assert module_report.functions == 1
+    assert module_report.has_module_doc
+    assert module_report.has_struct_type_spec == :not_struct
+    assert module_report.missed_docs == 0
+    assert module_report.missed_specs == 0
+    assert module_report.module == "Doctor.ParentModule.Nested"
+    assert module_report.doc_coverage == Decimal.new("100")
+    assert module_report.spec_coverage == Decimal.new("100")
     assert module_report.properties == [is_exception: false]
   end
 end
