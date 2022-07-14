@@ -131,6 +131,6 @@ defmodule Doctor.ModuleReport do
   end
 
   defp has_module_doc?(module_info) do
-    module_info.module_doc != :none
+    module_info.module_doc not in [:none, %{}]
   end
 end
