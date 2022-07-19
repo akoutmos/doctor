@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.19.0] - 2022-7-19
+
+### Fixed
+
+- `mix doctor.explain` now works in umbrella projects
+- Properly measure documentation coverage in nested modules
+- Properly measure documentation with `__using__`
+- Fix `@moduledoc` detection for older elixir versions
+
 ## [0.18.0] - 2021-5-27
 
 - @doc false assumes no explicit spec and does not count against results
