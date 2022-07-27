@@ -132,6 +132,25 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.properties == [is_exception: false]
   end
 
+  test "build/1 should build the correct report struct for a file with an opaque struct spec" do
+    module_report =
+      Doctor.OpaqueStructSpecModule
+      |> Code.fetch_docs()
+      |> ModuleInformation.build(Doctor.OpaqueStructSpecModule)
+      |> ModuleInformation.load_file_ast()
+      |> ModuleInformation.load_user_defined_functions()
+      |> ModuleReport.build()
+
+    assert module_report.functions == 0
+    refute module_report.has_module_doc
+    assert module_report.has_struct_type_spec
+    assert module_report.missed_docs == 0
+    assert module_report.missed_specs == 0
+    assert module_report.module == "Doctor.OpaqueStructSpecModule"
+    assert module_report.doc_coverage == nil
+    assert module_report.properties == [is_exception: false]
+  end
+
   test "build/1 should build the correct report for an exception" do
     module_report =
       Doctor.Exception
