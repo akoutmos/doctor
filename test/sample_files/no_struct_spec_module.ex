@@ -1,4 +1,4 @@
-defmodule Doctor.OpaqueStructSpecModule do
+defmodule Doctor.NoStructSpecModule do
   defstruct ~w(name arity)a
 
   @opaque t :: %__MODULE__{}
