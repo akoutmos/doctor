@@ -93,7 +93,7 @@ defmodule Doctor.Reporters.ModuleExplain do
 
   defp valid_moduledoc?(module_report, config) do
     (not config.exception_moduledoc_required and module_report.properties[:is_exception]) or
-      (config.moduledoc_required and module_report.has_module_doc)
+      (Config.moduledoc_required?(config) and module_report.has_module_doc)
   end
 
   defp valid_doc_coverage?(module_report, config) do
@@ -142,9 +142,7 @@ defmodule Doctor.Reporters.ModuleExplain do
         end
 
       OutputUtils.print_error(
-        "  Has Module Doc:  #{OutputUtils.print_pass_or_fail(module_report.has_module_doc)}  --> Your config has #{
-          config_option
-        } value of true"
+        "  Has Module Doc:  #{OutputUtils.print_pass_or_fail(module_report.has_module_doc)}  --> Your config has #{config_option} value of true"
       )
     end
   end
@@ -156,9 +154,7 @@ defmodule Doctor.Reporters.ModuleExplain do
       OutputUtils.print_success("  Doc Coverage:    #{doc_coverage}%")
     else
       OutputUtils.print_error(
-        "  Doc Coverage:    #{doc_coverage}%  --> Your config has a 'min_module_doc_coverage' value of #{
-          config.min_module_doc_coverage
-        }"
+        "  Doc Coverage:    #{doc_coverage}%  --> Your config has a 'min_module_doc_coverage' value of #{config.min_module_doc_coverage}"
       )
     end
   end
@@ -170,9 +166,7 @@ defmodule Doctor.Reporters.ModuleExplain do
       OutputUtils.print_success("  Spec Coverage:   #{spec_coverage}%")
     else
       OutputUtils.print_error(
-        "  Spec Coverage:   #{spec_coverage}%  --> Your config has a 'min_module_spec_coverage' value of #{
-          config.min_module_spec_coverage
-        }"
+        "  Spec Coverage:   #{spec_coverage}%  --> Your config has a 'min_module_spec_coverage' value of #{config.min_module_spec_coverage}"
       )
     end
   end

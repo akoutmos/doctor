@@ -76,6 +76,21 @@ defmodule Doctor.ReportUtils do
   end
 
   @doc """
+  Calculate the ratio of modules which have a moduledoc.
+  """
+  def calc_overall_moduledoc_coverage(module_report_list) do
+    {all_modules, with_moduledoc} =
+      Enum.reduce(module_report_list, {0, 0}, fn
+        %{has_module_doc: true}, {acc_all, acc_with} -> {acc_all + 1, acc_with + 1}
+        %{has_module_doc: false}, {acc_all, acc_with} -> {acc_all + 1, acc_with}
+      end)
+
+    with_moduledoc
+    |> Decimal.div(all_modules)
+    |> Decimal.mult(100)
+  end
+
+  @doc """
   Calculate the overall spec coverage in the codebase
   """
   def calc_overall_spec_coverage(module_report_list) do
@@ -123,36 +138,60 @@ defmodule Doctor.ReportUtils do
   end
 
   defp valid_module_doc?(module_report, config) do
-    if config.moduledoc_required, do: module_report.has_module_doc, else: true
+    if Config.moduledoc_required?(config),
+      do: module_report.has_module_doc,
+      else: true
   end
 
   @doc """
   Check whether Doctor overall has passed or failed validation
   """
-  def doctor_report_passed?(module_report_list, %Config{} = config) do
-    all_modules_pass =
+  def doctor_report_passed?(module_report_list, config) do
+    [] == doctor_report_errors(module_report_list, config)
+  end
+
+  @doc """
+  Check whether Doctor overall has passed or failed validation
+  """
+  @spec doctor_report_errors([Doctor.ModuleReport.t()], Config.t()) :: [String.t()]
+  def doctor_report_errors(module_report_list, %Config{} = config) do
+    msg = fn
+      true, _msg -> []
+      false, msg -> [msg]
+    end
+
+    all_modules =
       module_report_list
-      |> Enum.reduce_while(false, fn module_report, _acc ->
+      |> Enum.reduce_while([], fn module_report, _acc ->
         if module_passed_validation?(module_report, config) do
-          {:cont, true}
+          {:cont, []}
         else
-          {:halt, false}
+          {:halt, ["one or more highlighted modules above is unhealthy"]}
         end
       end)
 
-    overall_doc_cov_pass =
+    overall_doc_cov =
       module_report_list
       |> calc_overall_doc_coverage()
       |> Decimal.to_float()
       |> Kernel.>=(config.min_overall_doc_coverage)
+      |> msg.("overall @doc coverage is below #{config.min_overall_doc_coverage}")
 
-    overall_spec_cov_pass =
+    overall_moduledoc_cov =
+      module_report_list
+      |> calc_overall_moduledoc_coverage()
+      |> Decimal.to_float()
+      |> Kernel.>=(config.min_overall_moduledoc_coverage)
+      |> msg.("overall @moduledoc coverage is below #{config.min_overall_moduledoc_coverage}")
+
+    overall_spec_cov =
       module_report_list
       |> calc_overall_spec_coverage()
       |> Decimal.to_float()
       |> Kernel.>=(config.min_overall_spec_coverage)
+      |> msg.("overall @spec coverage is below #{config.min_overall_spec_coverage}")
 
-    all_modules_pass and overall_doc_cov_pass and overall_spec_cov_pass
+    all_modules ++ overall_doc_cov ++ overall_moduledoc_cov ++ overall_spec_cov
   end
 
   defp calc_coverage_pass(coverage, threshold) when not is_nil(coverage) do
