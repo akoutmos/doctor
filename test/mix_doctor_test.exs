@@ -148,10 +148,10 @@ defmodule Mix.Tasks.DoctorTest do
                  "\e[31m0%       0%        7          Doctor.NoDocs                            No          N/A        \e[0m"
                ],
                [
-                 "\e[31mN/A      N/A       0          Doctor.OpaqueStructSpecModule            No          Yes        \e[0m"
+                 "\e[31mN/A      N/A       0          Doctor.NoStructSpecModule                No          No         \e[0m"
                ],
                [
-                 "\e[31mN/A      N/A       0          Doctor.NoStructSpecModule                No          No         \e[0m"
+                 "\e[31mN/A      N/A       0          Doctor.OpaqueStructSpecModule            No          Yes        \e[0m"
                ],
                [
                  "\e[31m57%      57%       7          Doctor.PartialDocs                       No          N/A        \e[0m"
