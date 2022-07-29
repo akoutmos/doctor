@@ -91,6 +91,7 @@ defmodule Doctor.ModuleInformation do
 
         Enum.any?(specs, fn
           {:type, {:t, _, _}} -> true
+          {:opaque, {:t, _, _}} -> true
           _ -> false
         end)
 

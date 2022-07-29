@@ -99,7 +99,7 @@ defmodule Mix.Tasks.DoctorTest do
                ["---------------------------------------------"],
                ["Summary:\n"],
                ["Passed Modules: 24"],
-               ["Failed Modules: 7"],
+               ["Failed Modules: 8"],
                ["Total Doc Coverage: 82.2%"],
                ["Total Spec Coverage: 39.7%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
@@ -116,7 +116,7 @@ defmodule Mix.Tasks.DoctorTest do
                ["---------------------------------------------"],
                ["Summary:\n"],
                ["Passed Modules: 24"],
-               ["Failed Modules: 7"],
+               ["Failed Modules: 8"],
                ["Total Doc Coverage: 82.2%"],
                ["Total Spec Coverage: 39.7%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
@@ -151,6 +151,9 @@ defmodule Mix.Tasks.DoctorTest do
                  "\e[31mN/A      N/A       0          Doctor.NoStructSpecModule                No          No         \e[0m"
                ],
                [
+                 "\e[31mN/A      N/A       0          Doctor.OpaqueStructSpecModule            No          Yes        \e[0m"
+               ],
+               [
                  "\e[31m57%      57%       7          Doctor.PartialDocs                       No          N/A        \e[0m"
                ],
                [
@@ -162,7 +165,7 @@ defmodule Mix.Tasks.DoctorTest do
                ["----------------------------------------------------------------------------------------------"],
                ["Summary:\n"],
                ["Passed Modules: 24"],
-               ["Failed Modules: 7"],
+               ["Failed Modules: 8"],
                ["Total Doc Coverage: 82.2%"],
                ["Total Spec Coverage: 39.7%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
