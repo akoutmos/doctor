@@ -53,6 +53,7 @@ defmodule Doctor.Reporters.Short do
     overall_passed = ReportUtils.count_total_passed_modules(module_reports, args)
     overall_failed = ReportUtils.count_total_failed_modules(module_reports, args)
     overall_doc_coverage = ReportUtils.calc_overall_doc_coverage(module_reports)
+    overall_moduledoc_coverage = ReportUtils.calc_overall_moduledoc_coverage(module_reports)
     overall_spec_coverage = ReportUtils.calc_overall_spec_coverage(module_reports)
 
     print_footer(
@@ -60,6 +61,7 @@ defmodule Doctor.Reporters.Short do
       overall_passed,
       overall_failed,
       overall_doc_coverage,
+      overall_moduledoc_coverage,
       overall_spec_coverage
     )
   end
@@ -84,8 +86,9 @@ defmodule Doctor.Reporters.Short do
     |> Mix.shell().info()
   end
 
-  defp print_footer(pass, passed, failed, doc_coverage, spec_coverage) do
+  defp print_footer(pass, passed, failed, doc_coverage, moduledoc_coverage, spec_coverage) do
     doc_coverage = Decimal.round(doc_coverage, 1)
+    moduledoc_coverage = Decimal.round(moduledoc_coverage, 1)
     spec_coverage = Decimal.round(spec_coverage, 1)
 
     print_divider()
@@ -93,6 +96,7 @@ defmodule Doctor.Reporters.Short do
     Mix.shell().info("Passed Modules: #{passed}")
     Mix.shell().info("Failed Modules: #{failed}")
     Mix.shell().info("Total Doc Coverage: #{doc_coverage}%")
+    Mix.shell().info("Total Moduledoc Coverage: #{moduledoc_coverage}%")
     Mix.shell().info("Total Spec Coverage: #{spec_coverage}%\n")
 
     if pass do

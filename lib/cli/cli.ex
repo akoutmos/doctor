@@ -39,9 +39,7 @@ defmodule Doctor.CLI do
     Project.config()
     |> Keyword.get(:app)
     |> get_application_modules()
-    |> Enum.find(:not_found, fn module ->
-      Atom.to_string(module) == "Elixir.#{module_name}"
-    end)
+    |> Enum.find(:not_found, &(inspect(&1) == module_name))
     |> case do
       :not_found ->
         :not_found

@@ -59,7 +59,6 @@ defmodule Mix.Tasks.Doctor.Explain do
 
   @impl true
   def run(args) do
-    default_config_opts = Config.config_defaults()
     {cli_arg_opts, args} = parse_cli_args(args)
     config_file_opts = load_config_file(cli_arg_opts)
 
@@ -67,9 +66,9 @@ defmodule Mix.Tasks.Doctor.Explain do
     # Precedence order is:
     # default < config file < cli args
     config =
-      default_config_opts
-      |> Map.merge(config_file_opts)
+      config_file_opts
       |> Map.merge(cli_arg_opts)
+      |> Config.new()
 
     # Get the module name from args
     module_name =
