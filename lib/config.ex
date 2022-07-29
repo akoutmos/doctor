@@ -83,7 +83,7 @@ defmodule Doctor.Config do
 
     # Fancy crap to drop the deprecated option.
     idx = Enum.find_index(iodata, &(&1 == "moduledoc_required:"))
-    Enum.slice(iodata, 0..(idx - 1)) ++ Enum.slice(iodata, (idx+6)..-1)
+    Enum.slice(iodata, 0..(idx - 1)) ++ Enum.slice(iodata, (idx + 6)..-1)
   end
 
   @doc """
