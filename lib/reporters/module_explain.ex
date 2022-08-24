@@ -79,6 +79,8 @@ defmodule Doctor.Reporters.ModuleExplain do
     valid_module?(module_report, config)
   end
 
+  defp valid_module?(%ModuleReport{is_protocol_implementation: true}, _config), do: true
+
   defp valid_module?(module_report, config) do
     valid_struct_spec?(module_report, config) and
       valid_moduledoc?(module_report, config) and
@@ -91,10 +93,14 @@ defmodule Doctor.Reporters.ModuleExplain do
       module_report.has_struct_type_spec
   end
 
+  defp valid_moduledoc?(%ModuleReport{is_protocol_implementation: true}, _config), do: true
+
   defp valid_moduledoc?(module_report, config) do
     (not config.exception_moduledoc_required and module_report.properties[:is_exception]) or
       (Config.moduledoc_required?(config) and module_report.has_module_doc)
   end
+
+  defp valid_doc_coverage?(%ModuleReport{is_protocol_implementation: true}, _config), do: true
 
   defp valid_doc_coverage?(module_report, config) do
     doc_coverage(module_report) >= config.min_module_doc_coverage
@@ -128,6 +134,10 @@ defmodule Doctor.Reporters.ModuleExplain do
     end
   end
 
+  defp print_module_doc(%ModuleReport{is_protocol_implementation: true}, %Config{} = _config) do
+    OutputUtils.print_success("  Has Module Doc:  N/A")
+  end
+
   defp print_module_doc(%ModuleReport{} = module_report, %Config{} = config) do
     if valid_moduledoc?(module_report, config) do
       OutputUtils.print_success("  Has Module Doc:  #{OutputUtils.print_pass_or_fail(module_report.has_module_doc)}")
@@ -147,6 +157,10 @@ defmodule Doctor.Reporters.ModuleExplain do
     end
   end
 
+  defp print_doc_coverage(%ModuleReport{is_protocol_implementation: true}, %Config{} = _config) do
+    OutputUtils.print_success("  Doc Coverage:    N/A")
+  end
+
   defp print_doc_coverage(%ModuleReport{} = module_report, %Config{} = config) do
     doc_coverage = doc_coverage(module_report)
 
@@ -157,6 +171,10 @@ defmodule Doctor.Reporters.ModuleExplain do
         "  Doc Coverage:    #{doc_coverage}%  --> Your config has a 'min_module_doc_coverage' value of #{config.min_module_doc_coverage}"
       )
     end
+  end
+
+  defp print_spec_coverage(%ModuleReport{is_protocol_implementation: true}, %Config{} = _config) do
+    OutputUtils.print_success("  Spec Coverage:   N/A")
   end
 
   defp print_spec_coverage(%ModuleReport{} = module_report, %Config{} = config) do

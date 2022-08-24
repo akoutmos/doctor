@@ -59,7 +59,8 @@ defmodule Doctor.ModuleInformation do
       user_defined_functions: nil,
       struct_type_spec: contains_struct_type_spec?(module),
       properties: [
-        is_exception: is_exception?(module)
+        is_exception: is_exception?(module),
+        is_protocol_implementation: is_protocol_implementation?(module)
       ]
     }
   end
@@ -106,6 +107,10 @@ defmodule Doctor.ModuleInformation do
 
   defp is_exception?(module) when is_atom(module) do
     function_exported?(module, :__struct__, 0) and :__exception__ in Map.keys(module.__struct__())
+  end
+
+  defp is_protocol_implementation?(module) when is_atom(module) do
+    function_exported?(module, :__impl__, 1)
   end
 
   @doc """
