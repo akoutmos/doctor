@@ -99,10 +99,10 @@ defmodule Mix.Tasks.DoctorTest do
       assert rest_doctor_output == [
                ["---------------------------------------------"],
                ["Summary:\n"],
-               ["Passed Modules: 24"],
+               ["Passed Modules: 28"],
                ["Failed Modules: 8"],
                ["Total Doc Coverage: 82.9%"],
-               ["Total Moduledoc Coverage: 75.0%"],
+               ["Total Moduledoc Coverage: 76.5%"],
                ["Total Spec Coverage: 42.1%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
              ]
@@ -117,10 +117,10 @@ defmodule Mix.Tasks.DoctorTest do
                ["Doctor file found. Loading configuration."],
                ["---------------------------------------------"],
                ["Summary:\n"],
-               ["Passed Modules: 24"],
+               ["Passed Modules: 28"],
                ["Failed Modules: 8"],
                ["Total Doc Coverage: 82.9%"],
-               ["Total Moduledoc Coverage: 75.0%"],
+               ["Total Moduledoc Coverage: 76.5%"],
                ["Total Spec Coverage: 42.1%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
              ]
@@ -167,10 +167,10 @@ defmodule Mix.Tasks.DoctorTest do
                ],
                ["----------------------------------------------------------------------------------------------"],
                ["Summary:\n"],
-               ["Passed Modules: 24"],
+               ["Passed Modules: 28"],
                ["Failed Modules: 8"],
                ["Total Doc Coverage: 82.9%"],
-               ["Total Moduledoc Coverage: 75.0%"],
+               ["Total Moduledoc Coverage: 76.5%"],
                ["Total Spec Coverage: 42.1%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
              ]

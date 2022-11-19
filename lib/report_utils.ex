@@ -81,6 +81,7 @@ defmodule Doctor.ReportUtils do
   def calc_overall_moduledoc_coverage(module_report_list) do
     {all_modules, with_moduledoc} =
       Enum.reduce(module_report_list, {0, 0}, fn
+        %{is_protocol_implementation: true}, {acc_all, acc_with} -> {acc_all, acc_with}
         %{has_module_doc: true}, {acc_all, acc_with} -> {acc_all + 1, acc_with + 1}
         %{has_module_doc: false}, {acc_all, acc_with} -> {acc_all + 1, acc_with}
       end)
@@ -129,18 +130,22 @@ defmodule Doctor.ReportUtils do
     doc_cov and spec_cov and passed_struct_type_spec and passed_module_doc
   end
 
-  defp valid_module_doc?(%ModuleReport{properties: [is_exception: true]} = module_report, config) do
-    if config.exception_moduledoc_required do
-      module_report.has_module_doc
-    else
-      true
-    end
+  defp valid_module_doc?(%ModuleReport{is_protocol_implementation: true}, _config) do
+    true
   end
 
-  defp valid_module_doc?(module_report, config) do
-    if Config.moduledoc_required?(config),
-      do: module_report.has_module_doc,
-      else: true
+  defp valid_module_doc?(%ModuleReport{properties: properties} = module_report, config) do
+    if Keyword.get(properties, :is_exception) do
+      if config.exception_moduledoc_required do
+        module_report.has_module_doc
+      else
+        true
+      end
+    else
+      if Config.moduledoc_required?(config),
+        do: module_report.has_module_doc,
+        else: true
+    end
   end
 
   @doc """

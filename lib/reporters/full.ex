@@ -30,7 +30,7 @@ defmodule Doctor.Reporters.Full do
     Enum.each(module_reports, fn module_report ->
       doc_cov = massage_coverage(module_report.doc_coverage)
       spec_cov = massage_coverage(module_report.spec_coverage)
-      module_doc = massage_module_doc(module_report.has_module_doc)
+      module_doc = massage_module_doc(module_report)
       struct_type_spec = massage_struct_type_spec(module_report.has_struct_type_spec)
 
       output_line =
@@ -137,9 +137,9 @@ defmodule Doctor.Reporters.Full do
     end
   end
 
-  defp massage_module_doc(module_doc) do
-    if module_doc, do: "Yes", else: "No"
-  end
+  defp massage_module_doc(%{is_protocol_implementation: true}), do: "N/A"
+  defp massage_module_doc(%{has_module_doc: true}), do: "Yes"
+  defp massage_module_doc(%{has_module_doc: false}), do: "No"
 
   defp massage_struct_type_spec(:not_struct), do: "N/A"
   defp massage_struct_type_spec(true), do: "Yes"

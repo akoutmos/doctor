@@ -18,7 +18,7 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.missed_specs == 0
     assert module_report.module == "Doctor.AllDocs"
     assert module_report.doc_coverage == Decimal.new("100")
-    assert module_report.properties == [is_exception: false]
+    assert module_report.properties == [is_exception: false, is_protocol_implementation: false]
   end
 
   test "build/1 should build the correct report struct for a file with partial coverage" do
@@ -36,7 +36,7 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.missed_specs == 3
     assert module_report.module == "Doctor.PartialDocs"
     assert module_report.doc_coverage == Decimal.new("57.14285714285714285714285714")
-    assert module_report.properties == [is_exception: false]
+    assert module_report.properties == [is_exception: false, is_protocol_implementation: false]
   end
 
   test "build/1 should build the correct report struct for a file that implements behaviour callbacks" do
@@ -54,7 +54,7 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.missed_specs == 0
     assert module_report.module == "Doctor.BehaviourModule"
     assert module_report.doc_coverage == Decimal.new("100")
-    assert module_report.properties == [is_exception: false]
+    assert module_report.properties == [is_exception: false, is_protocol_implementation: false]
   end
 
   test "build/1 should build the correct report struct for a file that implements behaviour callbacks with multiple clauses" do
@@ -73,7 +73,7 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.module == "Doctor.FooBar"
     assert module_report.doc_coverage == Decimal.new("83.33333333333333333333333333")
     assert module_report.spec_coverage == Decimal.new("50.0")
-    assert module_report.properties == [is_exception: false]
+    assert module_report.properties == [is_exception: false, is_protocol_implementation: false]
   end
 
   test "build/1 should build the correct report struct for a file with no coverage" do
@@ -91,7 +91,7 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.missed_specs == 7
     assert module_report.module == "Doctor.NoDocs"
     assert module_report.doc_coverage == Decimal.new("0")
-    assert module_report.properties == [is_exception: false]
+    assert module_report.properties == [is_exception: false, is_protocol_implementation: false]
   end
 
   test "build/1 should build the correct report struct for a file with struct specs" do
@@ -110,7 +110,7 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.missed_specs == 0
     assert module_report.module == "Doctor.StructSpecModule"
     assert module_report.doc_coverage == nil
-    assert module_report.properties == [is_exception: false]
+    assert module_report.properties == [is_exception: false, is_protocol_implementation: false]
   end
 
   test "build/1 should build the correct report struct for a file with no struct specs" do
@@ -129,7 +129,7 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.missed_specs == 0
     assert module_report.module == "Doctor.NoStructSpecModule"
     assert module_report.doc_coverage == nil
-    assert module_report.properties == [is_exception: false]
+    assert module_report.properties == [is_exception: false, is_protocol_implementation: false]
   end
 
   test "build/1 should build the correct report struct for a file with an opaque struct spec" do
@@ -148,7 +148,7 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.missed_specs == 0
     assert module_report.module == "Doctor.OpaqueStructSpecModule"
     assert module_report.doc_coverage == nil
-    assert module_report.properties == [is_exception: false]
+    assert module_report.properties == [is_exception: false, is_protocol_implementation: false]
   end
 
   test "build/1 should build the correct report for an exception" do
@@ -167,7 +167,7 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.missed_specs == 0
     assert module_report.module == "Doctor.Exception"
     assert module_report.doc_coverage == Decimal.new("100")
-    assert module_report.properties == [is_exception: true]
+    assert module_report.properties == [is_exception: true, is_protocol_implementation: false]
   end
 
   test "build/1 should build the correct report for a module with __using__ macro" do
@@ -187,7 +187,7 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.module == "Doctor.UseModule"
     assert module_report.doc_coverage == Decimal.new("50.0")
     assert module_report.spec_coverage == Decimal.new("50.0")
-    assert module_report.properties == [is_exception: false]
+    assert module_report.properties == [is_exception: false, is_protocol_implementation: false]
   end
 
   test "build/1 should build the correct report for a module with a nested module" do
@@ -207,7 +207,7 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.module == "Doctor.ParentModule"
     assert module_report.doc_coverage == Decimal.new("100")
     assert module_report.spec_coverage == Decimal.new("100")
-    assert module_report.properties == [is_exception: false]
+    assert module_report.properties == [is_exception: false, is_protocol_implementation: false]
   end
 
   test "build/1 should build the correct report for a nested module" do
@@ -227,6 +227,48 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.module == "Doctor.ParentModule.Nested"
     assert module_report.doc_coverage == Decimal.new("100")
     assert module_report.spec_coverage == Decimal.new("100")
-    assert module_report.properties == [is_exception: false]
+    assert module_report.properties == [is_exception: false, is_protocol_implementation: false]
+  end
+
+  test "build/1 should build the correct report for a protocol derivation" do
+    module_report =
+      Inspect.Doctor.DeriveProtocol
+      |> Code.fetch_docs()
+      |> ModuleInformation.build(Inspect.Doctor.DeriveProtocol)
+      |> ModuleInformation.load_file_ast()
+      |> ModuleInformation.load_user_defined_functions()
+      |> ModuleReport.build()
+
+    assert module_report.is_protocol_implementation == true
+    assert module_report.functions == 0
+    assert module_report.has_module_doc == false
+    assert module_report.has_struct_type_spec == :not_struct
+    assert module_report.missed_docs == 0
+    assert module_report.missed_specs == 0
+    assert module_report.module == "Inspect.Doctor.DeriveProtocol"
+    assert module_report.doc_coverage == nil
+    assert module_report.spec_coverage == nil
+    assert module_report.properties == [is_exception: false, is_protocol_implementation: true]
+  end
+
+  test "build/1 should build the correct report for a protocol implementation" do
+    module_report =
+      Inspect.Doctor.ImplementProtocol
+      |> Code.fetch_docs()
+      |> ModuleInformation.build(Inspect.Doctor.ImplementProtocol)
+      |> ModuleInformation.load_file_ast()
+      |> ModuleInformation.load_user_defined_functions()
+      |> ModuleReport.build()
+
+    assert module_report.is_protocol_implementation == true
+    assert module_report.functions == 0
+    assert module_report.has_module_doc == false
+    assert module_report.has_struct_type_spec == :not_struct
+    assert module_report.missed_docs == 0
+    assert module_report.missed_specs == 0
+    assert module_report.module == "Inspect.Doctor.ImplementProtocol"
+    assert module_report.doc_coverage == nil
+    assert module_report.spec_coverage == nil
+    assert module_report.properties == [is_exception: false, is_protocol_implementation: true]
   end
 end
