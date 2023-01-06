@@ -29,6 +29,20 @@ def deps do
 end
 ```
 
+You can also install Doctor globally by executing the following
+from the command line:
+
+```bash
+$ mix escript.install hex doctor
+```
+
+To install from the master branch, rather than the latest release,
+the following command can be used:
+
+```bash
+$ mix escript.install github akoutmos/doctor
+```
+
 Documentation can be found at [https://hexdocs.pm/doctor](https://hexdocs.pm/doctor).
 
 ## Comparison with other tools

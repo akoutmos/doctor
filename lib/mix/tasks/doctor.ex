@@ -44,6 +44,11 @@ defmodule Mix.Tasks.Doctor do
   @recursive true
   @umbrella_accumulator Doctor.Umbrella
 
+  # For escript entry
+  def main(args) do
+    run(args)
+  end
+
   @impl true
   def run(args) do
     cli_arg_opts = parse_cli_args(args)

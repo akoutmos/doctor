@@ -27,7 +27,8 @@ defmodule Doctor.MixProject do
         "coveralls.post": :test,
         "coveralls.html": :test,
         "coveralls.github": :test
-      ]
+      ],
+      escript: [main_module: Mix.Tasks.Doctor]
     ]
   end
 
