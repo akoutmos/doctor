@@ -1,11 +1,11 @@
 # Doctor
 
-[![Module Version](https://img.shields.io/hexpm/v/doctor.svg)](https://hex.pm/packages/doctor)
-[![Doctor CI](https://img.shields.io/github/workflow/status/akoutmos/doctor/Doctor%20CI/master?label=Build%20Status)](https://github.com/akoutmos/doctor/actions)
-[![Coverage Status](https://coveralls.io/repos/github/akoutmos/doctor/badge.svg?branch=master)](https://coveralls.io/github/akoutmos/doctor?branch=master)
-[![Hex Docs](https://img.shields.io/badge/hex-docs-lightgreen.svg)](https://hexdocs.pm/doctor/)
-[![Total Download](https://img.shields.io/hexpm/dt/doctor.svg)](https://hex.pm/packages/doctor)
-[![License](https://img.shields.io/hexpm/l/doctor.svg)](https://github.com/akoutmos/doctor/blob/master/LICENSE)
+[![Module Version](https://img.shields.io/hexpm/v/doctor.svg?style=for-the-badge)](https://hex.pm/packages/doctor)
+[![Doctor CI](https://img.shields.io/github/actions/workflow/status/akoutmos/doctor/master.yml?label=Build%20Status&style=for-the-badge&branch=master)](https://github.com/akoutmos/doctor/actions)
+[![Coverage Status](https://coveralls.io/repos/github/akoutmos/doctor/badge.svg?branch=master&style=for-the-badge)](https://coveralls.io/github/akoutmos/doctor?branch=master)
+[![Hex Docs](https://img.shields.io/badge/hex-docs-lightgreen.svg?style=for-the-badge)](https://hexdocs.pm/doctor/)
+[![Total Download](https://img.shields.io/hexpm/dt/doctor.svg?style=for-the-badge)](https://hex.pm/packages/doctor)
+[![License](https://img.shields.io/hexpm/l/doctor.svg?style=for-the-badge)](https://github.com/akoutmos/doctor/blob/master/LICENSE)
 
 Ensure that your documentation is healthy with Doctor! This library contains a mix task that you can run against your
 project to generate a documentation coverage report. Items which are reported on include: the presence of module docs,
