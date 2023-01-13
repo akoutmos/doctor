@@ -15,6 +15,7 @@ defmodule Doctor.CLI do
     Project.config()
     |> Keyword.get(:app)
     |> get_application_modules()
+    |> Enum.filter(fn module -> String.starts_with?(to_string(module), "Elixir.") end)
 
     # Fetch the module information from the list of application modules
     |> Enum.map(&generate_module_entry/1)
