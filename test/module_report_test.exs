@@ -132,14 +132,14 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.properties == [is_exception: false, is_protocol_implementation: false]
   end
 
-  test "build/1 should build the correct report struct for a file with an opaque struct spec" do
+  test "build/2 should build the correct report struct for a file with an opaque struct spec" do
     module_report =
       Doctor.OpaqueStructSpecModule
       |> Code.fetch_docs()
       |> ModuleInformation.build(Doctor.OpaqueStructSpecModule)
       |> ModuleInformation.load_file_ast()
       |> ModuleInformation.load_user_defined_functions()
-      |> ModuleReport.build()
+      |> ModuleReport.build(%Doctor.Config{})
 
     assert module_report.functions == 0
     refute module_report.has_module_doc
@@ -190,14 +190,14 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.properties == [is_exception: false, is_protocol_implementation: false]
   end
 
-  test "build/1 should build the correct report for a module with a nested module" do
+  test "build/2 should build the correct report for a module with a nested module" do
     module_report =
       Doctor.ParentModule
       |> Code.fetch_docs()
       |> ModuleInformation.build(Doctor.ParentModule)
       |> ModuleInformation.load_file_ast()
       |> ModuleInformation.load_user_defined_functions()
-      |> ModuleReport.build()
+      |> ModuleReport.build(%Doctor.Config{})
 
     assert module_report.functions == 1
     assert module_report.has_module_doc
@@ -210,14 +210,14 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.properties == [is_exception: false, is_protocol_implementation: false]
   end
 
-  test "build/1 should build the correct report for a nested module" do
+  test "build/2 should build the correct report for a nested module" do
     module_report =
       Doctor.ParentModule.Nested
       |> Code.fetch_docs()
       |> ModuleInformation.build(Doctor.ParentModule.Nested)
       |> ModuleInformation.load_file_ast()
       |> ModuleInformation.load_user_defined_functions()
-      |> ModuleReport.build()
+      |> ModuleReport.build(%Doctor.Config{})
 
     assert module_report.functions == 1
     assert module_report.has_module_doc
@@ -230,14 +230,14 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.properties == [is_exception: false, is_protocol_implementation: false]
   end
 
-  test "build/1 should build the correct report for a protocol derivation" do
+  test "build/2 should build the correct report for a protocol derivation" do
     module_report =
       Inspect.Doctor.DeriveProtocol
       |> Code.fetch_docs()
       |> ModuleInformation.build(Inspect.Doctor.DeriveProtocol)
       |> ModuleInformation.load_file_ast()
       |> ModuleInformation.load_user_defined_functions()
-      |> ModuleReport.build()
+      |> ModuleReport.build(%Doctor.Config{})
 
     assert module_report.is_protocol_implementation == true
     assert module_report.functions == 0
@@ -251,14 +251,14 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.properties == [is_exception: false, is_protocol_implementation: true]
   end
 
-  test "build/1 should build the correct report for a protocol implementation" do
+  test "build/2 should build the correct report for a protocol implementation" do
     module_report =
       Inspect.Doctor.ImplementProtocol
       |> Code.fetch_docs()
       |> ModuleInformation.build(Inspect.Doctor.ImplementProtocol)
       |> ModuleInformation.load_file_ast()
       |> ModuleInformation.load_user_defined_functions()
-      |> ModuleReport.build()
+      |> ModuleReport.build(%Doctor.Config{})
 
     assert module_report.is_protocol_implementation == true
     assert module_report.functions == 0
@@ -291,6 +291,6 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.missed_specs == 0
     assert module_report.module == "Doctor.HiddenDocs"
     assert module_report.doc_coverage == Decimal.new("100")
-    assert module_report.properties == [is_exception: false]
+    assert module_report.properties == [{:is_exception, false}, {:is_protocol_implementation, false}]
   end
 end
