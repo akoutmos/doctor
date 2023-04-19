@@ -1,6 +1,6 @@
 defmodule Doctor.ReportUtilsTest do
   use ExUnit.Case
-
+  import ExUnit.CaptureLog
   alias Doctor.{ModuleInformation, ModuleReport, ReportUtils}
 
   setup do
@@ -45,7 +45,7 @@ defmodule Doctor.ReportUtilsTest do
 
   test "count_total_passed_modules/1 should return the correct number of failed modules from a list of module reports if moduledoc config true",
        %{reports: reports} do
-    config = %Doctor.Config{moduledoc_required: true}
+    config = %Doctor.Config{min_overall_moduledoc_coverage: 100}
 
     assert reports
            |> Map.values()
@@ -54,16 +54,16 @@ defmodule Doctor.ReportUtilsTest do
 
   test "count_total_passed_modules/1 should return the correct number of failed modules from a list of module reports if config threshold set low",
        %{reports: reports} do
-    config = %Doctor.Config{min_overall_doc_coverage: 20, moduledoc_required: false}
+    config = %Doctor.Config{min_overall_doc_coverage: 20, min_overall_moduledoc_coverage: 100}
 
     assert reports
            |> Map.values()
-           |> ReportUtils.count_total_passed_modules(config) == 2
+           |> ReportUtils.count_total_passed_modules(config) == 1
   end
 
   test "count_total_failed_modules/1 should return the correct number of failed modules from a list of module reports if moduledoc config true",
        %{reports: reports} do
-    config = %Doctor.Config{moduledoc_required: true}
+    config = %Doctor.Config{min_overall_moduledoc_coverage: 100}
 
     assert reports
            |> Map.values()
@@ -72,11 +72,11 @@ defmodule Doctor.ReportUtilsTest do
 
   test "count_total_failed_modules/1 should return the correct number of failed modules from a list of module reports if config threshold set low",
        %{reports: reports} do
-    config = %Doctor.Config{min_overall_doc_coverage: 20, moduledoc_required: false}
+    config = %Doctor.Config{min_overall_doc_coverage: 20, min_overall_moduledoc_coverage: 100}
 
     assert reports
            |> Map.values()
-           |> ReportUtils.count_total_failed_modules(config) == 1
+           |> ReportUtils.count_total_failed_modules(config) == 2
   end
 
   test "calc_overall_doc_coverage/1 should return the correct percentage a list of module reports",
@@ -99,7 +99,7 @@ defmodule Doctor.ReportUtilsTest do
        %{
          reports: reports
        } do
-    config = %Doctor.Config{moduledoc_required: true}
+    config = %Doctor.Config{min_overall_moduledoc_coverage: 100}
 
     refute reports
            |> Map.values()
@@ -110,8 +110,8 @@ defmodule Doctor.ReportUtilsTest do
     reports: reports
   } do
     config = %Doctor.Config{
-      moduledoc_required: false,
       min_module_doc_coverage: 0,
+      min_overall_moduledoc_coverage: 0,
       min_overall_doc_coverage: 80
     }
 
@@ -123,11 +123,16 @@ defmodule Doctor.ReportUtilsTest do
   test "doctor_report_passed?/2 should return false if the report fails given low threshold", %{
     reports: reports
   } do
-    config = %Doctor.Config{
-      moduledoc_required: false,
-      min_module_doc_coverage: 0,
-      min_overall_doc_coverage: 50
-    }
+    {config, warn_msg} =
+      with_log(fn ->
+        Doctor.Config.new(
+          moduledoc_required: false,
+          min_module_doc_coverage: 0,
+          min_overall_doc_coverage: 50
+        )
+      end)
+
+    assert warn_msg =~ ":moduledoc_required in .doctor.exs is a deprecated option."
 
     assert reports
            |> Map.values()

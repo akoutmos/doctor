@@ -30,7 +30,7 @@ defmodule Doctor.Reporters.Full do
     Enum.each(module_reports, fn module_report ->
       doc_cov = massage_coverage(module_report.doc_coverage)
       spec_cov = massage_coverage(module_report.spec_coverage)
-      module_doc = massage_module_doc(module_report.has_module_doc)
+      module_doc = massage_module_doc(module_report)
       struct_type_spec = massage_struct_type_spec(module_report.has_struct_type_spec)
 
       output_line =
@@ -55,17 +55,19 @@ defmodule Doctor.Reporters.Full do
       end
     end)
 
-    overall_pass = ReportUtils.doctor_report_passed?(module_reports, args)
+    overall_errors = ReportUtils.doctor_report_errors(module_reports, args)
     overall_passed = ReportUtils.count_total_passed_modules(module_reports, args)
     overall_failed = ReportUtils.count_total_failed_modules(module_reports, args)
     overall_doc_coverage = ReportUtils.calc_overall_doc_coverage(module_reports)
+    overall_moduledoc_coverage = ReportUtils.calc_overall_moduledoc_coverage(module_reports)
     overall_spec_coverage = ReportUtils.calc_overall_spec_coverage(module_reports)
 
     print_footer(
-      overall_pass,
+      overall_errors,
       overall_passed,
       overall_failed,
       overall_doc_coverage,
+      overall_moduledoc_coverage,
       overall_spec_coverage
     )
   end
@@ -93,8 +95,9 @@ defmodule Doctor.Reporters.Full do
     |> Mix.shell().info()
   end
 
-  defp print_footer(pass, passed, failed, doc_coverage, spec_coverage) do
+  defp print_footer(errors, passed, failed, doc_coverage, moduledoc_coverage, spec_coverage) do
     doc_coverage = Decimal.round(doc_coverage, 1)
+    moduledoc_coverage = Decimal.round(moduledoc_coverage, 1)
     spec_coverage = Decimal.round(spec_coverage, 1)
 
     print_divider()
@@ -102,13 +105,28 @@ defmodule Doctor.Reporters.Full do
     Mix.shell().info("Passed Modules: #{passed}")
     Mix.shell().info("Failed Modules: #{failed}")
     Mix.shell().info("Total Doc Coverage: #{doc_coverage}%")
+    Mix.shell().info("Total Moduledoc Coverage: #{moduledoc_coverage}%")
     Mix.shell().info("Total Spec Coverage: #{spec_coverage}%\n")
 
-    if pass do
-      Mix.shell().info("Doctor validation has passed!")
-    else
-      Mix.shell().info(ANSI.red() <> "Doctor validation has failed!" <> ANSI.reset())
-    end
+    msg =
+      case errors do
+        [] ->
+          "Doctor validation has passed!"
+
+        [err] ->
+          """
+          #{ANSI.red()}Doctor validation has failed because #{err}.#{ANSI.reset()}
+          """
+
+        errs ->
+          """
+          #{ANSI.red()}Doctor validation has failed because:
+            * #{Enum.map_join(errs, ".\n  * ", &String.capitalize(&1))}.\
+          #{ANSI.reset()})")
+          """
+      end
+
+    Mix.shell().info(msg)
   end
 
   defp massage_coverage(coverage) do
@@ -119,9 +137,9 @@ defmodule Doctor.Reporters.Full do
     end
   end
 
-  defp massage_module_doc(module_doc) do
-    if module_doc, do: "Yes", else: "No"
-  end
+  defp massage_module_doc(%{is_protocol_implementation: true}), do: "N/A"
+  defp massage_module_doc(%{has_module_doc: true}), do: "Yes"
+  defp massage_module_doc(%{has_module_doc: false}), do: "No"
 
   defp massage_struct_type_spec(:not_struct), do: "N/A"
   defp massage_struct_type_spec(true), do: "Yes"

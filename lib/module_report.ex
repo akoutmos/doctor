@@ -18,6 +18,7 @@ defmodule Doctor.ModuleReport do
           missed_specs: integer(),
           has_module_doc: boolean(),
           has_struct_type_spec: atom() | boolean(),
+          is_protocol_implementation: boolean(),
           properties: Keyword.t()
         }
 
@@ -31,6 +32,7 @@ defmodule Doctor.ModuleReport do
     missed_specs
     has_module_doc
     has_struct_type_spec
+    is_protocol_implementation
     properties
   )a
 
@@ -49,6 +51,7 @@ defmodule Doctor.ModuleReport do
       missed_specs: calculate_missed_specs(module_info),
       has_module_doc: has_module_doc?(module_info, config),
       has_struct_type_spec: module_info.struct_type_spec,
+      is_protocol_implementation: is_protocol_implementation?(module_info),
       properties: module_info.properties
     }
   end
@@ -140,5 +143,9 @@ defmodule Doctor.ModuleReport do
       end
 
     module_info.module_doc not in failed_doc_cases
+  end
+
+  defp is_protocol_implementation?(module_info) do
+    Keyword.get(module_info.properties, :is_protocol_implementation)
   end
 end

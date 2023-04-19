@@ -24,7 +24,7 @@ defmodule Mix.Tasks.Doctor do
   --raise        If any of your modules fails Doctor validation, then
                  raise an error and return a non-zero exit status.
 
-  --failed       If set only the failed modules will be reported. Works with
+  --failed       If set, only the failed modules will be reported. Works with
                  --full and --short options.
 
   --umbrella     By default, in an umbrella project, each app will be
@@ -37,7 +37,6 @@ defmodule Mix.Tasks.Doctor do
   """
 
   use Mix.Task
-
   alias Doctor.{CLI, Config}
   alias Doctor.Reporters.{Full, Short, Summary}
 
@@ -47,7 +46,6 @@ defmodule Mix.Tasks.Doctor do
 
   @impl true
   def run(args) do
-    default_config_opts = Config.config_defaults()
     cli_arg_opts = parse_cli_args(args)
     config_file_opts = load_config_file(cli_arg_opts)
 
@@ -55,9 +53,9 @@ defmodule Mix.Tasks.Doctor do
     # Precedence order is:
     # default < config file < cli args
     config =
-      default_config_opts
-      |> Map.merge(config_file_opts)
+      config_file_opts
       |> Map.merge(cli_arg_opts)
+      |> Config.new()
 
     if config.umbrella do
       run_umbrella(config)

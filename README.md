@@ -1,12 +1,11 @@
 # Doctor
 
-[![Module Version](https://img.shields.io/hexpm/v/doctor.svg)](https://hex.pm/packages/doctor)
-[![Build Status](https://travis-ci.org/akoutmos/doctor.svg?branch=master)](https://travis-ci.org/akoutmos/doctor)
-[![Coverage Status](https://coveralls.io/repos/github/akoutmos/doctor/badge.svg?branch=master)](https://coveralls.io/github/akoutmos/doctor?branch=master)
-[![Hex Docs](https://img.shields.io/badge/hex-docs-lightgreen.svg)](https://hexdocs.pm/doctor/)
-[![Total Download](https://img.shields.io/hexpm/dt/doctor.svg)](https://hex.pm/packages/doctor)
-[![License](https://img.shields.io/hexpm/l/doctor.svg)](https://github.com/akoutmos/doctor/blob/master/LICENSE)
-[![Last Updated](https://img.shields.io/github/last-commit/akoutmos/doctor.svg)](https://github.com/akoutmos/doctor/commits/master)
+[![Module Version](https://img.shields.io/hexpm/v/doctor.svg?style=for-the-badge)](https://hex.pm/packages/doctor)
+[![Doctor CI](https://img.shields.io/github/actions/workflow/status/akoutmos/doctor/master.yml?label=Build%20Status&style=for-the-badge&branch=master)](https://github.com/akoutmos/doctor/actions)
+[![Coverage Status](https://img.shields.io/coverallsCoverage/github/akoutmos/doctor.svg?branch=master&style=for-the-badge)](https://coveralls.io/github/akoutmos/doctor?branch=master)
+[![Hex Docs](https://img.shields.io/badge/hex-docs-lightgreen.svg?style=for-the-badge)](https://hexdocs.pm/doctor/)
+[![Total Download](https://img.shields.io/hexpm/dt/doctor.svg?style=for-the-badge)](https://hex.pm/packages/doctor)
+[![License](https://img.shields.io/hexpm/l/doctor.svg?style=for-the-badge)](https://github.com/akoutmos/doctor/blob/master/LICENSE)
 
 Ensure that your documentation is healthy with Doctor! This library contains a mix task that you can run against your
 project to generate a documentation coverage report. Items which are reported on include: the presence of module docs,
@@ -25,7 +24,7 @@ Adding `:doctor` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:doctor, "~> 0.18.0", only: :dev}
+    {:doctor, "~> 0.21.0", only: :dev}
   ]
 end
 ```
@@ -124,8 +123,8 @@ the default Doctor settings. The default file contents are:
       min_module_doc_coverage: 40,
       min_module_spec_coverage: 0,
       min_overall_doc_coverage: 50,
+      min_overall_moduledoc_coverage: 100,
       min_overall_spec_coverage: 0,
-      moduledoc_required: true,
       exception_moduledoc_required: true,
       raise: false,
       reporter: Doctor.Reporters.Full,
@@ -146,8 +145,8 @@ Below is a sample `.doctor.exs` file with some sample values for the various fie
   min_module_doc_coverage: 40,
   min_module_spec_coverage: 0,
   min_overall_doc_coverage: 50,
+  min_overall_moduledoc_coverage: 100,
   min_overall_spec_coverage: 0,
-  moduledoc_required: true,
   exception_moduledoc_required: true,
   raise: false,
   reporter: Doctor.Reporters.Full,

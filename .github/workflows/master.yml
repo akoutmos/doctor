@@ -20,8 +20,8 @@ jobs:
       - name: Set up Elixir
         uses: erlef/setup-elixir@v1
         with:
-          elixir-version: '1.11.2'
-          otp-version: '23.1'
+          elixir-version: '1.13.4'
+          otp-version: '25.0.2'
       - name: Restore dependencies cache
         uses: actions/cache@v2
         with:
@@ -41,23 +41,14 @@ jobs:
     name: Run ExUnit tests
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        elixir:
-          - '1.10'
-          - '1.11.3'
-        otp:
-          - '22.0.2'
-          - '23.0'
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Set up Elixir
         uses: erlef/setup-elixir@v1
         with:
-          elixir-version: ${{ matrix.elixir }}
-          otp-version: ${{ matrix.otp }}
+          elixir-version: '1.13.4'
+          otp-version: '25.0.2'
       - name: Restore dependencies cache
         uses: actions/cache@v2
         with:

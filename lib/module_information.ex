@@ -59,7 +59,8 @@ defmodule Doctor.ModuleInformation do
       user_defined_functions: nil,
       struct_type_spec: contains_struct_type_spec?(module),
       properties: [
-        is_exception: is_exception?(module)
+        is_exception: is_exception?(module),
+        is_protocol_implementation: is_protocol_implementation?(module)
       ]
     }
   end
@@ -91,6 +92,7 @@ defmodule Doctor.ModuleInformation do
 
         Enum.any?(specs, fn
           {:type, {:t, _, _}} -> true
+          {:opaque, {:t, _, _}} -> true
           _ -> false
         end)
 
@@ -107,24 +109,36 @@ defmodule Doctor.ModuleInformation do
     function_exported?(module, :__struct__, 0) and :__exception__ in Map.keys(module.__struct__())
   end
 
+  defp is_protocol_implementation?(module) when is_atom(module) do
+    function_exported?(module, :__impl__, 1)
+  end
+
   @doc """
   Given a ModuleInformation struct with the AST loaded, fetch all of the author defined functions
   """
   def load_user_defined_functions(%ModuleInformation{} = module_info) do
-    {_ast, modules} = Macro.prewalk(module_info.file_ast, %{}, &parse_ast_node_for_defmodules/2)
+    {_ast, %{modules: modules}} =
+      Macro.traverse(
+        module_info.file_ast,
+        %{modules: %{}, stack: []},
+        &parse_ast_node_for_defmodules/2,
+        &pop_module_stack/2
+      )
 
     {_ast, %{functions: functions}} =
       modules
       |> Map.get(module_info.module)
-      |> Macro.prewalk(%{last_impl: :none, functions: []}, &parse_ast_node_for_def/2)
+      |> Macro.traverse(
+        %{functions: [], last_impl: :none, nesting_level: 0},
+        &parse_ast_node_for_def/2,
+        &unnest/2
+      )
 
     %{module_info | user_defined_functions: Enum.uniq(functions)}
-    |> load_using_docs_and_specs()
+    |> load_using_docs_and_specs(modules)
   end
 
-  defp load_using_docs_and_specs(%ModuleInformation{} = module_info) do
-    {_ast, modules} = Macro.prewalk(module_info.file_ast, %{}, &parse_ast_node_for_defmodules/2)
-
+  defp load_using_docs_and_specs(%ModuleInformation{} = module_info, modules) do
     {_ast, using} =
       modules
       |> Map.get(module_info.module)
@@ -173,6 +187,15 @@ defmodule Doctor.ModuleInformation do
     module
     |> get_full_file_path()
     |> Path.relative_to(File.cwd!())
+  end
+
+  defp parse_ast_node_for_def({definition, _defmodule_line, _body} = ast, %{nesting_level: level} = acc)
+       when definition in [:defimpl, :defmodule, :defprotocol] do
+    {ast, Map.put(acc, :nesting_level, level + 1)}
+  end
+
+  defp parse_ast_node_for_def(ast, %{nesting_level: level} = acc) when level > 1 do
+    {ast, acc}
   end
 
   defp parse_ast_node_for_def({:@, _line_number, [{:doc, _, [false]}]} = ast, acc) do
@@ -225,6 +248,15 @@ defmodule Doctor.ModuleInformation do
     {ast, acc}
   end
 
+  defp unnest({definition, _defmodule_line, _body} = ast, %{nesting_level: level} = acc)
+       when definition in [:defmodule, :defprotocol] do
+    {ast, Map.put(acc, :nesting_level, level - 1)}
+  end
+
+  defp unnest(ast, acc) do
+    {ast, acc}
+  end
+
   defp update_acc_for_def(acc, function_name, function_arity, last_impl) do
     impl =
       case last_impl do
@@ -259,25 +291,41 @@ defmodule Doctor.ModuleInformation do
 
   defp parse_ast_node_for_defmodules(
          {definition, _defmodule_line, [{:__aliases__, _line_num, module}, _do_block]} = ast,
-         acc
+         %{modules: modules, stack: stack} = acc
        )
        when definition in [:defmodule, :defprotocol] do
-    module_in_ast = Module.concat(module)
-    {ast, Map.put(acc, module_in_ast, ast)}
+    parent = List.first(stack)
+    full_module_name = Module.concat(List.wrap(parent) ++ module)
+
+    updated_acc =
+      acc
+      |> Map.put(:modules, Map.put(modules, full_module_name, ast))
+      |> Map.put(:stack, [full_module_name | stack])
+
+    {ast, updated_acc}
   end
 
   defp parse_ast_node_for_defmodules(ast, acc) do
     {ast, acc}
   end
 
+  defp pop_module_stack(
+         {definition, _defmodule_line, _body} = ast,
+         %{stack: [_current | rest]} = acc
+       )
+       when definition in [:defmodule, :defprotocol] do
+    {ast, Map.put(acc, :stack, rest)}
+  end
+
+  defp pop_module_stack(ast, acc) do
+    {ast, acc}
+  end
+
   defp get_function_arity(nil), do: 0
   defp get_function_arity(args), do: length(args)
 
-  defp parse_ast_for_using(
-         {:defmacro, _macro_line, [{:__using__, _line, [{:_opts, _opts_line, _opts}]}, do_block]} = ast,
-         _acc
-       ),
-       do: {ast, %{using: do_block}}
+  defp parse_ast_for_using({:defmacro, _macro_line, [{:__using__, _line, _args}, do_block]} = ast, _acc),
+    do: {ast, %{using: do_block}}
 
   defp parse_ast_for_using(ast, acc), do: {ast, acc}
 

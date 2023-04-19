@@ -47,24 +47,48 @@ defmodule Doctor.ModuleInformationTest do
     end
   end
 
-  test "load_user_defined_functions/1 should load user defined functions from AST" do
-    module_information =
-      Doctor.AllDocs
-      |> Code.fetch_docs()
-      |> ModuleInformation.build(Doctor.AllDocs)
-      |> ModuleInformation.load_file_ast()
-      |> ModuleInformation.load_user_defined_functions()
+  describe "load_user_defined_functions/1" do
+    test "should load user defined functions from AST" do
+      module_information =
+        Doctor.AllDocs
+        |> Code.fetch_docs()
+        |> ModuleInformation.build(Doctor.AllDocs)
+        |> ModuleInformation.load_file_ast()
+        |> ModuleInformation.load_user_defined_functions()
 
-    assert module_information != nil
+      assert module_information != nil
 
-    assert Enum.sort(module_information.user_defined_functions) == [
-             {:func_1, 1, :none},
-             {:func_2, 1, :none},
-             {:func_3, 1, :none},
-             {:func_4, 1, :none},
-             {:func_5, 2, :none},
-             {:func_5, 3, :none},
-             {:func_6, 1, :none}
-           ]
+      assert Enum.sort(module_information.user_defined_functions) == [
+               {:func_1, 1, :none},
+               {:func_2, 1, :none},
+               {:func_3, 1, :none},
+               {:func_4, 1, :none},
+               {:func_5, 2, :none},
+               {:func_5, 3, :none},
+               {:func_6, 1, :none}
+             ]
+    end
+
+    test "parent of nested module should ignore functions from nested modules" do
+      module_information =
+        Doctor.ParentModule
+        |> Code.fetch_docs()
+        |> ModuleInformation.build(Doctor.ParentModule)
+        |> ModuleInformation.load_file_ast()
+        |> ModuleInformation.load_user_defined_functions()
+
+      assert module_information.user_defined_functions == [{:outer, 0, :none}]
+    end
+
+    test "nested module should include its functions" do
+      module_information =
+        Doctor.ParentModule.Nested
+        |> Code.fetch_docs()
+        |> ModuleInformation.build(Doctor.ParentModule.Nested)
+        |> ModuleInformation.load_file_ast()
+        |> ModuleInformation.load_user_defined_functions()
+
+      assert module_information.user_defined_functions == [{:inner, 0, :none}]
+    end
   end
 end
