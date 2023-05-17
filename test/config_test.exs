@@ -5,6 +5,8 @@ defmodule Doctor.ConfigTest do
   test "config_defaults_as_string" do
     assert """
            %Doctor.Config{
+             exception_moduledoc_required: true,
+             failed: false,
              ignore_modules: [],
              ignore_paths: [],
              min_module_doc_coverage: 40,
@@ -12,13 +14,11 @@ defmodule Doctor.ConfigTest do
              min_overall_doc_coverage: 50,
              min_overall_moduledoc_coverage: 100,
              min_overall_spec_coverage: 0,
-             exception_moduledoc_required: true,
              raise: false,
              reporter: Doctor.Reporters.Full,
              struct_type_spec_required: true,
              umbrella: false,
-             fail_hidden_doc: false,
-             failed: false
+             fail_hidden_doc: false
            }\
            """ == "#{Config.config_defaults_as_string()}"
   end
