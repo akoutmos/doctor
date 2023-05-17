@@ -137,7 +137,7 @@ defmodule Doctor.ModuleReport do
     failed_doc_cases = [:none, %{}]
 
     failed_doc_cases =
-      case config.include_hidden_doc do
+      case config.fail_hidden_doc do
         true -> failed_doc_cases ++ [:hidden]
         _ -> failed_doc_cases
       end

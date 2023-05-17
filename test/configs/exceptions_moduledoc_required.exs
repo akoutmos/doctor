@@ -11,5 +11,5 @@
   reporter: Doctor.Reporters.Full,
   struct_type_spec_required: true,
   umbrella: false,
-  include_hidden_doc: false
+  fail_hidden_doc: false
 }

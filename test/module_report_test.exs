@@ -274,7 +274,7 @@ defmodule Doctor.ModuleReportTest do
 
   test "build/2 should build the correct report struct for a file with hidden docs" do
     args = %Doctor.Config{
-      include_hidden_doc: true
+      fail_hidden_doc: true
     }
 
     module_report =
