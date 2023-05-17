@@ -17,7 +17,8 @@ defmodule Doctor.ConfigTest do
              raise: false,
              reporter: Doctor.Reporters.Full,
              struct_type_spec_required: true,
-             umbrella: false
+             umbrella: false,
+             fail_hidden_doc: false
            }\
            """ == "#{Config.config_defaults_as_string()}"
   end

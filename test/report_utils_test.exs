@@ -13,7 +13,7 @@ defmodule Doctor.ReportUtilsTest do
           |> ModuleInformation.build(module)
           |> ModuleInformation.load_file_ast()
           |> ModuleInformation.load_user_defined_functions()
-          |> ModuleReport.build()
+          |> ModuleReport.build(%Doctor.Config{})
 
         {module, report}
       end)
