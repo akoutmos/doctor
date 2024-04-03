@@ -110,7 +110,7 @@ defmodule Doctor.Config do
   end
 
   defp warn_deprecation(_bool, val) do
-    Logger.warn("""
+    Logger.warning("""
     :moduledoc_required in #{Config.config_file()} is a deprecated option. \
     Now running with the equivalent :min_overall_moduledoc_coverage #{val} \
     but you should replace the deprecated option with the new one to avoid \

@@ -122,7 +122,7 @@ defmodule Doctor.Reporters.Full do
           """
           #{ANSI.red()}Doctor validation has failed because:
             * #{Enum.map_join(errs, ".\n  * ", &String.capitalize(&1))}.\
-          #{ANSI.reset()})")
+          #{ANSI.reset()}
           """
       end
 
