@@ -7,7 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.22.0] - 2024-10-30
+
+### Changed
+
 - Fix deprecated Elixir `Logger.warn()` to `Logger.warning()`.
+- Changed minimum Elixir version to 1.14
 
 ## [0.21.0] - 2022-11-19
 

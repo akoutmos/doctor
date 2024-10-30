@@ -241,7 +241,7 @@ defmodule Doctor.ModuleReportTest do
 
     assert module_report.is_protocol_implementation == true
     assert module_report.functions == 0
-    assert module_report.has_module_doc == false
+    assert module_report.has_module_doc == true
     assert module_report.has_struct_type_spec == :not_struct
     assert module_report.missed_docs == 0
     assert module_report.missed_specs == 0
@@ -262,7 +262,7 @@ defmodule Doctor.ModuleReportTest do
 
     assert module_report.is_protocol_implementation == true
     assert module_report.functions == 0
-    assert module_report.has_module_doc == false
+    assert module_report.has_module_doc == true
     assert module_report.has_struct_type_spec == :not_struct
     assert module_report.missed_docs == 0
     assert module_report.missed_specs == 0

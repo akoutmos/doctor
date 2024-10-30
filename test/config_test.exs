@@ -3,8 +3,7 @@ defmodule Doctor.ConfigTest do
   alias Doctor.Config
 
   test "config_defaults_as_string" do
-    assert """
-           %Doctor.Config{
+    assert %Doctor.Config{
              exception_moduledoc_required: true,
              failed: false,
              ignore_modules: [],
@@ -18,7 +17,6 @@ defmodule Doctor.ConfigTest do
              reporter: Doctor.Reporters.Full,
              struct_type_spec_required: true,
              umbrella: false
-           }\
-           """ == "#{Config.config_defaults_as_string()}"
+           } == Config.config_defaults_as_string() |> Code.eval_string() |> elem(0)
   end
 end

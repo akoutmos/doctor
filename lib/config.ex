@@ -79,11 +79,11 @@ defmodule Doctor.Config do
   def config_defaults_as_string do
     config = quote do: unquote(%Config{})
 
-    iodata = config |> Macro.to_string() |> Code.format_string!()
-
-    # Drop the `:moduledoc_required` option in favor of `:min_overall_moduledoc_coverage`.
-    idx = Enum.find_index(iodata, &(&1 == "moduledoc_required:"))
-    Enum.slice(iodata, 0..(idx - 1)) ++ Enum.slice(iodata, (idx + 6)..-1)
+    config
+    |> Macro.to_string()
+    |> Code.format_string!()
+    |> to_string()
+    |> String.replace(~r/\s+moduledoc_required:.*/, "")
   end
 
   @doc """
