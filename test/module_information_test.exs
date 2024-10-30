@@ -40,7 +40,7 @@ defmodule Doctor.ModuleInformationTest do
         |> ModuleInformation.build(Doctor.AnotherBehaviourModule)
         |> ModuleInformation.load_file_ast()
         |> ModuleInformation.load_user_defined_functions()
-        |> ModuleReport.build()
+        |> ModuleReport.build(%Doctor.Config{})
 
       assert module_report.missed_specs == 0
       assert module_report.missed_docs == 0

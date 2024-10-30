@@ -99,11 +99,11 @@ defmodule Mix.Tasks.DoctorTest do
       assert rest_doctor_output == [
                ["---------------------------------------------"],
                ["Summary:\n"],
-               ["Passed Modules: 28"],
+               ["Passed Modules: 29"],
                ["Failed Modules: 8"],
-               ["Total Doc Coverage: 82.9%"],
-               ["Total Moduledoc Coverage: 76.5%"],
-               ["Total Spec Coverage: 42.1%\n"],
+               ["Total Doc Coverage: 83.1%"],
+               ["Total Moduledoc Coverage: 77.1%"],
+               ["Total Spec Coverage: 42.9%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
              ]
     end
@@ -117,11 +117,11 @@ defmodule Mix.Tasks.DoctorTest do
                ["Doctor file found. Loading configuration."],
                ["---------------------------------------------"],
                ["Summary:\n"],
-               ["Passed Modules: 28"],
+               ["Passed Modules: 29"],
                ["Failed Modules: 8"],
-               ["Total Doc Coverage: 82.9%"],
-               ["Total Moduledoc Coverage: 76.5%"],
-               ["Total Spec Coverage: 42.1%\n"],
+               ["Total Doc Coverage: 83.1%"],
+               ["Total Moduledoc Coverage: 77.1%"],
+               ["Total Spec Coverage: 42.9%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
              ]
     end
@@ -167,11 +167,11 @@ defmodule Mix.Tasks.DoctorTest do
                ],
                ["----------------------------------------------------------------------------------------------"],
                ["Summary:\n"],
-               ["Passed Modules: 28"],
+               ["Passed Modules: 29"],
                ["Failed Modules: 8"],
-               ["Total Doc Coverage: 82.9%"],
-               ["Total Moduledoc Coverage: 76.5%"],
-               ["Total Spec Coverage: 42.1%\n"],
+               ["Total Doc Coverage: 83.1%"],
+               ["Total Moduledoc Coverage: 77.1%"],
+               ["Total Spec Coverage: 42.9%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
              ]
     end

@@ -21,7 +21,7 @@ defmodule Doctor.Reporters.ModuleExplain do
   Generate the output for a single module report
   """
   def generate_report(%ModuleInformation{} = module_information, %Config{} = config) do
-    module_report = ModuleReport.build(module_information)
+    module_report = ModuleReport.build(module_information, config)
 
     user_defined_functions = module_information.user_defined_functions
     module_docs = module_information.docs

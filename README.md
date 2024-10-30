@@ -129,7 +129,8 @@ the default Doctor settings. The default file contents are:
       raise: false,
       reporter: Doctor.Reporters.Full,
       struct_type_spec_required: true,
-      umbrella: false
+      umbrella: false,
+      fail_hidden_doc: false
     }
 ```
 
@@ -150,7 +151,8 @@ Below is a sample `.doctor.exs` file with some sample values for the various fie
   raise: false,
   reporter: Doctor.Reporters.Full,
   struct_type_spec_required: true,
-  umbrella: false
+  umbrella: false,
+  fail_hidden_doc: false
 }
 ```
 
@@ -159,6 +161,10 @@ For the reporter field, the following reporters included with Doctor:
 - `Doctor.Reporters.Full`
 - `Doctor.Reporters.Short`
 - `Doctor.Reporters.Summary`
+
+The `fail_hidden_doc` field will mark modules as failures if it looks like:
+
+- `@moduledoc false`
 
 ## Sample reports
 
