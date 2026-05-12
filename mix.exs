@@ -56,7 +56,7 @@ defmodule Doctor.MixProject do
   defp deps do
     [
       # Production dependencies
-      {:decimal, "~> 2.0"},
+      {:decimal, "~> 3.1"},
 
       # Development and testing dependencies
       {:ex_doc, "~> 0.34", only: :dev, runtime: false},
