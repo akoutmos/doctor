@@ -20,8 +20,13 @@ defmodule Doctor.MixProject do
       ],
       package: package(),
       deps: deps(),
-      test_coverage: [tool: ExCoveralls],
-      preferred_cli_env: [
+      test_coverage: [tool: ExCoveralls]
+    ]
+  end
+
+  def cli do
+    [
+      preferred_envs: [
         coveralls: :test,
         "coveralls.detail": :test,
         "coveralls.post": :test,
@@ -56,7 +61,7 @@ defmodule Doctor.MixProject do
   defp deps do
     [
       # Production dependencies
-      {:decimal, "~> 2.0"},
+      {:decimal, "~> 3.1"},
 
       # Development and testing dependencies
       {:ex_doc, "~> 0.34", only: :dev, runtime: false},

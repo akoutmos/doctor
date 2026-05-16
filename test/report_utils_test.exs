@@ -84,7 +84,7 @@ defmodule Doctor.ReportUtilsTest do
     assert reports
            |> Map.values()
            |> ReportUtils.calc_overall_doc_coverage() ==
-             Decimal.new("52.38095238095238095238095238")
+             Decimal.new("52.38095238095238095238095238095238")
   end
 
   test "calc_overall_spec_coverage/1 should return the correct percentage a list of module reports",
@@ -92,7 +92,7 @@ defmodule Doctor.ReportUtilsTest do
     assert reports
            |> Map.values()
            |> ReportUtils.calc_overall_spec_coverage() ==
-             Decimal.new("52.38095238095238095238095238")
+             Decimal.new("52.38095238095238095238095238095238")
   end
 
   test "doctor_report_passed?/2 should return false if the report fails given required moduledocs",

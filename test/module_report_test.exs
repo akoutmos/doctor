@@ -35,7 +35,7 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.missed_docs == 3
     assert module_report.missed_specs == 3
     assert module_report.module == "Doctor.PartialDocs"
-    assert module_report.doc_coverage == Decimal.new("57.14285714285714285714285714")
+    assert module_report.doc_coverage == Decimal.new("57.14285714285714285714285714285714")
     assert module_report.properties == [is_exception: false, is_protocol_implementation: false]
   end
 
@@ -71,7 +71,7 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.missed_docs == 1
     assert module_report.missed_specs == 3
     assert module_report.module == "Doctor.FooBar"
-    assert module_report.doc_coverage == Decimal.new("83.33333333333333333333333333")
+    assert module_report.doc_coverage == Decimal.new("83.33333333333333333333333333333333")
     assert module_report.spec_coverage == Decimal.new("50.0")
     assert module_report.properties == [is_exception: false, is_protocol_implementation: false]
   end
