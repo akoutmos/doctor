@@ -93,14 +93,10 @@ defmodule Doctor.Reporters.ModuleExplain do
       module_report.has_struct_type_spec
   end
 
-  defp valid_moduledoc?(%ModuleReport{is_protocol_implementation: true}, _config), do: true
-
   defp valid_moduledoc?(module_report, config) do
     (not config.exception_moduledoc_required and module_report.properties[:is_exception]) or
       (Config.moduledoc_required?(config) and module_report.has_module_doc)
   end
-
-  defp valid_doc_coverage?(%ModuleReport{is_protocol_implementation: true}, _config), do: true
 
   defp valid_doc_coverage?(module_report, config) do
     doc_coverage(module_report) >= config.min_module_doc_coverage
