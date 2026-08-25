@@ -7,7 +7,7 @@ defmodule Doctor.MixProject do
     [
       app: :doctor,
       version: "0.23.0",
-      elixir: "~> 1.14",
+      elixir: "~> 1.17",
       name: "Doctor",
       source_url: @source_url,
       homepage_url: "https://hex.pm/packages/doctor",
@@ -64,7 +64,7 @@ defmodule Doctor.MixProject do
       {:decimal, "~> 3.1"},
 
       # Development and testing dependencies
-      {:ex_doc, "~> 0.34", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.40.3", only: :dev, runtime: false},
       {:excoveralls, "~> 0.14", only: :test, runtime: false}
     ]
   end
