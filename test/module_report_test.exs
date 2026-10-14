@@ -190,6 +190,36 @@ defmodule Doctor.ModuleReportTest do
     assert module_report.properties == [is_exception: false, is_protocol_implementation: false]
   end
 
+  test "build/1 should not require specs for callbacks injected by a __using__ macro" do
+    module_report =
+      Doctor.UseImplSpecModule
+      |> Code.fetch_docs()
+      |> ModuleInformation.build(Doctor.UseImplSpecModule)
+      |> ModuleInformation.load_file_ast()
+      |> ModuleInformation.load_user_defined_functions()
+      |> ModuleReport.build()
+
+    assert module_report.functions == 2
+    assert module_report.missed_docs == 0
+    assert module_report.missed_specs == 0
+    assert module_report.spec_coverage == Decimal.new("100")
+  end
+
+  test "build/1 should not require docs for callbacks injected by a __using__ macro" do
+    module_report =
+      Doctor.UseImplDocModule
+      |> Code.fetch_docs()
+      |> ModuleInformation.build(Doctor.UseImplDocModule)
+      |> ModuleInformation.load_file_ast()
+      |> ModuleInformation.load_user_defined_functions()
+      |> ModuleReport.build()
+
+    assert module_report.functions == 2
+    assert module_report.missed_docs == 0
+    assert module_report.missed_specs == 0
+    assert module_report.doc_coverage == Decimal.new("100")
+  end
+
   test "build/1 should build the correct report for a module with a nested module" do
     module_report =
       Doctor.ParentModule
