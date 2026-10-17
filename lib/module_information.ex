@@ -277,12 +277,26 @@ defmodule Doctor.ModuleInformation do
     end)
   end
 
+  defp normalize_alias({:__aliases__, _, parts}) do
+    Enum.map(parts, &normalize_alias_part/1)
+  end
+
+  defp normalize_alias([first | rest]) do
+    [normalize_alias_part(first) | Enum.map(rest, &normalize_alias_part/1)]
+  end
+
+  defp normalize_alias(other), do: [normalize_alias_part(other)]
+
+  defp normalize_alias_part({:__MODULE__, _, _}), do: __MODULE__
+  defp normalize_alias_part(atom) when is_atom(atom), do: atom
+  defp normalize_alias_part(other), do: other
+
   defp normalize_impl([value]) when is_boolean(value) do
     value
   end
 
-  defp normalize_impl([{:__aliases__, _, module}]) do
-    Module.concat(module)
+  defp normalize_impl([ast]) do
+    Module.concat(normalize_alias(ast))
   end
 
   defp normalize_impl(value) do
@@ -290,12 +304,29 @@ defmodule Doctor.ModuleInformation do
   end
 
   defp parse_ast_node_for_defmodules(
-         {definition, _defmodule_line, [{:__aliases__, _line_num, module}, _do_block]} = ast,
+         {definition, _line, [module_ast, _do_block]} = ast,
          %{modules: modules, stack: stack} = acc
        )
        when definition in [:defmodule, :defprotocol] do
     parent = List.first(stack)
-    full_module_name = Module.concat(List.wrap(parent) ++ module)
+
+    module_parts =
+      case module_ast do
+        {:__aliases__, _, parts} ->
+          parts
+
+        {:module, _, _} ->
+          []
+
+        other ->
+          List.wrap(other)
+      end
+
+    full_module_name =
+      case module_parts do
+        [] -> parent
+        parts -> Module.concat(List.wrap(parent) ++ parts)
+      end
 
     updated_acc =
       acc
