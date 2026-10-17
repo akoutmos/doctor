@@ -15,6 +15,7 @@ defmodule Doctor.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       docs: [
+        source_ref: "master",
         main: "readme",
         extras: ["README.md", "CHANGELOG.md"]
       ],
