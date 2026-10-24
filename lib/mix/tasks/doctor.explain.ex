@@ -42,7 +42,7 @@ defmodule Mix.Tasks.Doctor.Explain do
   To use these command line args you would do something like so:
 
   ```
-  $ mix doctor.explain --raise --config_file /some/path/to/some/.doctor.exs MyApp.Some.Module
+  $ mix doctor.explain --raise --config-file /some/path/to/some/.doctor.exs MyApp.Some.Module
   ```
 
   Note that `mix doctor.explain` takes a module name instead of a file path since you can

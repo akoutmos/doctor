@@ -9,7 +9,7 @@ defmodule Mix.Tasks.Doctor do
   flags are supported:
 
   ```
-  --config_file  Provide a relative or absolute path to a `.doctor.exs`
+  --config-file  Provide a relative or absolute path to a `.doctor.exs`
                  file to use during the execution of the mix command.
 
   --full         When generating a Doctor report of your project, use
