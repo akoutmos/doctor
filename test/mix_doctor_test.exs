@@ -100,10 +100,10 @@ defmodule Mix.Tasks.DoctorTest do
                ["---------------------------------------------"],
                ["Summary:\n"],
                ["Passed Modules: 30"],
-               ["Failed Modules: 8"],
-               ["Total Doc Coverage: 83.8%"],
-               ["Total Moduledoc Coverage: 77.8%"],
-               ["Total Spec Coverage: 45.0%\n"],
+               ["Failed Modules: 9"],
+               ["Total Doc Coverage: 82.7%"],
+               ["Total Moduledoc Coverage: 78.4%"],
+               ["Total Spec Coverage: 44.4%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
              ]
     end
@@ -118,10 +118,10 @@ defmodule Mix.Tasks.DoctorTest do
                ["---------------------------------------------"],
                ["Summary:\n"],
                ["Passed Modules: 30"],
-               ["Failed Modules: 8"],
-               ["Total Doc Coverage: 83.8%"],
-               ["Total Moduledoc Coverage: 77.8%"],
-               ["Total Spec Coverage: 45.0%\n"],
+               ["Failed Modules: 9"],
+               ["Total Doc Coverage: 82.7%"],
+               ["Total Moduledoc Coverage: 78.4%"],
+               ["Total Spec Coverage: 44.4%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
              ]
     end
@@ -163,15 +163,18 @@ defmodule Mix.Tasks.DoctorTest do
                  "\e[31mN/A      N/A       0          Doctor.StructSpecModule                  No          Yes        \e[0m"
                ],
                [
+                 "\e[31m0%       0%        1          Doctor.TypeAndFunctionSameName           Yes         N/A        \e[0m"
+               ],
+               [
                  "\e[31m50%      50%       4          Doctor.UseModule                         Yes         N/A        \e[0m"
                ],
                ["----------------------------------------------------------------------------------------------"],
                ["Summary:\n"],
                ["Passed Modules: 30"],
-               ["Failed Modules: 8"],
-               ["Total Doc Coverage: 83.8%"],
-               ["Total Moduledoc Coverage: 77.8%"],
-               ["Total Spec Coverage: 45.0%\n"],
+               ["Failed Modules: 9"],
+               ["Total Doc Coverage: 82.7%"],
+               ["Total Moduledoc Coverage: 78.4%"],
+               ["Total Spec Coverage: 44.4%\n"],
                ["\e[31mDoctor validation has failed!\e[0m"]
              ]
     end
