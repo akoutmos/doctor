@@ -68,7 +68,11 @@ defmodule Doctor.ModuleReport do
       |> Enum.filter(fn {_function, _arity, impl} -> impl == :none end)
       |> Enum.map(fn {function, arity, _impl} -> {function, arity} end)
 
-    docs_arity_list = Enum.map(module_info.docs, fn doc -> {doc.name, doc.arity} end)
+    # Code.fetch_docs/1 also returns entries for types and callbacks, which
+    # can share a name and arity with a function. Keep only function docs.
+    function_docs = Enum.filter(module_info.docs, &(&1.kind in [:function, :macro]))
+
+    docs_arity_list = Enum.map(function_docs, fn doc -> {doc.name, doc.arity} end)
 
     functions_not_in_docs =
       Enum.count(function_arity_list, fn fun ->
@@ -76,7 +80,7 @@ defmodule Doctor.ModuleReport do
       end)
 
     functions_without_docs =
-      Enum.count(module_info.docs, fn doc ->
+      Enum.count(function_docs, fn doc ->
         {doc.name, doc.arity} in function_arity_list and doc.doc == :none
       end)
 
